@@ -1,0 +1,134 @@
+AMMD 1.5 Cache Spinner Hotfix
+06/30/2017
+
+INTRODUCTION
+
+	- This fix was introduced to address two related issues: 
+	   
+	   (1) long load times for primary queries to the explore-tree and explore-panel; and 
+	   
+	   (2) a need to provide some form of user-feedback in unavoidable cases.
+	
+	- The solution involved the introduction of caching support and user interface components (a.k.a., "spinners") to provide user feedback.
+	  
+THE CACHING SOLUTION
+
+	- Uses a server-side caching strategy
+	
+	- Is incremental
+		
+		- This means that each page is cached when it is first accessed
+
+			- Thus, the spinner (longer-waiting-time user feedback) is primarily shown for first-time page accesses
+		
+		- However, site maintainers can ensure that most users have nearly instantaneous caching speeds by accessing new pages (to pre-cache them) each time the site is rebooted or its files are updated
+		
+	
+	- First time page accesses can range from about ~5-15 seconds, depending on the size of the files that are being loaded and rendered
+	
+	- Cached page accesses are nearly instantaneous (averaging ~200ms)
+	
+DEPLOYMENT PROCESS
+
+NOTE: 
+	All the hotfix files are contained in the separate directory: ammd-1.5-cache-spinner-hotfix-files/ . These may also be found within the main code-base as well.
+
+To deploy the hotfix to the existing site deployment (i.e., AMMD v1.5):
+
+	1. Completely backup all existing site files before making any hotfix changes.
+	
+			- This ensures that site maintainers can always return to their pre-hotfix baseline configuration if desired.
+			
+	2. Copy the following ten (10) hotfix files, directly replacing their pre-existing AMMD v1.5 versions.
+	
+			explore_tree/ajax.py
+			explore_tree/views.py
+			explore_tree/templates/explore_tree/content.html
+			explore_tree/static/explore_tree/js/load_view.js
+			static/am/js/mock.js
+			templates/am/base/scripts.html
+			templates/am/base/styles.html
+			templates/am/base/footer.html
+			templates/am/base/ie_support.html
+			templates/am/landing_page.html		
+	
+	3.  Manually copy in only the cache-specific configuration information into the beginning of the site's existing settings.py file (preserving all other site-specific configurations).
+	
+			- The following excerpt from the hotfix mgi/settings.py file should be copy/pasted into the site's mgi/settings.py file:
+		
+				# - - - - - - - - - - - - - - - - - - - - - -
+				CACHES = {
+						'default': {
+							'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+							'LOCATION': 'loc1',
+							'TIMEOUT': None
+						},
+						'navigation': {
+							'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+							'LOCATION': 'loc2',
+							'TIMEOUT': None
+						},
+						'html_tree': {
+							'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+							'LOCATION': 'loc3',
+							'TIMEOUT': None
+						},
+						'nav_id': {
+							'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+							'LOCATION': 'loc4',
+							'TIMEOUT': None
+						},
+						'tmpls': {
+							'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+							'LOCATION': 'loc5',
+							'TIMEOUT': None
+						},
+						'leaf': {
+							'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+							'LOCATION': 'loc6',
+							'TIMEOUT': None
+						},
+						'branch': {
+							'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+							'LOCATION': 'loc7',
+							'TIMEOUT': None
+						},
+						'link': {
+							'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+							'LOCATION': 'loc8',
+							'TIMEOUT': None
+						},
+					}
+
+				# - - - - - - - - - - - - - - - - - - - - - -
+
+				CACHE_MIDDLEWARE_ALIAS = 'default'
+				CACHE_MIDDLEWARE_SECONDS = 604800
+				CACHE_MIDDLEWARE_KEY_PREFIX = ''
+				CACHE_BACKEND = "locmem:///"
+
+				# - - - - - - - - - - - - - - - - - - - - - -
+
+	4. Since the caching solution gives the best performance after the site's pages have been initially accessed/pre-cached, we recommend that after deploying the hotfix - as well as after file updates - that these pages be accessed right away, by accessing the explore-tree and explore-view pages throughout the website. These will display the spinner upon the initial access/load for each page, but will not need to do so on subsequent (cached) page accesses. In this way, these pages will be pre-cached for other users who might visit the site.
+		
+MAINTENANCE INFORMATION
+
+	- Since the site's files are updated only periodically and in bulk, then it is worth noting that:
+		
+		- Every time the site's server is restarted (say, for maintenance or updates), the caches will be cleared. This will explain why files show that they are being loaded when accessed after updates occur.
+		
+		- Having the cache clear at these points in time is important to ensure that any files/pages that change over time can, at these update points, be updated in the cache through this process.
+
+FULL HOTFIX FILE LISTING
+
+	explore_tree/ajax.py
+	explore_tree/views.py
+	explore_tree/templates/explore_tree/content.html
+	explore_tree/static/explore_tree/js/load_view.js
+	static/am/js/mock.js
+	templates/am/base/scripts.html
+	templates/am/base/styles.html
+	templates/am/base/footer.html
+	templates/am/base/ie_support.html
+	templates/am/landing_page.html				
+	mgi/settings.py
