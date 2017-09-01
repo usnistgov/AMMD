@@ -10,8 +10,15 @@ from explore_tree.api.navigation.operations import retrieve_navigation_filters, 
 from mgi.models import XMLdata
 from utils.json_parser.processview import processview, processviewdocidlist, process_cross_query
 from parser import query
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
+from django.core.cache import caches
 
+leaf_cache   = caches['leaf']
+branch_cache = caches['branch']
+link_cache   = caches['link']
 
+@cache_page(600 * 15)
 def load_view(request):
     """
 
@@ -22,17 +29,51 @@ def load_view(request):
     if "nav_id" not in request.POST:
         request.POST = {}
 
+    node_id=''
+    doc_id =''
+    ref_node_id=''
+
     if "node_id" in request.POST and "doc_id" in request.POST:
-        return __load_leaf_view(request)
+        node_id = request.POST['node_id']
+        doc_id  = request.POST['doc_id']
+        leaf    = None
+        c_id    = str(node_id) + '_' + str(doc_id)
+
+        if ( c_id in leaf_cache ):
+            leaf = leaf_cache.get(c_id)
+        else:
+            leaf = __load_leaf_view(request)
+            leaf_cache.set(c_id, leaf)
+        return leaf
+
     elif "node_id" in request.POST:
-        return __load_branch_view(request)
+        node_id = request.POST['node_id']
+        branch  = None
+
+        if ( node_id in branch_cache ):
+            branch = branch_cache.get(node_id)
+        else:
+            branch = __load_branch_view(request)
+            branch_cache.set(node_id, branch)
+        return branch
+
     elif "ref_node_id" in request.POST and "doc_id" in request.POST:
-        return __load_link_view(request)
+        ref_node_id = request.POST['ref_node_id']
+        doc_id      = request.POST['doc_id']
+        c_id        = ref_node_id + '_' + doc_id
+        link        = None
+
+        if ( c_id in link_cache ):
+            link = link_cache.get(c_id)
+        else:
+            link = __load_link_view(request)
+            link_cache.set(c_id, link)
+        return link
+
     else:
         error = {
             "message": "Request is malformed."
         }
-
         return HttpResponse(json.dumps(error), status=HTTP_400_BAD_REQUEST)
 
 

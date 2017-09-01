@@ -1,3 +1,6 @@
+<!-- template-based caching -->
+{% load cache %}
+
 <div id="tree-panel" class="col-sm-4 col-md-3 sidebar">
     <div id="tree">
         <h4 id="tree-loading">
@@ -11,7 +14,14 @@
     </div>
 </div>
 
-<div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main">
+<div id="explore-panel" class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main">
+    <!-- spinner for initial load -->
+    <div id="explorer-panel-transparent-bgd" style="display:none;">
+        <h4 id="explore-panel-loading" style="display:none;">
+            <i class="fa fa-spinner fa-pulse fa-fw fa-align-center"></i>
+            <span>Loading ...</span>
+        </h4>
+    </div>
     <div id="explore-view">
         <h1 class="page-header">Exploration panel</h1>
 
@@ -28,3 +38,4 @@
         </p>
     </div>
 </div>
+

@@ -26,6 +26,63 @@ from mongoengine import connect
 
 VERSION = "1.4_rc3"
 
+
+# - - - - - - - - - - - - - - - - - - - - - -
+# added caching support - BJL - 2017-06-14
+# - - - - - - - - - - - - - - - - - - - - - -
+CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'loc1',
+            'TIMEOUT': None
+        },
+        'navigation': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'loc2',
+            'TIMEOUT': None
+        },
+        'html_tree': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'loc3',
+            'TIMEOUT': None
+        },
+        'nav_id': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'loc4',
+            'TIMEOUT': None
+        },
+        'tmpls': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'loc5',
+            'TIMEOUT': None
+        },
+        'leaf': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'loc6',
+            'TIMEOUT': None
+        },
+        'branch': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'loc7',
+            'TIMEOUT': None
+        },
+        'link': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'loc8',
+            'TIMEOUT': None
+        },
+    }
+
+# - - - - - - - - - - - - - - - - - - - - - -
+
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 604800
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
+CACHE_BACKEND = "locmem:///"
+
+# - - - - - - - - - - - - - - - - - - - - - -
+
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
