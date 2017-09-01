@@ -20,7 +20,7 @@
 import operator
 from datetime import datetime
 from mongoengine.queryset.visitor import Q
-from ..models import QueryOntology
+from ..models import QueryOntology, TemplateVersion
 
 
 def create_ontology(name, content):
@@ -65,6 +65,14 @@ def edit_ontology_status(ontology_id, status):
 def edit_ontology_name(ontology_id, name):
     query_ontology = QueryOntology.objects.get(pk=ontology_id)
     query_ontology.update(set__name=name)
+    query_ontology.update(set__last_modif=datetime.now())
+
+    query_ontology.reload()
+
+
+def edit_ontology_template(ontology_id, template_version_id):
+    query_ontology = QueryOntology.objects.get(pk=ontology_id)
+    query_ontology.update(set__template_version=TemplateVersion.objects.get(pk=template_version_id))
     query_ontology.update(set__last_modif=datetime.now())
 
     query_ontology.reload()

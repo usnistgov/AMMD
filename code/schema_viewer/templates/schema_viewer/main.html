@@ -9,13 +9,10 @@
     </div>
     <div class="col-md-3">
         <div class="form-group">
-            <label for="schema-selector">Select schema</label>
-            <select class="form-control" id="schema-selector">
-                <option value="0">Schemas...</option>
-                {% for template in templates %}
-                    <option value="{{ template.pk }}">{{ template.title }}</option>
-                {% endfor %}
-            </select>
+            <form>
+                {% csrf_token %}
+                {{ form }}
+            </form>
         </div>
     </div>
     <div class="col-md-4">
@@ -40,9 +37,10 @@
         </a>
     </div>
     <div class="col-md-4">
-        <a href="#">
+        <a target="_blank" id="sandbox_view" href="#">
             <img src="{% static 'schema_viewer/img/under_construction_logo.png' %}" class="reduced"
-                 alt="under_construction"/>
+                 alt="under_construction" style="width:75%;height:75%"/>
+            <h3 style="margin-top:-6em">Sandbox View</h3>
         </a>
     </div>
 </div>

@@ -6,12 +6,18 @@ from itertools import chain
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.servers.basehttp import FileWrapper
+from django.views.static import serve
+from django.utils.encoding import smart_str
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from rest_framework.status import HTTP_405_METHOD_NOT_ALLOWED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
 from api.query_ontology.views import get_ontology
+from explore_tree.forms import ModelChoiceInput
+
+import os
 
 
 @staff_member_required
@@ -21,9 +27,12 @@ def admin_exploration_tree(request):
     :param request:
     :return:
     """
+    model_choice_input = ModelChoiceInput()
+
     context = {
         "owl_available_list": list(chain(get_ontology(status=1), get_ontology(status=0))),
-        "owl_deleted_list": get_ontology(status=-1)
+        "owl_deleted_list": get_ontology(status=-1),
+        "template_list": model_choice_input
     }
 
     return render(request, "admin/explore_tree_wrapper.html", context)
@@ -50,8 +59,19 @@ def admin_download_owl(request):
         return HttpResponse({}, status=HTTP_405_METHOD_NOT_ALLOWED)
 
     if "owl_id" not in request.GET:
-        ontology_list = get_ontology(status=2)
+        return _download_static_file()
     else:
         ontology_list = get_ontology(ontology_id=request.GET["owl_id"])
 
     return __build_attachment(ontology_list)
+
+
+def _download_static_file():
+    file_path = './static/am/owl/blank.owl'
+    file = open(file_path)
+    file.seek(0)
+    data = file.read()
+    data_obj = StringIO(data.encode('utf-8'))
+    response = HttpResponse(FileWrapper(data_obj), content_type='application/xml')
+    response['Content-Disposition'] = 'attachment; filename=%s' % 'blank.owl'
+    return response

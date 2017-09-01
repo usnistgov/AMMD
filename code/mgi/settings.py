@@ -19,13 +19,13 @@
 # Sponsor: National Institute of Standards and Technology (NIST)
 #
 ################################################################################
+from __future__ import absolute_import
 import os
-
+from celery.schedules import crontab
 from django.core.urlresolvers import reverse_lazy
 from mongoengine import connect
 
 VERSION = "1.4_rc3"
-
 
 # - - - - - - - - - - - - - - - - - - - - - -
 # added caching support - BJL - 2017-06-14
@@ -102,7 +102,9 @@ if DEBUG:
         }
     }
 else:
-    SECRET_KEY = "please_replace"
+    # Uncomment and set all parameters, delete pass instruction
+    # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
+    SECRET_KEY = '<secret_key>'
 
     # https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts
     ALLOWED_HOSTS = ['*']
@@ -124,30 +126,6 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-    # Uncomment and set all parameters, delete pass instruction
-    # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-    
-    # https://docs.djangoproject.com/en/1.7/ref/settings/#secret-key
-    # SECRET_KEY = '<secret_key>'
-    
-    # https://docs.djangoproject.com/en/1.7/ref/settings/#allowed-hosts
-    # ALLOWED_HOSTS = ['<domain>','<server_ip>']
-    
-    # os.environ['HTTPS'] = "on"
-    # https://docs.djangoproject.com/en/1.7/ref/settings/#csrf-cookie-secure
-    # CSRF_COOKIE_SECURE = True
-    # https://docs.djangoproject.com/en/1.7/ref/settings/#session-cookie-secure
-    # SESSION_COOKIE_SECURE = True
-    
-    # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #         'USER':"<postgres_user>",
-    #         'PASSWORD': "<postgres_password>",
-    #         'NAME': 'mgi',                      
-    #     }
-    # }
 
 #SMTP Configuration
 USE_EMAIL = False #Send email, True or False
@@ -200,7 +178,7 @@ PASSWORD_WORDS = []
 # Replace by your own values
 MONGO_MGI_USER = "mgi_user"
 MONGO_MGI_PASSWORD = "mgi_password"
-MGI_DB = "mgi"
+MGI_DB = "mgi-test"
 MONGODB_URI = "mongodb://" + MONGO_MGI_USER + ":" + MONGO_MGI_PASSWORD + "@localhost/" + MGI_DB
 connect(MGI_DB, host=MONGODB_URI)
 
@@ -453,5 +431,14 @@ LOGGING = {
             'handlers': ['console', 'logfile'],
             'level': 'DEBUG',
         },
+    }
+}
+
+CELERY_TIMEZONE = 'America/New_York'
+CELERYBEAT_SCHEDULER = 'celery.beat:PersistentScheduler'
+CELERYBEAT_SCHEDULE = {
+    'clean_db_sandbox': {
+        'task': 'clean_db_sandbox',
+        'schedule': crontab(minute=0, hour=0)   # Everyday at midnight
     }
 }

@@ -15,8 +15,9 @@
 #
 # Sponsor: National Institute of Standards and Technology (NIST)
 """
-from mongoengine import Document, StringField, DictField, ListField, IntField
+from mongoengine import Document, StringField, DictField, ListField, IntField, ReferenceField
 from mongoengine.fields import DateTimeField
+from mgi.models import TemplateVersion
 
 
 class QueryOntology(Document):
@@ -26,6 +27,7 @@ class QueryOntology(Document):
     status = IntField(default=0, required=True)  # 0: Uploaded; 1: Active; 2: Blank; -1: Deleted
     last_modif = DateTimeField(required=False)
     content = StringField(required=True)
+    template_version = ReferenceField(TemplateVersion, required=False)
 
 
 class Navigation(Document):

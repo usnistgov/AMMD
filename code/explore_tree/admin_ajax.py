@@ -11,7 +11,7 @@ from os.path import join, exists, splitext
 from os import mkdir
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_405_METHOD_NOT_ALLOWED, HTTP_200_OK, \
     HTTP_500_INTERNAL_SERVER_ERROR
-from api.query_ontology.views import create_ontology, edit_ontology_name
+from api.query_ontology.views import create_ontology, edit_ontology_name, edit_ontology_template
 from explore_tree.api.query_ontology.views import edit_ontology_status, ontology_delete
 from utils import randomizer
 
@@ -48,6 +48,8 @@ def admin_upload_owl(request):
 
     ontology_name = "_".join([uploaded_file_name, randomizer.generate_string(6, True, False, True), timestamp])
 
+    # FIXME: ontology should be created only when 'Save' is clicked
+    # FIXME: {% if owl_file.template_version != None %} added in wrapper.html to hide object without template
     ontology_id = create_ontology(ontology_name + ".owl", ontology_content)
 
     if ontology_id == -1:  # An exception happened while creating the ontology
@@ -81,8 +83,13 @@ def admin_query_ontology(request):
         elif request.method == "POST":  # Create / Edit an ontology
             query_onto_id = request.POST["id"]
 
-            if "name" in request.POST:
+            if "action" in request.POST and request.POST["action"] == u'create':
+                _edit_ontology_template(request, query_onto_id)
+
+            if "action" in request.POST and request.POST["action"] == u'edit':
                 edit_ontology_name(query_onto_id, request.POST["name"] + ".owl")
+                _edit_ontology_template(request, query_onto_id)
+
             elif "status" in request.POST:
                 exit_code = edit_ontology_status(query_onto_id, request.POST["status"])
 
@@ -99,8 +106,11 @@ def admin_query_ontology(request):
 
         return HttpResponse(status=HTTP_200_OK)
     except Exception as exc:
-        error_message = {
-            "message": exc.message
-        }
+        return HttpResponse(exc.message, status=HTTP_400_BAD_REQUEST, content_type="application/json")
 
-        return HttpResponse(json.dumps(error_message), status=HTTP_400_BAD_REQUEST)
+
+def _edit_ontology_template(request, query_onto_id):
+    if "template_version_id" in request.POST and request.POST["template_version_id"] is not u"":
+        edit_ontology_template(query_onto_id, request.POST["template_version_id"])
+    else:
+        raise Exception("   Template need to be selected")

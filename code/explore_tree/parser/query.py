@@ -32,7 +32,7 @@ def _is_advanced_filter(str_filter):
         return False
 
 
-def execute_query(filters=list(), projection=None):
+def execute_query(templateID, filters=list(), projection=None):
     """
 
     :param filters:
@@ -43,7 +43,7 @@ def execute_query(filters=list(), projection=None):
     #     "$and": []
     # }
 
-    results_id = {xml_data["_id"] for xml_data in XMLdata.objects()}
+    results_id = {xml_data["_id"] for xml_data in XMLdata.executeFullTextQuery("", [templateID])}
     results = []
 
     # Parsing filters if present

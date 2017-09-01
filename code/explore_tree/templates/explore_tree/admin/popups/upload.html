@@ -41,11 +41,19 @@
                                 .owl
                             </div>
                         </div>
-
+                        <div class="raw" style="margin-top: 0.5em;">
+                            {{template_list}}
+                        </div>
                         <input type="hidden" class="form-control" id="ontology-id" value=""/>
                     </div>
                 </div>
+                <div id="error_div" class="raw" style="margin-top:0.5em;">
+                    <p class="alert alert-danger">
+                        <i id="error_message" class="fa fa-exclamation-circle" style="padding: 5px;"></i>
+                    </p>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     <i class="fa fa-times"></i> Close
@@ -54,6 +62,7 @@
                     <i class="fa fa-save"></i> Save file
                 </button>
             </div>
+
         </div>
     </div>
 </div>

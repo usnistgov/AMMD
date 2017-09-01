@@ -24,7 +24,7 @@ from utils.xml_utils.projection import get_projection
 TEMPLATES_PATH = join(BASE_DIR, 'explore_tree', 'parser', 'templates')
 
 
-def render_navigation(navigation):
+def render_navigation(navigation, template_id):
     """
     Renders a navigation tree
     :param navigation:
@@ -45,13 +45,13 @@ def render_navigation(navigation):
                 context = {
                     'branch_id': navigation_id,
                     'branch_name': name,
-                    'branches': render_documents(navigation_child)
+                    'branches': render_documents(navigation_child, template_id)
                 }
             else:
                 context = {
                     'branch_id': navigation_id,
                     'branch_name': name,
-                    'branches': render_navigation(navigation_child)
+                    'branches': render_navigation(navigation_child, template_id)
                 }
 
             if 'view' in navigation_child.options and navigation_child.options['view'] is not None:
@@ -65,7 +65,7 @@ def render_navigation(navigation):
     return nav_tree_html
 
 
-def render_documents(navigation):
+def render_documents(navigation, template_id):
     doc_tree_html = ""
 
     try:
@@ -89,7 +89,7 @@ def render_documents(navigation):
                 navigation = navigation_get(navigation.parent)
 
         # get the documents matching the query
-        documents = query.execute_query(filters, projection)
+        documents = query.execute_query(template_id, filters, projection)
 
         for document in documents:
             with open(join(TEMPLATES_PATH, 'li_document.html'), 'r') as li_file:

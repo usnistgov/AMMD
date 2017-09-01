@@ -20,7 +20,6 @@
 """
 import os
 
-from django.contrib.auth.decorators import login_required
 from lxml import etree
 from django.http.response import HttpResponse
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_405_METHOD_NOT_ALLOWED

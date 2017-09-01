@@ -125,7 +125,7 @@ def request_new_account(request):
     else:
         form = RequestAccountForm()
     
-    return render(request, 'request_new_account.html', {'form':form})
+    return render(request, 'request_new_account.html', {'form': form})
 
 
 ################################################################################

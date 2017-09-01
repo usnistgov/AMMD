@@ -16,7 +16,15 @@
         .owl
     </div>
 </div>
+<div id="edit-select-template" class="raw" style="margin-top: 0.5em;">
+    {{template_list}}
+</div>
 <input type="hidden" id="edit-owl-id" value=""/>
+<div id="edit_error_div" class="raw" style="margin-top:0.5em;">
+    <p class="alert alert-danger">
+        <i id="edit_error_message" class="fa fa-exclamation-circle" style="padding: 5px;"></i>
+    </p>
+</div>
 {% endblock %}
 
 {% block modal_footer %}

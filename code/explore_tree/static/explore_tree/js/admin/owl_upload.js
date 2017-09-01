@@ -7,6 +7,7 @@ $(function () {
 
         $("#progress-complete").hide();
         $("#progress-error").hide();
+        $("#error_div").hide();
 
         $("#ontology-name").val("");
         $("#ontology-id").val("");
@@ -68,14 +69,19 @@ $(function () {
             url: "/admin/explore_tree/query_ontology",
             method: "POST",
             data: {
+                "action": "create",
                 "id": $("#ontology-id").val(),
-                "name": $("#ontology-name").val()
+                "name": $("#ontology-name").val(),
+                "template_version_id": $("#id_values").val()
             },
             success: function(data) {
                 console.log("success")
                 location.href = "";
             },
-            error: function() {
+            error: function(data) {
+                var message = data.responseText;
+                $("#error_message").text(message);
+                $("#error_div").show();
                 console.log("error");
             }
         })

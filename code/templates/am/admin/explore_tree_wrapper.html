@@ -42,6 +42,7 @@
     <thead>
         <tr>
             <th>Filename</th>
+            <th>Template</th>
             <th>Status</th>
             <th>Last modified on</th>
             <th>Actions</th>
@@ -49,25 +50,30 @@
     </thead>
     <tbody>
     {% for owl_file in owl_available_list %}
-        <tr id="{{ owl_file.id }}" {% if owl_file.status == 1 %}class="success"{% endif %}>
-            <td>{{ owl_file.name }}</td>
-            <td>
-                {% if owl_file.status == 0 %}
-                    Uploaded
-                {% else %}
-                    Active
-                {% endif %}
-            </td>
-            <td>{{ owl_file.last_modif }}</td>
-            <td>
-                {% if owl_file.status == 0 %}
-                <a href="#" class="btn btn-success activate-owl"><i class="fa fa-play"></i> Activate</a>
-                {% endif %}
-                <a href="#" class="btn btn-default edit-owl"><i class="fa fa-edit"></i> Edit</a>
-                <a href="#" class="btn btn-default download-owl"><i class="fa fa-download"></i> Download</a>
-                <a href="#" class="btn btn-default delete-owl"><i class="fa fa-trash"></i> Delete</a>
-            </td>
-        </tr>
+        {% if owl_file.template_version != None %}
+            <tr id="{{ owl_file.id }}" {% if owl_file.status == 1 %}class="success"{% endif %}>
+                <td>{{ owl_file.name }}</td>
+                <td id="{{ owl_file.template_version.id }}" class="template">
+                    {{ owl_file.template_version }}
+                </td>
+                <td>
+                    {% if owl_file.status == 0 %}
+                        Uploaded
+                    {% else %}
+                        Active
+                    {% endif %}
+                </td>
+                <td>{{ owl_file.last_modif }}</td>
+                <td>
+                    {% if owl_file.status == 0 %}
+                    <a href="#" class="btn btn-success activate-owl"><i class="fa fa-play"></i> Activate</a>
+                    {% endif %}
+                    <a href="#" class="btn btn-default edit-owl"><i class="fa fa-edit"></i> Edit</a>
+                    <a href="#" class="btn btn-default download-owl"><i class="fa fa-download"></i> Download</a>
+                    <a href="#" class="btn btn-default delete-owl"><i class="fa fa-trash"></i> Delete</a>
+                </td>
+            </tr>
+        {% endif %}
     {% empty %}
         <tr>
             <td colspan="4" class="empty-text">

@@ -101,6 +101,9 @@ class Template(dme_Document):
     ResultXsltList = dme_fields.ReferenceField(ResultXslt, reverse_delete_rule=NULLIFY, blank=True)
     ResultXsltDetailed = dme_fields.ReferenceField(ResultXslt, reverse_delete_rule=NULLIFY, blank=True)
 
+    def __str__(self):
+        return self.title
+
 
 def delete_template(object_id):
     from mgiutils import getListNameTemplateDependenciesRecordFormData
@@ -269,13 +272,16 @@ def type_list_current():
     return current_types
 
 
-class TemplateVersion(Document):
+class TemplateVersion(dme_Document):
     """Manages versions of templates"""
     versions = ListField(StringField())
     deletedVersions = ListField(StringField())
     current = StringField()
     nbVersions = IntField(required=True)
     isDeleted = BooleanField(required=True)
+
+    def __str__(self):
+        return Template.objects.get(pk=self.current).filename
 
 
 class Type(Document):    

@@ -178,7 +178,7 @@ viewData = function()
 {
     console.log('BEGIN [viewData]');
 
-    formContent = document.getElementById('xsdForm').innerHTML
+    formContent = document.getElementById('xsdForm').innerHTML;
     view_data(formContent);
 
     console.log('END [viewData]');

@@ -37,7 +37,5 @@ class Curate(models.Model):
 class SchemaElement(Document):
     tag = fields.StringField()
     value = fields.StringField(default=None, blank=True)
-
     options = fields.DictField(blank=True)
-
     children = fields.ListField(fields.ReferenceField('SchemaElement'), blank=True)

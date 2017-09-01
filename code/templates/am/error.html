@@ -1,0 +1,10 @@
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="row">
+        <p class="alert alert-danger">
+            <i class="fa fa-exclamation-circle"></i>  {{ error_message }}
+        </p>
+    </div>
+{% endblock %}

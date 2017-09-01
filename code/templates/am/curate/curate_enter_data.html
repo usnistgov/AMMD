@@ -24,13 +24,19 @@
 
 {% block content %}
 <div class="row">
-    <h1>Data Entry</h1>
+    {% if not sandbox %}
+        <h1>Data Entry</h1>
+    {% else %}
+        <h1>Sandbox</h1>
+    {% endif %}
     <p>
         Here you can fill in the {{CUSTOM_DATA}} form. Once it is completed, you can go to 'View Data' to review what
         you have entered. You won't be able to reach the review page before the document is valid according to the
-        selected template. From the review page, you will be able to curate the data. The 'Save Form' button allows you
-        to save partial data that you may want to edit later. This will only save a temporary document and won't
-        actually curate data. All grayed elements are optional. Thus, all elements written in black are required.
+        selected template. From the review page, you will be able to curate the data.
+        {% if not sandbox %} The 'Save Form' button allows you to save partial data that you may want to edit later.
+        This will only save a temporary document and won't actually curate data.
+        {% endif %}
+        All grayed elements are optional. Thus, all elements written in black are required.
         The document may still be valid with empty elements. There are no validation on empty fields if no such
         constraint is defined in the template. Thus, an empty string of characters may not raise a validation error,
         but an empty number will.

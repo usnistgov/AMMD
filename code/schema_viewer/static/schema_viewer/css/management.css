@@ -1,0 +1,9 @@
+ul {
+    list-style-type: none;
+    text-align: center;
+}
+
+td ul li {
+    display: inline;
+    margin-left: 1% ;
+}

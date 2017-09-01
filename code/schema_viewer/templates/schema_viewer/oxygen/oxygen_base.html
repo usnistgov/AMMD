@@ -1,0 +1,13 @@
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <div style="float:left; width:20%">
+        {% block oxygen_menu %}
+        {% endblock %}
+    </div>
+    <div style="float:right; width:80%">
+        {% block oxygen_content %}
+        {% endblock %}
+    </div>
+{% endblock %}

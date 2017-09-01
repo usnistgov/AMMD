@@ -1,0 +1,106 @@
+{% extends 'base_admin.html' %}
+{% load staticfiles %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="{% static "schema_viewer/css/management.css" %}" type="text/css" />
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="{% static 'schema_viewer/js/management.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-header">Manage schemas</h1>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                    {% if message.tags == 'debug' %}
+                        <div class="alert alert-info">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <i class="fa fa-bug"></i> {{message}}
+                        </div>
+                    {% elif message.tags == 'info' %}
+                        <div class="alert alert-info">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <i class="fa fa-info"></i> {{message}}
+                        </div>
+                    {% elif message.tags == 'success' %}
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <i class="fa fa-check"></i> {{message}}
+                        </div>
+                    {% elif message.tags == 'warning' %}
+                        <div class="alert alert-warning">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <i class="fa fa-exclamation-triangle"></i> {{message}}
+                        </div>
+                    {% elif message.tags == 'error' %}
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <i class="fa fa-times"></i> {{message}}
+                        </div>
+                    {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <div class="row">
+        <div class="pull-right">
+            <p>
+                <a class="btn btn-primary" href="/admin/upload_oxygen">
+                    <i class="fa fa-upload"></i> Upload &lt;oXygen&gt; documentation
+                </a>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <form id="form_log_files" action="#" enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                {{ log_file_formset.management_form }}
+                {{ formset.non_form_errors.as_ul }}
+                <table id="formset" class="table table-hover container-fluid table-striped ">
+                    {% for form in formset.forms %}
+                        {% if forloop.first %}
+                            <thead>
+                                <tr>
+                                    {% for field in form.visible_fields %}
+                                        {% if field.label|capfirst == "Schema name" %}
+                                            <th class="text-center col-xs-6">{{ field.label|capfirst }}</th>
+                                        {% elif field.label|capfirst == "Is visible" %}
+                                            <th class="text-center col-xs-3">{{ field.label|capfirst }}</th>
+                                        {% elif field.label|capfirst == "Is default" %}
+                                            <th class="text-center col-xs-3">{{ field.label|capfirst }}</th>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                        {% endif %}
+                        <tr class="{% cycle row1,row2 %}">
+                        {% for field in form.visible_fields %}
+                            <td class="schema_management">
+                                    {{ field.errors.as_ul }}
+                                    {% if field.label|capfirst == "Schema name" %}
+                                        <span style="display:none"> {{ field }} </span>
+                                        <div style="text-align: center; font-weight: bold;">
+                                            {{ field.value }}
+                                        </div>
+                                    {% else %}
+                                        {{ field }}
+                                    {% endif %}
+                            </td>
+                        {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="row">
+                    <div class="col-sm-2 col-md-offset-10">
+                        <button class="btn btn-success" style="float: Left;">
+                            Save modification
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
