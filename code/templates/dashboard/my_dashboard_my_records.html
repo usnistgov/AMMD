@@ -1,0 +1,105 @@
+{% extends "mdcs/extra/one_column.html" %}
+{% load staticfiles %}
+{% load auth_extras %}
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: my_dashboard_my_records.html
+# Application: user_dashboard
+# Description:
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Xavier SCHMITT
+#		  xavier.schmitt@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+{% block title %}
+    {% if user.is_staff %}
+        <h1><span>My Published Records / Other users Published Records</span></h1>
+    {% else %}
+        <h1><span>My Published Records</span></h1>
+    {% endif %}
+{% endblock %}
+{% block menu %}{% include 'mdcs/menus/main.html' with active_tab='profile' %}{% endblock %}
+{% block submenu %}{% include 'mdcs/menus/submenu/dashboard.html' with active_tab='tab1' %}{% endblock %}
+
+{% block content %}
+    <div id="body">
+	    <div class="width">
+            <!--<ul class="nav nav-tabs">-->
+                <!--{% if ispublished == None %} <li class="active"> {%else%} <li> {% endif%} <a href="/dashboard/records">All</a></li>-->
+                <!--{% if ispublished == True %} <li class="active"> {%else%} <li> {% endif%}<a href="/dashboard/records?ispublished=true">Public</a></li>-->
+                <!--{% if ispublished == False %} <li class="active"> {%else%} <li> {% endif%}<a href="/dashboard/records?ispublished=false">Private</a></li>-->
+            <!--</ul>-->
+            {% if user.is_staff %}
+                <span>
+                    <div class="tpl-title">My published records</div>
+                </span>
+            {%endif%}
+            {% if XMLdatas%}
+                {% with canEdit=request.user|has_perm:'curate.curate_edit_document' canDelete=request.user|has_perm:'curate.curate_delete_document' %}
+                        {% include 'dashboard/my_dashboard_my_records_table.html' with XMLdatas=XMLdatas %}
+                {% endwith%}
+            {%else%}
+                No published record found
+            {%endif%}
+            <div class="clear"></div>
+            {% if user.is_staff %}
+                <span>
+                    <div class="tpl-title">Other users published records</div>
+                </span>
+                {% if OtherUsersXMLdatas%}
+                    {% with canEdit=request.user|has_perm:'curate.curate_edit_document' canDelete=request.user|has_perm:'curate.curate_delete_document' %}
+                            {% include 'dashboard/my_dashboard_my_records_table.html' with XMLdatas=OtherUsersXMLdatas %}
+                    {% endwith%}
+                {%else%}
+                    No other users published records found
+                {%endif%}
+            {%endif%}
+        </div>
+	</div>
+    <div class="clear"></div>
+<hr>
+{% endblock %}
+
+{% block popups %}
+<div id="dialog-delete-result" title="Delete Document" style="display:none;">
+Are you sure you want to delete this document?
+</div>
+<div id="dialog-publish" title="Publish Document" style="display:none;">
+Are you sure you want to publish this document?
+</div>
+<div id="dialog-unpublish" title="Unpublish Document" style="display:none;">
+Are you sure you want to unpublish this document?
+</div>
+<div id="dialog-detail-result" title="Resource Details" style="display:none;">
+<div id="result_detail">
+</div>
+</div>
+
+<div id="dialog-change-owner-record" title="Change Record Owner" style="display:none;">
+    <div class="alert alert-danger" id="banner_errors" style="display: none;">
+        <a href="#" class="close" data-hide="alert" aria-label="close">&times;</a>
+        <h4><i class="fa fa-exclamation-circle fa-1x"></i> Error</h4>
+        <div id="form_start_errors">
+        </div>
+    </div>
+    Please select the new owner:
+       {{user_form}}
+</div>
+{% endblock %}
+
+{% block extrajs %}
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <script src="{% static 'inc/controllers/js/dashboard.js' %}"></script>
+  <script>
+    initBanner();
+  </script>
+{% endblock %}

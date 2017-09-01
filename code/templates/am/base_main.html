@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<div id="navbar" class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a></li>
+        <li><a href="/curate"><i class="fa fa-edit"></i> Curate</a></li>
+        <li><a href="/explore"><i class="fa fa-search"></i> Explore</a></li>
+        <li><a href="/schema_viewer"><i class="fa fa-eye"></i> View schema</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        {% if not user.is_authenticated %}
+        <li class="dropdown"><a href="/login"><i class="fa fa-sign-in"></i> Login</a></li>
+        {% else %}
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                <i class="fa fa-user"></i> {{ user }} <span class="caret"></span>
+            </a>
+            {% include 'main/user_menu.html' %}
+        </li>
+        {% endif %}
+        <li><a href="/help"><i class="fa fa-question-circle-o"></i> Help</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="col-md-12 main">
+    {% block content %}{% endblock %}
+</div>
+{% endblock %}

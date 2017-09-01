@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<div id="navbar" class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        {% if user.is_authenticated %}
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                <i class="fa fa-users"></i> Users <span class="caret"></span>
+            </a>
+
+            <ul class="dropdown-menu">
+                <li><a href="/admin/user-management">Manage Users</a></li>
+                <li><a href="/admin/user-requests">Account Requests</a></li>
+                <li><a href="/admin/contact-messages">Contact Messages</a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                <i class="fa fa-database"></i> Templates <span class="caret"></span>
+            </a>
+
+            <ul class="dropdown-menu">
+                <li><a href="/admin/xml-schemas">Manage Templates</a></li>
+                <li><a href="/admin/xml-schemas/manage-types">Manage Types</a></li>
+                <li><a href="/admin/xml-schemas/manage-xslt">Manage XSLT</a></li>
+            </ul>
+        </li>
+        <li><a href="/admin/explore_tree"><i class="fa fa-code-fork"></i> Exploration tree</a></li>
+        <li><a href="/admin/website"><i class="fa fa-globe"></i> Website</a></li>
+        {% endif %}
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        {% if not user.is_authenticated %}
+        <li><a href="/login"><i class="fa fa-sign-in"></i> Login</a></li>
+        {% else %}
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                <i class="fa fa-user"></i> {{ user }} <span class="caret"></span>
+            </a>
+            {% include 'main/user_menu.html' %}
+        </li>
+        {% endif %}
+        <li><a href="/help"><i class="fa fa-question-circle-o"></i> Help</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="col-md-12 main">
+    {% block content %}{% endblock %}
+</div>
+{% endblock %}

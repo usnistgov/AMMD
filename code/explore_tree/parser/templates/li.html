@@ -1,0 +1,10 @@
+<li id="{{ branch_id }}"{% if hidden %} class="hidden"{% endif %}>
+    <span>
+        <i class="fa fa-chevron-down"></i> {{ branch_name }}
+        {% if branch_view %}
+            <a class="branch {{ branch_id }}" href="#"><i class="fa fa-external-link"></i></a>
+        {% endif %}
+    </span>
+
+    <ul>{{ branches | safe }}</ul>
+</li>

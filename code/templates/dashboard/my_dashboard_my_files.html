@@ -1,0 +1,80 @@
+{% extends "mdcs/extra/one_column.html" %}
+{% load staticfiles %}
+{% load dict_key_extras %}
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: my_profile_dashboard_my_files.html
+# Application: user dashboard
+# Description:
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Xavier SCHMITT
+#		  xavier.schmitt@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology (NIST)
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block title %}
+    {% if user.is_staff %}
+        <h1><span>My Files / Other users Files</span></h1>
+    {% else %}
+        <h1><span>My Files</span></h1>
+    {% endif %}
+{% endblock %}
+{% block menu %}{% include 'mdcs/menus/main.html' with active_tab='profile' %}{% endblock %}
+
+{% block submenu %}
+    {% include 'mdcs/menus/submenu/dashboard.html' with active_tab='tab5' %}
+{% endblock %}
+
+{% block content%}
+    {% if user.is_staff %}
+        <span>
+            <div class="tpl-title">My Files</div>
+        </span>
+    {%endif%}
+    {% if files %}
+        {% include 'dashboard/my_dashboard_my_files_table.html' with files=files %}
+    {% else %}
+    <div class="empty-table">
+        You don't currently own any files.
+    </div>
+    {% endif %}
+    <div class="clear"></div>
+    {% if user.is_staff %}
+        <span>
+            <div class="tpl-title">Other users Files</div>
+        </span>
+        {% if otherUsersFiles%}
+            {% include 'dashboard/my_dashboard_my_files_table.html' with files=otherUsersFiles %}
+        {%else%}
+            No other users Files found
+        {%endif%}
+    {%endif%}
+{% endblock %}
+
+{% block popups %}
+
+<div id="dialog-deleteconfirm-message" title="Confirm Delete" style="display:none;">
+<p></p>
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 10px 0;"></span>
+    Are you sure you want to delete <b id="object-to-delete"></b>?
+  </p>
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'inc/controllers/js/dashboard.js' %}"></script>
+<script>
+loadUploadManagerHandler();
+</script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% load render_extras %}
+{% load auth_extras %}
+
+{% with canEdit=request.user|has_perm:'curate.curate_edit_document' canDelete=request.user|has_perm:'curate.curate_delete_document' %}
+
+{% for result in list_results%}
+    {% if custom_xslt %}
+        {% render_as_template result.xml %}
+    {% else %}
+    <div id="{{result.id}}" name="result">
+        <input type='checkbox' name='checks' result_id='{{result.id}}'/>
+        <span class='expand' style='cursor:pointer;' onclick='showhideResults(event);'></span>
+        <span style='font-weight:bold;'><a href="detail_result_keyword?id={{result.id}}">{{result.title}}</a></span>
+        <br>
+        <span style='color:grey;'>{{result.registry_name}}  -  {{result.schema_name}}</span>
+        <div class='xmlResult' readonly='true' style='display:none;'>
+            {% autoescape off %}
+            {{result.xml}}
+            {% endautoescape %}
+        </div>
+    </div>
+    <br>
+    {% endif %}
+{% endfor %}
+
+{% endwith %}
+

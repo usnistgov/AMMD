@@ -1,0 +1,20 @@
+<h2 class="section-header">{{ view.title }}</h2>
+
+{% for view_data_item in view.data %}
+<table class="table table-bordered table-striped view-data-table">
+    <tbody>
+        {% for view_data_item_details in view_data_item %}
+        <tr>
+            <th>{{ view_data_item_details.name }}</th>
+            {% if "link" in view_data_item_details %}
+                <td>
+                    <a class="link {{ view_data_item_details.link }}" href="#">{{ view_data_item_details.value }}</a>
+                </td>
+            {% else %}
+                <td>{{ view_data_item_details.value }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endfor %}

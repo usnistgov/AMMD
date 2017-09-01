@@ -1,0 +1,107 @@
+{#% extends "mdcs/extra/one_column.html" %#}
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+{% load auth_extras %}
+{% load dict_key_extras %}
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: my_dashboard_my_records.html
+# Application: user_dashboard
+# Description:
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Xavier SCHMITT
+#		  xavier.schmitt@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block content %}
+
+<h1 class="page-header">My Records</h1>
+  <div id="body">
+
+	<div class="width">
+
+    <!--<ul class="nav nav-tabs">-->
+        <!--{% if not ispublished %} <li class="active"> {%else%} <li> {% endif%} <a href="/dashboard/records">All</a></li>-->
+        <!--{% if ispublished == "true" %} <li class="active"> {%else%} <li> {% endif%}<a href="/dashboard/records?ispublished=true">Published</a></li>-->
+        <!--{% if ispublished == "false" %} <li class="active"> {%else%} <li> {% endif%}<a href="/dashboard/records?ispublished=false">Not Published</a></li>-->
+    <!--</ul>-->
+
+{% if XMLdatas %}
+{% with canEdit=request.user|has_perm:'curate.curate_edit_document' canDelete=request.user|has_perm:'curate.curate_delete_document' %}
+
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th width="75%">Resource name</th>
+                <!--<th>Published</th>-->
+                <!--<th width="175em">Last Publication date</th>-->
+                <th>Actions</th>
+            </tr>
+            {% for XMLdata in XMLdatas %}
+                {% cycle 'even' '' as rowcolors silent %}
+                <tr class="{{ rowcolors }}">
+                    <td>
+                            {% if XMLdata.content.Resource.identity.title %}
+                                {{ XMLdata.content.Resource.identity.title }}
+                            {%else%}
+                                <script>
+                                    document.write('{{ XMLdata.title }}'.replace(/\.[^/.]+$/, ""));
+                                </script>
+                            {% endif %}
+                    </td>
+                    <td>
+                        {% with XMLdata|get:"_id" as XMLdata_id %}
+                        {% autoescape on %}
+                        <a href="/dashboard/detail?type=record&id={{XMLdata_id}}"><span class="icon legend result">
+                            View
+                        </span></a>
+                        {% endautoescape %}
+                        <span class="icon legend delete" onclick="deleteResult('{{XMLdata_id}}')">
+                            Delete
+                        </span>
+                        {% endwith%}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+{% endwith%}
+{%else%}
+    No Resources found
+{%endif%}
+
+    	<div class="clear"></div>
+    </div>
+	</div>
+
+            <div class="clear"></div>
+    {% endblock %}
+
+{% block popups %}
+<div id="dialog-delete-result" title="Delete Document" style="display:none;">
+Are you sure you want to delete this document?
+</div>
+<div id="dialog-publish" title="Publish Document" style="display:none;">
+Are you sure you want to publish this document?
+</div>
+<div id="dialog-unpublish" title="Unpublish Document" style="display:none;">
+Are you sure you want to unpublish this document?
+</div>
+<div id="dialog-detail-result" title="Resource Details" style="display:none;">
+<div id="result_detail">
+</div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="{% static 'js/dashboard/dashboard.js' %}"></script>
+{% endblock %}

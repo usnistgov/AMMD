@@ -1,0 +1,48 @@
+{% load staticfiles %}
+<div class="row">
+    <div class="col-md-5">
+        <p style="color: grey; font-style: italic">
+            Select the version of the schema you would like to view or download.<br/>
+            Click on one of the three provided views to browse the AMMD Schema.<br/>
+            Click to the right to directly download the AMMD xsd file.
+        </p>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label for="schema-selector">Select schema</label>
+            <select class="form-control" id="schema-selector">
+                <option value="0">Schemas...</option>
+                {% for template in templates %}
+                    <option value="{{ template.pk }}">{{ template.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="viewer-options">
+            <a href="#" id="download-schema">
+                <img src="{% static 'schema_viewer/img/download-btn.png' %}" alt="Download button"/>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row">&nbsp;</div>
+<div class="row">&nbsp;</div>
+<div class="row viewer-sections">
+    <div class="col-md-4">
+        <a target="_blank" id="oxygen-viewer" href="#">
+            <img src="{% static 'schema_viewer/img/oxygen_logo.png' %}" class="reduced" alt="oxygen_view"/>
+        </a>
+    </div>
+    <div class="col-md-4 middle">
+        <a target="_blank" id="schema_view" href="#">
+            <img src="{% static 'schema_viewer/img/tabbed_logo.png' %}" class="reduced" alt="tabbed_view"/>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="#">
+            <img src="{% static 'schema_viewer/img/under_construction_logo.png' %}" class="reduced"
+                 alt="under_construction"/>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+{#% extends "mdcs/extra/two_columns.html" %#}
+{% extends "base_admin.html" %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: terms_of_use.html
+# Application: templates/admin
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology (NIST)
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block title %}{% endblock %}
+
+{% block extrastyle %}
+<style>
+textarea {
+	width: 700px;
+}
+</style>
+{% endblock %}
+
+{% block menu %}{% include 'admin/menu/main.html' with active_tab='tab5' %}{% endblock %}
+{% block submenu %}{% include 'admin/menu/submenu/website.html' with active_tab='tab2' %}{% endblock %}
+
+{% block content %}
+<h1 class="page-header">Terms of Use</h1>
+
+You can use this form to provide terms of use for the website. You can use HTML syntax and HTML tags to write the text.
+<div>
+<br/>
+<form action="/admin/website/terms-of-use" method="post">
+ 	{% csrf_token %}
+    {{ form.content.label_tag }}
+    <br/>
+    {{ form.content }}
+    <br/>
+    <input type="submit" class="btn" value="Save"/>
+</form>
+</div>
+{% endblock %}
+
+

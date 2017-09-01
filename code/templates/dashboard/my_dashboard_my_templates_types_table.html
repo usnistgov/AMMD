@@ -1,0 +1,41 @@
+{% load dict_key_extras %}
+<table class="data-table">
+    <tr>
+        <th width="100em">{{ objectType }} name</th>
+        <th width="100em">Filename</th>
+        {% if user.is_staff %}
+            <th width="75em">
+                User
+            </th>
+        {% endif %}
+        <th width="100em">Actions</th>
+    </tr>
+    {% for object in objects %}
+        {% cycle 'even' '' as rowcolors silent %}
+        <tr class="{{ rowcolors }}">
+            <td>{{ object.title }}</td>
+            <td>{{ object.filename }}</td>
+            {% if user.is_staff %}
+                <td>
+                    {{usernames|get:object.user}}
+                </td>
+            {% endif %}
+            <td>
+                {% autoescape on %}
+                <span class="icon legend result" objectType="{{ objectType }}" objectid="{{ object.id }}"  content="{{ object.content|escape }}" >
+                    View
+                </span>
+                {% endautoescape %}
+                <span class="icon legend edit" objectfilename="{{ object.filename }}" objectname="{{ object.title }}" objecttype="{{ objectType }}" objectid="{{ object.id }}">
+                    Edit
+                </span>
+                <span class="icon legend modules" objectType="{{ objectType }}" objectid="{{ object.id }}">
+                    Modules
+                </span>
+                <span class="icon legend delete" objectfilename="{{ object.filename }}" objectname="{{ object.title }}" objecttype="{{ objectType }}" objectid="{{ object.id }}">
+                    Delete
+                </span>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

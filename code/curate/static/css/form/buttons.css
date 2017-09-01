@@ -1,0 +1,11 @@
+.add {
+    color: green;
+    cursor: pointer;
+    margin-left: 0.25em;
+}
+
+.remove {
+    color: red;
+    cursor: pointer;
+    margin-left: 0.25em;
+}

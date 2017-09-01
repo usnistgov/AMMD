@@ -1,0 +1,12 @@
+<h2 class="section-header">
+    {% if view.title %}
+        {{ view.title }}
+    {% else %}
+        Undefined view title
+    {% endif %}
+</h2>
+
+<div class="alert alert-danger">
+    <i class="fa fa-warning"></i> This view is not correctly configured. Please contact your administrator for more
+    information.
+</div>

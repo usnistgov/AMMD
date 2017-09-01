@@ -1,0 +1,25 @@
+{% extends "commons/modal.html" %}
+
+{% block modal_id %}remove-owl-modal{% endblock %}
+
+{% block modal_title %}Remove <span id="remove-owl-name"></span>?{% endblock %}
+
+{% block modal_body %}
+<p>
+    You are about to <strong>remove one of the ontology of queries</strong> of this system. If you proceed, the
+    ontology will be erase from the platform and you won't be able to recover it.
+    <br/>
+    <br/>
+    Are you sure to continue?
+</p>
+<input type="hidden" id="remove-owl-id" value=""/>
+{% endblock %}
+
+{% block modal_footer %}
+    <button class="btn btn-default" data-dismiss="modal">
+        <i class="fa fa-times"></i> Cancel
+    </button>
+    <button class="btn btn-danger" id="confirm-remove-owl">
+        <i class="fa fa-trash"></i> Remove ontology
+    </button>
+{% endblock %}

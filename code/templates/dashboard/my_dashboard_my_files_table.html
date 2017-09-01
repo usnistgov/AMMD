@@ -1,0 +1,35 @@
+{% load dict_key_extras %}
+<table class="data-table">
+    <tr>
+        <th width="175em">File name</th>
+        <th width="175em">Upload date</th>
+        {% if user.is_staff %}
+            <th width="175em">
+                User
+            </th>
+        {% endif %}
+        <th width="175em">Actions</th>
+    </tr>
+    {% for file in files %}
+        {% cycle 'even' '' as rowcolors silent %}
+        <tr class="{{ rowcolors }}">
+            <td>{{ file.name }}</td>
+            <td>{{ file.uploadDate }} </td>
+            {% if user.is_staff %}
+                <td>
+                    {{usernames|get:file.user}}
+                </td>
+            {% endif %}
+            <td>
+                <span class="icon legend delete" objectname="{{ file.name }}" objecttype="File" objectid="{{ file.id }}" onclick="deleteObject()" url="{{url}}">
+                    Delete
+                </span>
+                <a href="{{url}}/rest/blob?id={{file.id}}">
+                    <span class="icon legend download" >
+                        Download
+                    </span>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

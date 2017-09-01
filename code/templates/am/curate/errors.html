@@ -1,0 +1,33 @@
+{#% extends "mdcs/extra/two_columns.html" %#}
+{% extends "base_main.html" %}
+{% load staticfiles %}
+{% load auth_extras %}
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: curate.html
+# Application: templates
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology (NIST)
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block content %}
+<h1 class="page-header">Data entry error</h1>
+<div class="alert alert-danger">
+    {{ errors }}
+</div>
+{% endblock %}
+
+
+

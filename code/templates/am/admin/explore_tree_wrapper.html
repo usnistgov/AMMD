@@ -1,0 +1,141 @@
+{% extends "base_admin.html" %}
+{% load staticfiles %}
+{% load i18n admin_static %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: index.html
+# Application: templates/admin
+# Description:
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+
+            Philippe Dessauw
+            philippe.dessauw@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block content%}
+<h1 class="page-header">Exploration tree</h1>
+
+<h3>
+    Available OWL files
+
+    <span class="btn-group pull-right">
+        <a href="#" class="btn btn-primary" id="upload-owl">
+            <i class="fa fa-upload"></i> Upload new OWL
+        </a>
+        <a href="#" class="btn btn-primary" id="download-blank"><i class="fa fa-download"></i> Download blank OWL</a>
+    </span>
+</h3>
+<table class="table table-bordered table-striped" id="available-owl-table">
+    <thead>
+        <tr>
+            <th>Filename</th>
+            <th>Status</th>
+            <th>Last modified on</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for owl_file in owl_available_list %}
+        <tr id="{{ owl_file.id }}" {% if owl_file.status == 1 %}class="success"{% endif %}>
+            <td>{{ owl_file.name }}</td>
+            <td>
+                {% if owl_file.status == 0 %}
+                    Uploaded
+                {% else %}
+                    Active
+                {% endif %}
+            </td>
+            <td>{{ owl_file.last_modif }}</td>
+            <td>
+                {% if owl_file.status == 0 %}
+                <a href="#" class="btn btn-success activate-owl"><i class="fa fa-play"></i> Activate</a>
+                {% endif %}
+                <a href="#" class="btn btn-default edit-owl"><i class="fa fa-edit"></i> Edit</a>
+                <a href="#" class="btn btn-default download-owl"><i class="fa fa-download"></i> Download</a>
+                <a href="#" class="btn btn-default delete-owl"><i class="fa fa-trash"></i> Delete</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="4" class="empty-text">
+                There are no file available. Please upload or restore one.
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<hr />
+
+<h3>Deleted OWL files</h3>
+<table class="table table-bordered table-striped" id="deleted-owl-table">
+    <thead>
+        <tr>
+            <th>Filename</th>
+            <th>Last modified on</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for owl_file in owl_deleted_list %}
+        <tr id="{{ owl_file.id }}">
+            <td>{{ owl_file.name }}</td>
+            <td>{{ owl_file.last_modif }}</td>
+            <td>
+                <a href="#" class="btn btn-default restore-owl"><i class="fa fa-undo"></i> Restore</a>
+                <a href="#" class="btn btn-danger remove-owl"><i class="fa fa-times-circle"></i> Remove</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="4" class="empty-text">
+                There are no deleted files.
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block popups %}
+    {% include 'explore_tree/admin/popups/upload.html' %}
+    {% include 'explore_tree/admin/popups/activate.html' %}
+    {% include 'explore_tree/admin/popups/edit.html' %}
+    {% include 'explore_tree/admin/popups/remove.html' %}
+{% endblock %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.fileupload.css' %}" />
+{% endblock %}
+
+{% block extra_scripts %}
+    {# Scripts for uploading files #}
+    <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>
+    <script src="{% static 'js/jquery.fileupload.js' %}"></script>
+
+    <!--<script src="{% static 'explore_tree/js/admin/owl_actions.js' %}"></script>-->
+    <script src="{% static 'explore_tree/js/admin/owl_upload.js' %}"></script>
+    <script src="{% static 'explore_tree/js/admin/owl_activate.js' %}"></script>
+    <script src="{% static 'explore_tree/js/admin/owl_edit.js' %}"></script>
+    <script src="{% static 'explore_tree/js/admin/owl_download.js' %}"></script>
+    <script src="{% static 'explore_tree/js/admin/owl_delete.js' %}"></script>
+    <script src="{% static 'explore_tree/js/admin/owl_restore.js' %}"></script>
+    <script src="{% static 'explore_tree/js/admin/owl_remove.js' %}"></script>
+
+    <script src="{% static 'js/jquery.tablesorter.js' %}"></script>
+    <script src="{% static 'explore_tree/js/admin/tables.js' %}"></script>
+{% endblock %}
+
+

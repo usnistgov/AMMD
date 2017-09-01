@@ -1,0 +1,59 @@
+<div class="modal fade" id="upload-owl-modal" tabindex="-1" role="dialog" aria-labelledby="upload-owl-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Upload new ontology</h4>
+            </div>
+            <div class="modal-body">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <div class="row" style="height: 3em;">
+                    <div class="col-md-3">
+                        <div class="btn btn-default fileinput-button">
+                            <i class="fa fa-plus"></i>
+                            <span>Select file...</span>
+                            <!-- The file input field used as target for the file upload widget -->
+                            <input id="fileupload" type="file" name="files[]">
+                        </div>
+                    </div>
+                    <div class="col-md-9" style="padding-top: 0.5em">
+                        <!-- The global progress bar -->
+                        <div id="progress" class="progress">
+                            <div class="progress-bar progress-bar-striped active progress-bar-success"></div>
+                        </div>
+                        <div class="pull-right text-success" id="progress-complete">
+                            <i class="fa fa-check"></i> Upload complete
+                        </div>
+                        <div class="pull-right text-danger" id="progress-error">
+                            <i class="fa fa-times"></i> Upload failed:
+                            <span id="progress-error-msg">No error message provided</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:0.5em;">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="ontology-name" placeholder="ontology"
+                                   value=""/>
+                            <div class="input-group-addon" id="ontology-extension">
+                                <!--<i class="fa fa-check"></i>-->
+                                .owl
+                            </div>
+                        </div>
+
+                        <input type="hidden" class="form-control" id="ontology-id" value=""/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Close
+                </button>
+                <button type="button" class="btn btn-primary" id="save-owl">
+                    <i class="fa fa-save"></i> Save file
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

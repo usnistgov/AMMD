@@ -1,0 +1,71 @@
+{#% extends "mdcs/extra/two_columns.html" %#}
+{% extends "base_admin.html" %}
+{% load staticfiles %}
+{% load i18n admin_static %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: index.html
+# Application: templates/admin
+# Description:
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/dashboard.css' %}" />
+{% endblock %}
+
+{% block content%}
+<h1 class="page-header">User Management</h1>
+
+{% if app_list %}
+    {% for app in app_list %}
+        <div class="app-{{ app.app_label }} module">
+        <table class="table table-bordered">
+            <caption>
+                <a href="{{ app.app_url }}" class="section"
+                   title="{% blocktrans with name=app.name %}Models in the {{ name }} application{% endblocktrans %}">
+                    {% blocktrans with name=app.name %}{{ name }}{% endblocktrans %}
+                </a>
+            </caption>
+            {% for model in app.models %}
+                <tr class="model-{{ model.object_name|lower }}">
+                {% if model.admin_url %}
+                    <th scope="row" style="width:40%"><a href="{{ model.admin_url }}">{{ model.name }}</a></th>
+                {% else %}
+                    <th scope="row" style="width:40%">{{ model.name }}</th>
+                {% endif %}
+
+                {% if model.add_url %}
+                    <td style="width:30%"><a href="{{ model.add_url }}" class="addlink">{% trans 'Add' %}</a></td>
+                {% else %}
+                    <td style="width:30%">&nbsp;</td>
+                {% endif %}
+
+                {% if model.admin_url %}
+                    <td style="width:30%"><a href="{{ model.admin_url }}" class="changelink">{% trans 'Change' %}</a></td>
+                {% else %}
+                    <td style="width:30%">&nbsp;</td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>{% trans "You don't have permission to edit anything." %}</p>
+{% endif %}
+{% endblock %}
+

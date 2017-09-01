@@ -1,0 +1,63 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>AM Material Database</title>
+
+    {% include 'base/styles.html' %}
+    {% include 'base/ie_support.html' %}
+    <link href="{% static 'css/landing.css' %}" rel="stylesheet">
+
+    {% block extra_styles %}{% endblock %}
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="banner">
+            <a href="https://nist.gov">
+                <img src="{% static 'img/nist_grey_bg.png' %}" alt="banner"/>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="landing_header">
+            <img src="{% static 'img/landing_header.png' %}" alt="landing_header"/>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 2em; text-align: center">
+        <div class="col-md-4 side-link">
+            <a href="{% url 'exploration_tree' %}">
+                <img src="{% static 'img/explore_link.png' %}" alt="explore_link"/>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'img/home_link.png' %}" alt="explore_link"/>
+            </a>
+        </div>
+        <div class="col-md-4 side-link">
+            <a href="{% url 'xsd_viewer' %}">
+                <img src="{% static 'img/viewer_link.png' %}" alt="explore_link"/>
+            </a>
+        </div>
+    </div>
+
+
+</div>
+
+{% include 'base/footer.html' %}
+
+{% block popups %}{% endblock %}
+
+{% include 'base/scripts.html' %}
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,29 @@
+{% extends "mdcs/extra/one_column.html" %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: login.html
+# Application: templates
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block title %}<h1>Login</h1>{% endblock %}
+{% block menu %}{% include 'mdcs/menus/main.html' with active_tab='login' %}{% endblock %}
+
+{% block content %}
+	{% include 'commons/forms/login.html' %}
+{% endblock %}

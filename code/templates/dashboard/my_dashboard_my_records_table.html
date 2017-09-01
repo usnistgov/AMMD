@@ -1,0 +1,66 @@
+{% load dict_key_extras %}
+
+<table class="data-table">
+    <tr>
+        <th width="75em">Resource name</th>
+        <th width="30em">Published</th>
+        <th width="100em">Last Publication date</th>
+        {% if user.is_staff %}
+            <th width="50em">User</th>
+        {% endif %}
+        <th width="200em">Actions</th>
+    </tr>
+    {% for XMLdata in XMLdatas %}
+    {% with key=XMLdata.iduser %}
+        {% cycle 'even' '' as rowcolors silent %}
+        <tr class="{{ rowcolors }}">
+            <td>
+                {% if XMLdata.content.Resource.identity.title %}
+                    {{ XMLdata.content.Resource.identity.title }}
+                {%else%}
+                    <script>
+                        document.write('{{ XMLdata.title }}'.replace(/\.[^/.]+$/, ""));
+                    </script>
+                {% endif %}
+            </td>
+            <td>{% if XMLdata.ispublished %}Yes {%else%} No {% endif %}
+            </td>
+            <td>
+                {% if XMLdata.publicationdate %}
+                    {{XMLdata.publicationdate}}
+                {%else%}
+                    Never published before
+                {% endif %}
+            </td>
+            {% if user.is_staff %}
+                <td>
+                    {{usernames|get:key}}
+                </td>
+            {% endif %}
+            <td>
+                {% with XMLdata|get:"_id" as XMLdata_id %}
+                {% autoescape on %}
+                <a href="/dashboard/detail?type=record&id={{XMLdata_id}}"><span class="icon legend result">
+                    View
+                </span></a>
+                {% endautoescape %}
+                <a href="/curate/enter-data?id={{XMLdata_id}}"><span class="icon legend edit">
+                    Edit
+                </span></a>
+                {% if not XMLdata.ispublished %}
+                <span class="icon legend publish" onclick="updatePublish('{{XMLdata_id}}')">
+                    Publish
+                </span>
+                {% endif %}
+                <span class="icon legend delete" onclick="deleteResult('{{XMLdata_id}}')">
+                    Delete
+                </span>
+                <span class="icon legend changeOwner" onclick="changeOwnerRecord('{{XMLdata_id}}')">
+                    Change Owner
+                </span>
+                {% endwith%}
+            </td>
+        </tr>
+    {% endwith %}
+    {% endfor %}
+</table>

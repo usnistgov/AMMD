@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="file:/C:/Users/GAS2/workspace_git/mgi-mdcs/explore_tree/tests/test.xsd">
+    <name>
+       name2
+    </name>
+    <value>
+       value2
+    </value>
+</element2>

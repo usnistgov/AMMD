@@ -1,0 +1,29 @@
+{% extends "commons/modal.html" %}
+
+{% block modal_id %}edit-owl-modal{% endblock %}
+
+{% block modal_title %}Edit the ontology name{% endblock %}
+
+{% block modal_body %}
+<p>
+    You can change the name of your ontology in the form below:
+</p>
+<div class="input-group">
+    <input type="text" class="form-control" id="edit-owl-name" placeholder="ontology"
+            value=""/>
+    <div class="input-group-addon" id="ontology-extension">
+        <!--<i class="fa fa-check"></i>-->
+        .owl
+    </div>
+</div>
+<input type="hidden" id="edit-owl-id" value=""/>
+{% endblock %}
+
+{% block modal_footer %}
+    <button class="btn btn-default" data-dismiss="modal">
+        <i class="fa fa-times"></i> Close
+    </button>
+    <button class="btn btn-primary" id="confirm-edit-owl">
+        <i class="fa fa-edit"></i> Apply changes
+    </button>
+{% endblock %}

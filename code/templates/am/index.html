@@ -1,0 +1,88 @@
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6" style="text-align: center">
+        <img src="{% static 'img/home_link.png' %}" alt="landing_header"/>
+        <p style="margin-top: 1.5em; text-align: justify">
+            The Additive Manufacturing Materials Database (AMMD) is built using the NIST Material Data Curation System
+            (MDCS) as a backend with structure provided by NIST’s AM schema. Providing a collaboration platform, the
+            database is set to evolve through the open data access and material data sharing among the AM community. As
+            data sets continue to accumulate, it becomes possible to establish new correlations between processes,
+            materials, and parts.
+        </p>
+        <p style="margin-top: 1.5em; text-align: justify">
+            The schema, or data structure, provides the backbone of the AMMD.  The relationships created by the
+            structure are essential to supporting meaningful data curation and data retrieval.  As the AMMD matures
+            through iterations, it is the data structure that will need to evolve to support the development of
+            meaningful relationships that can be used to query the database.
+        </p>
+        <p style="margin-top: 1.5em; text-align: justify">
+            Since part design information and test data are linked to individual builds, we structure the data sets
+            into three types of main entities, as shown in Figure 1. The first entity type “amMaterial” captures vendor 
+            material information. The second type of entity “amMachine” captures AM machine information. The data
+            captured by these two types are independent of specific builds and can be provided by material vendors and
+            machine owners. The third type of database entity “amBuild” captures the information related to a specific
+            AM build, including part and specimen design, pre-process, in-process and post process information, as well
+            as test information.
+        </p>
+    </div>
+    <div class="col-md-5 col-md-offset-1">
+        <img src="{% static 'img/home_left_schema.png' %}" alt="landing_header"/>
+
+        <div class="row" style="font-size: 1.5em; margin-top: 2em">
+            <div class="col-md-9">
+                Read more about the Schema Development
+            </div>
+            <div class="col-md-3" style="font-weight: bold">
+                <a target="_blank" href="https://www.nist.gov/node/557011">Here</a>
+            </div>
+        </div>
+        <div class="row" style="font-size: 1.5em">
+            <div class="col-md-9">
+                Read more about the Development of AMMD
+            </div>
+            <div class="col-md-3" style="font-weight: bold">
+                <a target="_blank" href="{% static 'files/MST2016Poster.pdf' %}">Here</a>
+            </div>
+        </div>
+        <div class="row" style="font-size: 1.5em">
+            <div class="col-md-9">
+                Read more about the Development of MDCS
+            </div>
+            <div class="col-md-3" style="font-weight: bold">
+                <a target="_blank" href="https://mgi.nist.gov/materials-data-curation-system">Here</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %}
+<div class="row">
+    {% if perms.curate %}
+    <div class="col-md-3 col-md-offset-3 col-sm-5 col-sm-offset-1">
+        <p style="text-align: center">
+            <a href="/curate" class="btn btn-primary" style="font-size: 1.5em">
+                <i class="fa fa-edit"></i> Curate your data
+            </a>
+        </p>
+    </div>
+    <div class="col-md-3 col-sm-5">
+        <p style="text-align: center">
+            <a href="/explore" class="btn btn-success" style="font-size: 1.5em">
+                <i class="fa fa-search"></i> Explore the repository
+            </a>
+        </p>
+    </div>
+    {% else %}
+    <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+        <p style="text-align: center">
+            <a href="/explore" class="btn btn-success" style="font-size: 1.5em">
+                <i class="fa fa-search"></i> Explore the repository
+            </a>
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endcomment %}
+{% endblock %}

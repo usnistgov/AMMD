@@ -1,0 +1,86 @@
+{#% extends "mdcs/extra/two_columns.html" %#}
+{% extends "base_main.html" %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: curate_view_data.html
+# Application: templates
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block content %}
+<div class="row">
+    <h1 class="page-header">View Data</h1>
+    <p>
+        This is a preview of the curated data in XML format. As part of this demo, please save your data to the repository
+        so that we can better evaluate our system. You can also click the download button for a copy on your local machine.
+    </p>
+</div>
+<div class="row">
+    <div class="btn-group pull-right">
+        <button class="btn btn-default download-xml"><i class="fa fa-download"></i> Download XML</button>
+        <button class="btn btn-default save-to-repo"><i class="fa fa-star"></i> Save to repository</button>
+    </div>
+</div>
+<div class="row">
+    <div id="XMLHolder">
+        <div class="alert alert-info">
+            <i class="fa fa-spinner fa-spin"></i> Please wait. Generating XML data...
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block popups %}
+<div id="dialog-downloaded-message" title="Download Complete" style="display:none;">
+<p></p>
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 10px 0;"></span>
+    XML File Downloaded.
+  </p>
+</div>
+
+<div id="dialog-save-data-message" title="Save to Repository" style="display:none;">
+	Save data to the repository.
+	<form id="form_save" action="/curate/save_data" method="post">
+	{% csrf_token %}
+	{{form_save}}
+	</form>
+	<div id="saveErrorMessage" style="color:red;"></div>
+</div>
+
+<div id="dialog-saved-message" title="XML Data Saved" style="display:none;">
+<p></p>
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 10px 0;"></span>
+    Save to repository successful.
+  </p>
+</div>
+
+{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/curate/XMLTree.css' %}" media="screen" />
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'inc/controllers/js/XMLTree.js' %}"></script>
+<script src="{% static 'inc/controllers/js/curate.js' %}"></script>
+<script>
+verifyTemplateIsSelectedViewData();
+</script>
+{% endblock %}

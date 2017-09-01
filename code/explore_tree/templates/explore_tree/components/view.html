@@ -1,0 +1,11 @@
+<h1 class="page-header">{{ header }}</h1>
+
+{% for view in views %}
+    {% if type == "leaf" %}
+        {% include 'explore_tree/components/views/leaf.html' with view=view %}
+    {% elif type == "branch" %}
+        {% include 'explore_tree/components/views/branch.html' with view=view %}
+    {% else %}
+        {% include 'explore_tree/components/views/error.html' with view=view %}
+    {% endif %}
+{% endfor %}

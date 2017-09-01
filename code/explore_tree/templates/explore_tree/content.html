@@ -1,0 +1,30 @@
+<div id="tree-panel" class="col-sm-4 col-md-3 sidebar">
+    <div id="tree">
+        <h4 id="tree-loading">
+            <i class="fa fa-spinner fa-pulse fa-fw"></i>
+            <span>Loading tree...</span>
+        </h4>
+        <ul id="tree-details" class="hide">
+            <li class="root"><i class="fa fa-database"></i> Database</li>
+            {{ navigation_tree | safe }}
+        </ul>
+    </div>
+</div>
+
+<div class="col-sm-8 col-sm-offset-4 col-md-9 col-md-offset-3 main">
+    <div id="explore-view">
+        <h1 class="page-header">Exploration panel</h1>
+
+        <p class="alert alert-info">
+            <i class="fa fa-question-circle"></i> Please browse the left panel and select a viewable object to toggle
+            this screen.
+        </p>
+    </div>
+    <div id="explore-view-error">
+        <h1 class="page-header">Exploration error</h1>
+        <p class="alert alert-danger">
+            <i class="fa fa-exclamation-triangle"></i> An error occured while browsing the repository. If you keep
+            seeing this message, please <a href="{% url 'contact' %}">contact an administrator</a>.
+        </p>
+    </div>
+</div>

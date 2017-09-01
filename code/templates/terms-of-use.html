@@ -1,0 +1,37 @@
+{% extends "mdcs/extra/one_column.html" %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: terms-of-use.html
+# Application: templates
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block title %}<h1><span>Terms of Use</span></h1>{% endblock %}
+{% block menu %}{% include 'mdcs/menus/main.html' with active_tab='terms' %}{% endblock %}
+
+{% block content%}
+<div class="left" style="width: 830px">
+	<br/>
+	{% if terms %}
+	    {{ terms.content | safe}}
+	{% else %}
+	    <a href="/contact">Contact the administrator</a>
+	{% endif %}
+</div>
+<div class="clearer">&nbsp;</div>
+{% endblock %}

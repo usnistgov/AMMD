@@ -1,0 +1,17 @@
+.viewer-options {
+    margin-top: 0.5em;
+}
+
+img.reduced {
+    width: 70%;
+    height: 70%;
+}
+
+div.middle  {
+    border-left: 5px solid grey;
+    border-right: 5px solid grey;
+}
+
+.viewer-sections {
+    text-align: center;
+}

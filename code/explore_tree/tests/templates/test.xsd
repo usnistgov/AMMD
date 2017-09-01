@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:element name="element1" type="elementType"/>
+    <xs:element name="element2" type="elementType"/>
+    <xs:complexType name="elementType">
+        <xs:sequence>
+            <xs:element name="name"/>
+            <xs:element name="value"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,1809 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://siam.nist.gov/Database-Navigation-Ontology#"
+     xml:base="http://siam.nist.gov/Database-Navigation-Ontology"
+     xmlns:qudt="http://qudt.org/1.1/schema/qudt#"
+     xmlns:quantity="http://qudt.org/1.1/schema/quantity#"
+     xmlns:vaem="http://www.linkedmodel.org/1.2/schema/vaem#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+     xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+     xmlns:voag="http://voag.linkedmodel.org/1.0/schema/voag#"
+     xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:dtype="http://www.linkedmodel.org/1.0/schema/dtype#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:ace_lexicon="http://attempto.ifi.uzh.ch/ace_lexicon#"
+     xmlns:dimension="http://qudt.org/1.1/schema/dimension#">
+    <owl:Ontology rdf:about="http://siam.nist.gov/Database-Navigation-Ontology"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://attempto.ifi.uzh.ch/ace_lexicon#CN_pl -->
+
+    <owl:AnnotationProperty rdf:about="http://attempto.ifi.uzh.ch/ace_lexicon#CN_pl"/>
+    
+
+
+    <!-- http://attempto.ifi.uzh.ch/ace_lexicon#CN_sg -->
+
+    <owl:AnnotationProperty rdf:about="http://attempto.ifi.uzh.ch/ace_lexicon#CN_sg"/>
+    
+
+
+    <!-- http://attempto.ifi.uzh.ch/ace_lexicon#PN_sg -->
+
+    <owl:AnnotationProperty rdf:about="http://attempto.ifi.uzh.ch/ace_lexicon#PN_sg"/>
+    
+
+
+    <!-- http://attempto.ifi.uzh.ch/ace_lexicon#TV_pl -->
+
+    <owl:AnnotationProperty rdf:about="http://attempto.ifi.uzh.ch/ace_lexicon#TV_pl"/>
+    
+
+
+    <!-- http://attempto.ifi.uzh.ch/ace_lexicon#TV_sg -->
+
+    <owl:AnnotationProperty rdf:about="http://attempto.ifi.uzh.ch/ace_lexicon#TV_sg"/>
+    
+
+
+    <!-- http://attempto.ifi.uzh.ch/ace_lexicon#TV_vbg -->
+
+    <owl:AnnotationProperty rdf:about="http://attempto.ifi.uzh.ch/ace_lexicon#TV_vbg"/>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#display_instance -->
+
+    <owl:AnnotationProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#display_instance">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#display_value -->
+
+    <owl:AnnotationProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#display_value">
+        <rdfs:domain rdf:resource="_:genid-nodeid-A39"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#has_material_vendor -->
+
+    <owl:ObjectProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#has_material_vendor">
+        <rdfs:domain rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+        <rdfs:range rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#material_vendor"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;p style=&quot;margin-top: 0&quot;&gt;
+      this &amp;quot;property&amp;quot; will display a material vendor.  The value of this 
+      property will not be a string, but will point to a unique ID that will 
+      provide information about the vendor.  To properly display vendor 
+      information we must create a &amp;quot;dummy class&amp;quot; that will not display on the 
+      actual navigation tree, but will return a unique display frame.
+    &lt;/p&gt;</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#used_in_builds -->
+
+    <owl:ObjectProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#used_in_builds">
+        <rdfs:domain rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#material_vendor"/>
+        <rdfs:range rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;p style=&quot;margin-top: 0&quot;&gt;
+      this is &amp;quot;property&amp;quot; will provide a list of unique ids to builds that used 
+      material from this vendor
+    &lt;/p&gt;</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#used_material -->
+
+    <owl:ObjectProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#used_material">
+        <rdfs:domain rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+        <rdfs:range rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMaterial"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;p style=&quot;margin-top: 0&quot;&gt;
+      this property will provide a unique id to the query that is defined 
+      under the corresponding &amp;quot;material&amp;quot; display pane
+    &lt;/p&gt;</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#build_platform_thickness -->
+
+    <owl:DatatypeProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#build_platform_thickness">
+        <rdfs:domain rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#PBFBuilds"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;p style=&quot;margin-top: 0&quot;&gt;
+      this will display the platfrom value for the corresponding build.  A 
+      link will have to be made to the corresponding schema value
+    &lt;/p&gt;</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#display_instance -->
+
+    <owl:DatatypeProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#display_instance"/>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#display_value -->
+
+    <owl:DatatypeProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#display_value"/>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#feedstock_material_lot_number -->
+
+    <owl:DatatypeProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#feedstock_material_lot_number">
+        <rdfs:domain rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;p style=&quot;margin-top: 0&quot;&gt;
+      a link will have to be made to the corresponding schema value
+    &lt;/p&gt;</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#has_vendor_location -->
+
+    <owl:DatatypeProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#has_vendor_location">
+        <rdfs:domain rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#material_vendor"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;p style=&quot;margin-top: 0&quot;&gt;
+      has location
+    &lt;/p&gt;</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#has_vendor_name -->
+
+    <owl:DatatypeProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#has_vendor_name">
+        <rdfs:domain rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#material_vendor"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vendor name</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#substrate_material -->
+
+    <owl:DatatypeProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#substrate_material">
+        <rdfs:domain rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#PBFBuilds"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;p style=&quot;margin-top: 0&quot;&gt;
+      a link will  have to be made to the corresponding schema value
+    &lt;/p&gt;</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AISI420 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AISI420">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#ToolSteels"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AISIA2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AISIA2">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#ToolSteels"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AISID2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AISID2">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#ToolSteels"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AISIS7 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AISIS7">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#ToolSteels"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds">
+        <display_instance rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</display_instance>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AMMachine -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AMMachine">
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Physical_phenomenons</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Physical_phenomenon</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Individual stages of the multi-physics multi-scale process that characterizes PBF processes.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AMMaterial -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AMMaterial">
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Material_entities</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Material_entity</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Material used for AM process. Most AM processes are capable of using several materials.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AMTests -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AMTests"/>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ASTM_F75 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ASTM_F75">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#CobaltAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AlSi10Mg -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AlSi10Mg">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AluminumAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AlSi12 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AlSi12">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AluminumAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AlSi7Mg -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AlSi7Mg">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AluminumAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AluminumAlloy -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AluminumAlloy">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Metal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#AmorphousThermoplastic -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#AmorphousThermoplastic">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Polymer"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AmorphousThermoplastics</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">AmorphousThermoplastic</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Amorphous high-temperature polymers have a randomly ordered molecular structure which does not have a sharp melt point; instead amorphous materials soften gradually as the temperature rises.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Arcam -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Arcam">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#EBeam"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ArcamA2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamA2">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Arcam"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ArcamA2X -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamA2X">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Arcam"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ArcamA2XX -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamA2XX">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Arcam"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ArcamQ10 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamQ10">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Arcam"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ArcamQ20 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamQ20">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Arcam"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Arcam_Ti6Al4V -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Arcam_Ti6Al4V">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Arcam_Ti6Al4V_ELI -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Arcam_Ti6Al4V_ELI">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V_ELI"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#BJBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#BJBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#BinderJetting -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#BinderJetting">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMachine"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CARPENTER_Micro-Melt_625AM -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CARPENTER_Micro-Melt_625AM">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Builds: 
+
+  &lt;Build ID 1&gt;
+  &lt;Build ID 2&gt;
+  &lt;Build ID 3&gt;
+     ....</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Compatible AM Machines:
+
+  &lt;AMMachine Name 1&gt;
+  &lt;AMMachine Name 2&gt;
+  &lt;AMMachine Name 3&gt;
+   ......</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Conformance: 
+
+  AMS 5666F (-325M=10u)</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">General Information:
+
+Vendor Name: CARPENTER Powder Products 
+Material ID: Micro-Melt 625M
+MaterialName: Micro-Melt 625M
+Description:</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">InertGasAtomization?
+  Yes</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Rated Material Properties:
+
+  Powder Composition:
+  Powder Density:
+  Powder Size:
+  Powder Processing Info:
+  Powder Heats:
+  Powder Chemistry:</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Test Results:
+
+  &lt;Test ID1&gt;
+  &lt;Test ID2&gt;
+  &lt;Test ID3&gt;
+   .....</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CC480K -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CC480K">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#CopperAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CL_40TI -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CL_40TI">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CL_40TI_ELI -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CL_40TI_ELI">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V_ELI"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CeramicBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CeramicBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#LPBFBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CeramicMaterial -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CeramicMaterial">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Tensil"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Ceramics -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Ceramics">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMaterial"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ceramicses</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ceramics</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">An inorganic, nonmetallic solid primarily held in ionic and covalent bonds. The crystallinity of ceramic materials ranges from highly-oriented to semi-crystalline, and often completely amorphous.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CoCrWC -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CoCrWC">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#CobaltAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CobaltAlloy -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CobaltAlloy">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Metal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CompositeBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CompositeBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#LPBFBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CompositeMaterials -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CompositeMaterials">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Ceramics"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CompositeMaterialses</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">CompositeMaterials</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Materials that are particulate reinforced, fiber reinforces or some other combination of oxides and nonoxides.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Compressive -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Compressive">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Mechnical"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_M1_Cusing -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_M1_Cusing">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Concept_Laser"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_M2_Cusing -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_M2_Cusing">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Concept_Laser"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_M2_Cusing_MultiLaser -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_M2_Cusing_MultiLaser">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Concept_Laser"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_MLab_Cusing -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_MLab_Cusing">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Concept_Laser"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_MLab_Cusing_R -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_MLab_Cusing_R">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Concept_Laser"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_Xline_2000R -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ConceptLaser_Xline_2000R">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Concept_Laser"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Concept_Laser -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Concept_Laser">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#LPBF"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#CopperAlloy -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#CopperAlloy">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Metal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#DED -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#DED">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMachine"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#DEDBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#DEDBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Density -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Density">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Unit_Tests"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EBeam -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EBeam">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#PBF"/>
+        <owl:disjointWith rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#LPBF"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EBeamBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EBeamBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#PBFBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EOS -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOS">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#LPBF"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EOSINT_M270 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSINT_M270">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#EOS"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EOSINT_M280 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSINT_M280">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#EOS"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EOSM100 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSM100">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#EOS"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EOSM290 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSM290">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#EOS"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EOSM400 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSM400">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#EOS"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EOS_TitaniumTi64 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOS_TitaniumTi64">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#EOS_TitaniumTi64ELI -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOS_TitaniumTi64ELI">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V_ELI"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Fatigue -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Fatigue">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Mechnical"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#FerroMetal -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#FerroMetal">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#LPBFBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Geometry -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Geometry">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Unit_Tests"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Gold -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Gold">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#PreciousMetalAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#H13 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#H13">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#ToolSteels"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Hardness -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Hardness">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Mechnical"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#HastelloyX -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#HastelloyX">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#NickelAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Inconel625 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#NickelAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#MetalMaterial"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Inconel625_Builds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625_Builds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#NonFerroMetal"/>
+        <display_instance rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</display_instance>
+        <display_value rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;build name&gt;</display_value>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;p style=&quot;margin-top: 0&quot;&gt;
+      note annotation property to the class structure that dictates whether or 
+      not insances should be displayed in the navigation tree.  True=yes  
+      false=no  note that a &quot;display value&quot; annotation was used to determine what query attributet from the &quot;Inconel625_Builds&quot; frame query should be displayed in the navigation tree
+    &lt;/p&gt;</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Inconel713 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Inconel713">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#NickelAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Inconel718 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Inconel718">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#NickelAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Inconel738 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Inconel738">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#NickelAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#LPBF -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#LPBF">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#PBF"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#LPBFBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#LPBFBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#PBFBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#MEBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#MEBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#MJBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#MJBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Marage300 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Marage300">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#ToolSteels"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#MaterialExtrusion -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#MaterialExtrusion">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMachine"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#MaterialJetting -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#MaterialJetting">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMachine"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Mechnical -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Mechnical">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Unit_Tests"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Metal -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Metal">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMaterial"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Metals</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Metal</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A material that is typically hard, opaque, shiny, and has good electrical and thermal conductivity.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#MetalMaterial -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#MetalMaterial">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Tensil"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Microstructure -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Microstructure">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Unit_Tests"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_EOS270 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_EOS270">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#EOSINT_M270"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Builds:
+
+  &lt;Build ID 1&gt;
+  &lt;Build ID 2&gt;
+  &lt;Build ID 3&gt;
+    ...</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Compatible Material:
+
+  &lt;Compatible Material Name 1&gt;
+  &lt;Compatible Material Name 2&gt;
+  &lt;Compatible Material Name 3&gt;
+  ...</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">General Information
+
+Owner: NIST EL
+Manufacturer: EOS
+Model: EOSINT M270
+Year of Made: May, 2012
+Description: EOSINT M270 builds metal parts using Direct Metal Sintering (DMLS). 
+The technology fuses metal powder into a solid part by melting it locally using a focused laser beam.</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Machine History
+
+last Maintenance:
+Last Calibration:
+Software Version:</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">System Information:
+
+  System Serial Number:
+  Laser System:
+  Softwaer System:</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_EWI_Build1 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_EWI_Build1">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625_Builds"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Built Material Information:
+
+Material  Vendor: Carpenter Powder Products
+Material Name: &lt; MicroMelt 625AM &gt;
+Feedstock Material Lot Number: W1856B2
+Substrate Material: ATI 304/304L stainless steel; supplied by Directed MFG
+Build Platform Thickness: 51.562 mm 
+Blended or Unblended: No
+If Blended,  Individual Heat Certs to Traveller: 
+                    Heat Number: 1
+                    Lot Number: 
+Quantity of Powder in Lot:
+Certification Number (Attach Certification):
+Chemical Analysis Met:
+Sieve Analysis Met:
+Particle Size Distribution*
+                   D10:
+                   D50:
+                   D90:
+Powder Reuse:
+Material Handling:</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">General Infomration:
+
+Build ID :  NIST_EWI_Build1 
+Project Name: NIST EWI Round Robin
+Manufacturer: NIST
+Date of Build : Monday, August 11-17, 2013
+Drawing File:  EWI00001506</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Machine Information:
+
+Machine Used in This Build: &lt;NIST EOS INT M270&gt;
+Machine Last Calibration Date:</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Process Parameters
+
+Layer Thickness: 20um
+Feed Speed: 
+Travel Speed:
+Laser Power: 195W
+Laser Property Parameter:
+Date of Laser Diagnostic:</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Test Coupons:
+
+  &lt;Specimen ID1&gt;
+     &lt;Test ID 1&gt;
+     &lt;Test ID 2&gt;
+  &lt;Specimen ID2&gt;
+  &lt;Specimen ID3&gt;</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_EWI_Build2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_EWI_Build2">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625_Builds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_EWI_Build3 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_EWI_Build3">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625_Builds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_EWI_Build4 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_EWI_Build4">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625_Builds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin-T-XY-X3 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin-T-XY-X3">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-X1 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-X1">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-X2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-X2">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-X4 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-X4">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-X5 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-X5">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y1 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y1">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y2">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y3 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y3">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y4 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y4">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y5 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-XY-Y5">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X1 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X1">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X2">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X3 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X3">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X4 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X4">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X5 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NIST_Round_Robin_T-Z-X5">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Inconel625Powder"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">General Information:
+
+  Material Name: &lt;Material Name&gt;
+  Description:  
+  Test Location:
+  Test Performers:
+  Test Date:</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Test Details:
+
+  Test name:
+  Test Equipment: 
+  Test Standards: 
+  Specimen: &lt;Specimen ID&gt;
+  BuildID: &lt;Build ID&gt;</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Test Results: 
+
+      Speed:
+      Temp:
+      UTS:
+      YS:
+      Elongation:
+      RA:
+      E:
+      UltLoad:
+      FinalDimensions:</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NickelAlloy -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NickelAlloy">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Metal"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NickelAlloys</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NickelAlloy</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Superalloys with nickel as principal element. Some examples are alloys 625 and 718.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NonFerroMetal -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NonFerroMetal">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#LPBFBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#NonOxideCeramic -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#NonOxideCeramic">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Ceramics"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NonOxideCeramics</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">NonOxideCeramic</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Nonoxide ceramics, such as carbides, borides, nitrides, and silicides.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Optomec -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Optomec">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#DED"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Optomec_LENS850-R -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Optomec_LENS850-R">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Optomec"/>
+        <owl:disjointWith rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Optomec_LENSMR-7"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Optomec_LENSMR-7 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Optomec_LENSMR-7">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Optomec"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#OxideCeramic -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#OxideCeramic">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Ceramics"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OxideCeramics</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OxideCeramic</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Oxides are chemical compounds that contains at least one oxygen atom and one other element in its chemical formula.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#PBF -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#PBF">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMachine"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#PBFBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#PBFBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#PolyMethylmetacrylate -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#PolyMethylmetacrylate">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AmorphousThermoplastic"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PolyMethylmetacrylates</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PolyMethylmetacrylate</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PMMA is a transparent thermoplastic often used in sheet form as a lightweight or shatter-resistant alternative to glass.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Polyamide -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Polyamide">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#SemiChrystallineThermoplastics"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polyamides</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polyamide</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A macromolecule with repeating units linked by amide bonds.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Polycarbonate -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Polycarbonate">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AmorphousThermoplastic"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polycarbonates</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polycarbonate</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A group of thermoplastic polymers containing carbonate groups in their chemical structures. Polycarbonates used in engineering are strong, tough materials, and some grades are optically transparent. They are easily worked, molded, and thermoformed.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Polyethylene -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Polyethylene">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#SemiChrystallineThermoplastics"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polyethylenes</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polyethylene</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PE is the most common plastic. Many kinds of polyethylene are known, with most having the chemical formula (C2H4)n. Thus PE is usually a mixture of similar organic compounds that differ in terms of the value of n.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Polymer -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Polymer">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMaterial"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polymers</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polymer</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A large molecule, or macromolecule, composed of many repeated subunits. Only amorphous and semi-crystalline polymers are used in AM processes.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#PolymerBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#PolymerBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#LPBFBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#PolymerMaterial -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#PolymerMaterial">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Tensil"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Polypropylene -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Polypropylene">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#SemiChrystallineThermoplastics"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polypropylenes</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polypropylene</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PP is a thermoplastic polymer used in a wide variety of applications including packaging and labeling, textiles (e.g., ropes, thermal underwear and carpets), stationery, plastic parts and reusable containers of various types, laboratory equipment, loudspeakers, automotive components, and polymer banknotes. An addition polymer made from the monomer propylene, it is rugged and unusually resistant to many chemical solvents, bases and acids.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Polystyrene -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Polystyrene">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AmorphousThermoplastic"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polystyrenes</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Polystyrene</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A synthetic aromatic polymer made from the monomer styrene. Polystyrene can be solid or foamed. General purpose polystyrene is clear, hard, and rather brittle.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#PreciousMetalAlloy -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#PreciousMetalAlloy">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Metal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#SLBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SLBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#SS304 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SS304">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#StainlessSteel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#SS316L -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SS316L">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#StainlessSteel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#SS410 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SS410">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#StainlessSteel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#SS440 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SS440">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#StainlessSteel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Sciaky -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#DED"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM110 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM110">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM150 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM150">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM300 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM300">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM68 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM68">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM88 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM88">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#SemiChrystallineThermoplastics -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SemiChrystallineThermoplastics">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Polymer"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SemiChrystallineThermoplasticses</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SemiChrystallineThermoplastics</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Semi-crystalline materials have a highly ordered molecular structure with sharp melt points. They do not gradually soften with a temperature increase, instead, semi-crystalline materials remain solid until a given quantity of heat is absorbed and then rapidly change into a low viscosity liquid.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Shear -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Shear">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Mechnical"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#SheetLamination -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SheetLamination">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMachine"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#SilicateCeramic -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SilicateCeramic">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#OxideCeramic"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SilicateCeramics</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SilicateCeramic</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Silicate ceramics are manufactured from natural raw materials. They include porcelains, steatites, cordierites, and mullites.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Silver -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Silver">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#PreciousMetalAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#StainlessSteel -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#StainlessSteel">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Steel"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stainless_steels</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Stainless_steel</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Steel alloy with a minimum of 10.5% of chromium content by mass, to protect it from corrosion.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Steel -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Steel">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Metal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Surface -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Surface">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Unit_Tests"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#TPPBuilds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#TPPBuilds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMBuilds"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#TankPhotoPoly -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#TankPhotoPoly">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMMachine"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Tensil -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Tensil">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Mechnical"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Ti6AL4V_Builds -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Ti6AL4V_Builds">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#NonFerroMetal"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#TitaniumAlloy"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Composition:
+
+C   &lt;0.08%
+
+Fe  &lt;0.25%
+
+N2 &lt;0.05%
+
+O2  &lt;0.2%
+
+Al  5.5-6.76%
+
+V   3.5-4.5%
+
+Ti  Balance</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Specifications:
+
+AMS: 4911
+UNS: R56400</rdfs:comment>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Ti-6Al-4V (UNS designation R56400) is a alpha-beta titanium alloy featuring high strength, low weight ratio and good corrosion resistance. It is one of the most commonly used titanium alloys and is applied in a wide range of applications where low density and good corrosion resistance is necessary such as e.g. aerospace industry and biomechanical applications (implants and prostheses).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V_ELI -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Ti6Al4V_ELI">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#TitaniumAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#TiAl6Nb7 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#TiAl6Nb7">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#TitaniumAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#TitaniumAlloy -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#TitaniumAlloy">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Metal"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">TitaniumAlloys</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">TitaniumAlloy</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Alloys with Titanium as the primary element. The most typical example is Ti-6Al-4V.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#TitaniumGrade2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#TitaniumGrade2">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#TitaniumAlloy"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#ToolSteels -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ToolSteels">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Steel"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HardMetals</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">HardMetal</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Hard materials used in machining tough materials.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Unit_Tests -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Unit_Tests">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#AMTests"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#WC-COCementedCarbide -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#WC-COCementedCarbide">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#ToolSteels"/>
+        <ace_lexicon:CN_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">WC-COCementedCarbides</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">WC-COCementedCarbide</ace_lexicon:CN_sg>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cemented carbides are composed of a metal matrix composite where carbide particles act as the aggregate and a metallic binder serves as the matrix.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#material_vendor -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#material_vendor">
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">&lt;p style=&quot;margin-top: 0&quot;&gt;
+      this class will not be displayed in the navigation tree, but must be 
+      created in order to provide a uniue query view
+    &lt;/p&gt;</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#15-5PH -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#15-5PH">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#StainlessSteel"/>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#17-4PH -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#17-4PH">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#StainlessSteel"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotations
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description rdf:about="http://www.semanticweb.org/ina3/ontologies/2014/10/untitled-ontology-6-model-ontology#isDeterminedBy">
+        <ace_lexicon:TV_sg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">isDeterminedBies</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_pl rdf:datatype="http://www.w3.org/2001/XMLSchema#string">isDeterminedBy</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_vbg rdf:datatype="http://www.w3.org/2001/XMLSchema#string">isDeterminedBied</ace_lexicon:TV_vbg>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Thing">
+        <display_instance rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</display_instance>
+    </rdf:Description>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamA2"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamA2X"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamA2XX"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamQ10"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#ArcamQ20"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#BJBuilds"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#DEDBuilds"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#MEBuilds"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#MJBuilds"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#PBFBuilds"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SLBuilds"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#TPPBuilds"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#BinderJetting"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#DED"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#MaterialExtrusion"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#MaterialJetting"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#PBF"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#SheetLamination"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#TankPhotoPoly"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Ceramics"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Metal"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Polymer"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Compressive"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Fatigue"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Hardness"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Shear"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Tensil"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Density"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Geometry"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Mechnical"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Microstructure"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Surface"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSINT_M270"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSINT_M280"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSM100"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSM290"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#EOSM400"/>
+        </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM110"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM150"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM300"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM68"/>
+            <rdf:Description rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Sciaky_EBAM88"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
+

@@ -1,0 +1,63 @@
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: login.html
+# Application: templates
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% if form.errors %}
+<div class="alert alert-danger">
+    <i class="fa fa-times-circle"></i> Your username and password didn't match. Please try again.
+</div>
+{% endif %}
+
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.username.label_tag }}
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-user"></i>
+            </div>
+            <input type="text" class="form-control" id="{{ form.username.id_for_label }}"
+                   name="{{ form.username.html_name }}" placeholder="Username"
+                   {% if form.username.value %}value="{{ form.username.value }}"{% endif%}/>
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form.password.label_tag }}
+        <div class="input-group">
+            <div class="input-group-addon">
+                <i class="fa fa-lock"></i>
+            </div>
+            <input type="password" class="form-control" id="{{ form.password.id_for_label }}"
+                   name="{{ form.password.html_name }}" placeholder="Password"
+                   {% if form.password.value %}value="{{ form.password.value}}"{% endif %}/>
+        </div>
+    </div>
+
+    <div id="new-account" class="pull-right">
+        <span>No account? </span>
+        <a href="/request-new-account" class="btn btn-default">
+            <i class="fa fa-user-plus"></i> Request an Account
+        </a>
+    </div>
+
+    <button class="btn btn-primary" type="submit" value="login">
+        <i class="fa fa-sign-in"></i> Login
+    </button>
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>

@@ -1,0 +1,16 @@
+<ul class="dropdown-menu">
+    <li><a href="/dashboard">Profile</a></li>
+
+    {% if request.user.is_staff %}
+    <li><a href="/admin">Admin</a></li>
+    {% endif %}
+
+    {% if perms.curate %}
+    <li role="separator" class="divider"></li>
+    <li><a href="/dashboard/forms">Drafts</a></li>
+    <li><a href="/dashboard/records">Records</a></li>
+    {% endif %}
+
+    <li role="separator" class="divider"></li>
+    <li><a href="/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+</ul>

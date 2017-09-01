@@ -1,0 +1,48 @@
+{#% extends "mdcs/extra/one_column.html" %#}
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: request_new_account.html
+# Application: templates
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+{% block content%}
+<h1 class="page-header">Request New Account</h1>
+<div id="main" style="margin-left:20px;">
+Use the following form to request an user account on the {{CUSTOM_TITLE}} Curation System.
+	<div>
+		<br/>
+		<form action="/request-new-account" method="post" onsubmit="return validateRequest()">
+		 	{% csrf_token %}
+            <table>
+            {{ form.as_table }}
+            </table>
+		    <br/>
+		    <div id="request_error" style="font-weight: bold;">
+		    {{action_result}}
+		    </div>
+		    <input type="submit" class="btn btn-default" value="Make a Request"/>
+		</form>
+	</div>
+<div class="clearer">&nbsp;</div>
+</div>
+{% endblock %}
+
+{% block extra %}
+<script src="{% static 'inc/controllers/js/user_account_req.js' %}"></script>
+{% endblock %}

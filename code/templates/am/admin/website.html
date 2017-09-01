@@ -1,0 +1,43 @@
+{#% extends "mdcs/extra/two_columns.html" %#}
+{% extends "base_admin.html" %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: website.html
+# Application: templates/admin
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology (NIST)
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block content%}
+<h1 class="page-header">Website Management</h1>
+<div class="row">
+	<div class="col-md-3 col-md-offset-3">
+		<h3><a href="website/privacy-policy"><i class="fa fa-eye"></i> Privacy Policy</a></h3>
+		<p>Click here to edit the Privacy Policy page of the system.</p>
+	</div>
+	<div class="col-md-3">
+        <h3><a href="website/help"><i class="fa fa-question-circle"></i> Help</a></h3>
+        <p>Click here to edit the Help page of the system.</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-3 col-md-offset-3">
+        <h3><a href="website/terms-of-use"><i class="fa fa-file-text-o"></i> Terms of Use</a></h3>
+        <p>Click here to edit the Terms of Use page of the system.</p>
+	</div>
+</div>
+{% endblock %}  

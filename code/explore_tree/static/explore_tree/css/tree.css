@@ -1,0 +1,11 @@
+.highlight {
+    background-color: lightblue;
+    padding: 0.25em;
+}
+
+#tree li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}

@@ -1,0 +1,59 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>AM Material Database</title>
+
+    {% include 'base/styles.html' %}
+    {% include 'base/ie_support.html' %}
+
+    {% block extra_styles %}{% endblock %}
+</head>
+
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="banner">
+        <a target="_blank" href="https://nist.gov">
+            <img src="{% static 'img/nist_grey_bg.png' %}" alt="banner"/>
+        </a>
+
+        <a target="_blank" href="mailto:ammd@nist.gov?subject=Feedback%20on%20Website%20EL%20AMMD" class="pull-right">
+            <img src="{% static 'img/feedback.png' %}" alt="banner"/>
+        </a>
+    </div>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">AM Material Database</a>
+        </div>
+        {% block navbar %}{% endblock %}
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        {% block body %}{% endblock %}
+    </div>
+</div>
+
+{% include 'base/footer.html' %}
+
+{% block popups %}{% endblock %}
+
+{% include 'base/scripts.html' %}
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

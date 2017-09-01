@@ -1,0 +1,142 @@
+{#% extends "mdcs/extra/two_columns.html" %#}
+{% extends "base_main.html" %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: curate_enter_data.html
+# Application: templates
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+# 		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology (NIST)
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block content %}
+<div class="row">
+    <h1>Data Entry</h1>
+    <p>
+        Here you can fill in the {{CUSTOM_DATA}} form. Once it is completed, you can go to 'View Data' to review what
+        you have entered. You won't be able to reach the review page before the document is valid according to the
+        selected template. From the review page, you will be able to curate the data. The 'Save Form' button allows you
+        to save partial data that you may want to edit later. This will only save a temporary document and won't
+        actually curate data. All grayed elements are optional. Thus, all elements written in black are required.
+        The document may still be valid with empty elements. There are no validation on empty fields if no such
+        constraint is defined in the template. Thus, an empty string of characters may not raise a validation error,
+        but an empty number will.
+    </p>
+</div>
+<div class="row">
+    <div class="toolbar">
+        <div class="btn-group pull-right">
+            <button class="btn btn-default clear-fields"><i class="fa fa-eraser"></i> Clear Fields </button>
+            {% if not edit %}
+            <button class="btn btn-default save-form"><i class="fa fa-save"></i> Save Form </button>
+            {% endif %}
+            <button class="btn btn-default download"><i class="fa fa-download"></i> Download </button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div id="xsdForm">
+        <div class="alert alert-info">
+            <i class="fa fa-spinner fa-spin"></i> Please wait. Form loading...
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="btn-group pull-right">
+        <a class="btn btn-default view-data"><i class="fa fa-file-code-o"></i> Preview Document </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block popups %}
+<div id="dialog-cleared-message" title="Fields Cleared" style="display:none;">
+<p></p>
+  <p>
+    Are you sure you want to reset the form?
+  </p>
+</div>
+
+<div id="dialog-cancel-message" title="Cancel Form" style="display:none;">
+<p></p>
+  <p>
+    Are you sure you want to cancel the form? All your changes will be lost.
+  </p>
+</div>
+
+<div id="dialog-save-form-message" title="Save Form" style="display:none;">
+  Are you sure you want to save the form? If you are editing an existing form, this will replace the previous version of the form.
+</div>
+
+<div id="dialog-saved-message" title="Form Saved" style="display:none;">
+<p></p>
+    <p>
+        <i class="fa fa-check-circle"></i>
+        Form saved with success.
+    </p>
+</div>
+
+<div id="dialog-download-options" title="Download Options" style="display:none;">
+<p></p>
+<p>
+  <span class="btn-group">
+    <button class="btn btn-default" onclick="downloadXSD();"><i class="icon-arrow-down"></i> Download Schema</button>
+  </span>
+</p>
+<p>
+  <span class="btn-group">
+    <button class="btn btn-default" onclick="downloadCurrentXML();"><i class="icon-arrow-down"></i> Download Document</button>
+  </span>
+</p>
+
+</div>
+
+<div id="dialog-save-error-message" title="Validation Error" style="display:none;">
+<p></p>
+  <div id="saveErrorMessage">
+  </div>
+</div>
+
+<div id="dialog-use-message" title="Validation Warning" style="display:none;">
+<p>
+Some <span style="color:red;">required</span> or <span style="color:blue;">recommended</span> fields are present but empty:
+</p>
+  <div id="useErrorMessage">
+  </div>
+ <p>Edit the form or proceed to review page.</p> 
+</div>
+{% endblock %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/curate/XMLTreeCurator.css' %}" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/form/buttons.css' %}" media="screen" />
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'inc/controllers/js/XMLTreeCurator.js' %}"></script>
+<script src="{% static 'inc/controllers/js/modules.js' %}"></script>
+<script src="{% static 'inc/controllers/js/curate.js' %}"></script>
+{# New curate javascript for adding / removing element #}
+<script src="{% static 'js/form/buttons.js' %}"></script>
+<script src="{% static 'js/form/autosave.js' %}"></script>
+<script src="{% static 'js/form/choice.js' %}"></script>
+<script src="{% static 'js/toolbar.js' %}"></script>
+<script>
+verifyTemplateIsSelectedCurateEnterData();
+
+$("body").on("click", ".btn.view-data", validateXML);
+</script>
+{% endblock %}
+

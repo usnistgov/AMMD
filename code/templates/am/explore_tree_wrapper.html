@@ -1,0 +1,16 @@
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'explore_tree/css/tree.css' %}" media="screen" />
+{% endblock %}
+
+{% block body %}
+    {% include 'explore_tree/content.html' with navigation_tree=navigation_tree %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'explore_tree/js/load_view.js' %}"></script>
+<script src="{% static 'explore_tree/js/resize_tree_panel.js' %}"></script>
+<script src="{% static 'explore_tree/js/tree.js' %}"></script>
+{% endblock %}

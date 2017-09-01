@@ -1,0 +1,47 @@
+{% extends "mdcs/extra/one_column.html" %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: browse-all.html
+# Application: templates
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block title %}<h1>Browse All</h1>{% endblock %}
+{% block menu %}{% include 'mdcs/menus/main.html' with active_tab='all' %}{% endblock %}
+
+{% block content %}
+<table class="table table-bordered">
+  <tr>
+    <th>Template name</th>
+    <th>File name</th>
+  </tr>
+			  
+{% for template in templates %}
+  {% cycle 'even' '' as rowcolors silent %}
+  <tr class="{{ rowcolors }}">
+    <td>
+{{ template.title }}
+    </td>
+    <td>
+{{ template.filename }}
+    </td>
+  </tr>
+{% endfor %}
+</table>
+
+{% endblock %}

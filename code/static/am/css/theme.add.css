@@ -1,0 +1,39 @@
+.empty-text {
+    text-align: center;
+    font-style: italic;
+}
+
+.section-header {
+    color: #cfcfcf;
+    padding: 0.25em;
+    background-image: linear-gradient(to bottom, #3c3c3c 0%, #222 100%);
+    background-repeat: repeat-x;
+    border-radius: 4px;
+}
+
+#xsdForm, #XMLHolder {
+    margin-top: 0.5em;
+}
+
+.view-data-table>tbody>tr>th {
+    width: 30%;
+}
+
+.banner {
+    height: 75px;
+    background-color: rgb(64, 64, 64);
+    /*background-image:url("../img/banner.png");
+    background-repeat:no-repeat;*/
+}
+
+.navbar-inverse {
+    border-radius: 0px;
+    border-color: inherit;
+}
+
+.landing_header {
+    width: 100%;
+    text-align: center;
+    background-image: url("../img/landing_header_bg.png");
+    background-repeat: repeat-x;
+}

@@ -1,0 +1,38 @@
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: terms-of-use.html
+# Application: templates
+# Description: 
+#
+# Author: Philippe Dessauw
+#         philippe.dessauw@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/curate/XMLTree.am.css' %}" media="screen" />
+    <link rel="stylesheet" type="text/css" href="{% static 'schema_viewer/css/viewer.css' %}" media="screen" />
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-header" style="font-size: 1.75em; font-weight: bolder">
+        Schema Views and Download Page
+    </h1>
+
+    {% include "schema_viewer/main.html" %}
+{% endblock %}
+
+{% block extra_scripts %}
+    <script src="{% static 'schema_viewer/js/schema_loader.js' %}"></script>
+    <script src="{% static 'schema_viewer/js/download.js' %}"></script>
+    <script src="{% static 'inc/controllers/js/module_mgr.js' %}"></script>
+{% endblock %}

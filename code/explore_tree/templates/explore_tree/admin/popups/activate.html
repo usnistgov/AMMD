@@ -1,0 +1,24 @@
+{% extends "commons/modal.html" %}
+
+{% block modal_id %}activate-owl-modal{% endblock %}
+
+{% block modal_title %}Activate ontology?{% endblock %}
+
+{% block modal_body %}
+<p>
+    You are about to change the ontology of queries used in your application. This change will impact all user on this
+    platform.<br/>
+    <br/>
+    Are you sure to continue?
+</p>
+<input type="hidden" id="activate-owl-id" value=""/>
+{% endblock %}
+
+{% block modal_footer %}
+    <button class="btn btn-danger" data-dismiss="modal">
+        <i class="fa fa-times"></i> No, bring me back to the admin screen
+    </button>
+    <button class="btn btn-success" id="confirm-activate-owl">
+        <i class="fa fa-check"></i> Yes, activate this ontology
+    </button>
+{% endblock %}

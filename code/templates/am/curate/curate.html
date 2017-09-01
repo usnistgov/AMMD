@@ -1,0 +1,148 @@
+{#% extends "mdcs/extra/two_columns.html" %#}
+{% extends "base_main.html" %}
+{% load staticfiles %}
+{% load auth_extras %}
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: curate.html
+# Application: templates
+# Description: 
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology (NIST)
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block title %}<h1>Select Template</h1>{% endblock %}
+
+{% block description %}
+
+{% endblock %}
+
+{% block content %}
+<h1 class="page-header">Select Template</h1>
+<p>
+    Select a template from the following table. Once you make your selection, start a new document or open an existing
+    form or start from an uploaded document.  It will automatically load the appropriate form and display it on the
+    next page.
+</p>
+
+<div id="template_selection">
+{% if not request.session.currentTemplateID %}
+<div class="alert alert-warning">
+  <i class="fa fa-warning"></i> No template selected. Select one in the table below.
+</div>
+{% endif %}
+
+<h3 class="tpl-title">Global Templates</h3>
+<table class="table table-bordered">
+    <tr>
+        <th>Template name</th>
+        <th>File name</th>
+        <th class="th-actions">Actions</th>
+    </tr>
+    {% for template, isDeleted in templates.items %}
+        {% if isDeleted == False %}
+            {% cycle 'even' '' as rowcolors silent %}
+            <tr class="{{ rowcolors }}">
+                <td templateID='{{template.id}}'>{{ template.title }}</td>
+                <td>{{ template.filename }}</td>
+                <td>
+                    <button class="btn btn-default set-template">
+                        <i class="fa fa-play"></i> Set as current template
+                    </button>
+                </td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div class="box" >
+	<div class="box-title">{{CUSTOM_CURATE}}</div>
+	<div class="box-content">
+		<ul class="nice-list">
+            <li>
+                <div class="l-img">
+                    <img width="40" height="40" src="{% static 'resources/img/Orange_Number_1.png' %}" alt="1">
+                </div>
+                <div class="r-txt-selected"><a href="/curate/select-template">Select Template</a></div>
+            </li>
+            <li>
+                <div class="l-img">
+                    <img width="40" height="40" src="{% static 'resources/img/Orange_Number_2.png' %}" alt="2">
+                </div>
+                <div class="r-txt"><a onclick="enterDataError();">Enter Data</a></div>
+            </li>
+            <li>
+                <div class="l-img">
+                    <img width="40" height="40" src="{% static 'resources/img/Orange_Number_3.png' %}" alt="3">
+                </div>
+                <div class="r-txt"><a onclick="viewDataError();">View Data</a></div>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block popups %}
+<div id="dialog-message" title="Template Loaded" style="display:none;">
+    <div class="alert alert-danger" id="banner_errors" style="display: none;">
+        <a href="#" class="close" data-hide="alert" aria-label="close">&times;</a>
+     	<h4><i class="fa fa-exclamation-circle fa-1x"></i> Error</h4>
+        <div id="form_start_errors">
+        </div>
+    </div>
+	<p>
+	  Please choose one of the following options to start curating data: 
+	</p>
+    <form id="form_start" action="/curate/start_curate" method="post">
+        {% csrf_token %}
+        <div id="form_start_content"></div>
+    </form>
+</div>
+
+<div id="dialog-error-message" title="No template selected" style="display:none;">
+    <p></p>
+    <p>
+        Please select a template first.
+    </p>
+</div>
+
+<div id="dialog-view-error-message" title="No data to view" style="display:none;">
+    <p></p>
+    <p>
+        No data to view yet. Please select a template and enter data first.
+    </p>
+</div>
+
+<div id="dialog-enter-error-message" title="No template selected" style="display:none;">
+<p></p>
+  <p>
+    Please select a template first.
+  </p>
+</div>
+{% endblock %}
+
+
+{% block extra_scripts %}
+<script src="{% static 'inc/controllers/js/curate.js' %}"></script>
+<script>
+    loadTemplateSelectionControllers();
+    initBanner();
+</script>
+{% endblock %}
+
+

@@ -1,0 +1,21 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
+  z-index: 1000;
+  font-size: 15px;
+}
+
+.footer > .container {
+    width: 100%;
+    padding-top: 15px;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.footer > .container > p {
+    width: 100%
+}

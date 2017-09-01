@@ -1,0 +1,55 @@
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="row">
+    <h1 class="page-header">Administration panel</h1>
+    <h2>Exploration Tree Manager</h2>
+</div>
+<div class="row">
+    <div class="pull-right">
+        <a class="btn btn-primary"><i class="fa fa-upload"></i> Upload new tree file</a>
+    </div>
+</div>
+<div class="row" style="margin-top: 0.5em">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>Filename</td>
+                <td>Status</td>
+                <td>Upload data</td>
+                <td>Actions</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>am_tree_v1.owl</td>
+                <td>Uploaded</td>
+                <td>5/23/2016 9:21AM</td>
+                <td>
+                    <a class="btn btn-success">Activate</a>
+                    <a class="btn btn-danger">Delete file</a>
+                </td>
+            </tr>
+            <tr>
+                <td>am_tree_v2.owl</td>
+                <td>Uploaded</td>
+                <td>5/23/2016 9:21AM</td>
+                <td>
+                    <a class="btn btn-success">Activate</a>
+                    <a class="btn btn-danger">Delete file</a>
+                </td>
+            </tr>
+            <tr class="success">
+                <td>am_tree_v4.owl</td>
+                <td>Active</td>
+                <td>5/23/2016 9:21AM</td>
+                <td>
+                    <a class="btn btn-default" disabled="disabled">Activate</a>
+                    <a class="btn btn-danger" disabled="disabled">Delete file</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

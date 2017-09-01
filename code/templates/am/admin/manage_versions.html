@@ -1,0 +1,117 @@
+{#% extends "mdcs/extra/two_columns.html" %#}
+{% extends "base_admin.html" %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: manage_uploads.html
+# Application: templates/admin
+# Description:
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Guillaume SOUSA AMARAL
+#		  guillaume.sousa@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology (NIST)
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block content%}
+<h1 class="page-header">Upload {{ object_type }} Version</h1>
+
+<form id="form_start" action="/admin/manage_versions?type={{object_type}}&id={{object_id}}" method="post"
+	  enctype=multipart/form-data>
+	{% csrf_token %}
+
+    {{upload_form}}
+
+    <div class="row" id="upload_errors" style="min-height: 0.5em; color:red;">
+		{{errors}}
+	</div>
+
+	<input type="submit" class="btn btn-default" value="Upload {{object_type}}"/>
+</form>
+
+{% if dependency_resolver %}
+<hr/>
+<div id="dependencies">
+    {{dependency_resolver}}
+</div>
+{% endif %}
+<hr/>
+
+<div id="model_version">
+	<table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Version #</th>
+                <th>Uploaded on</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+	    <tbody>
+            {% for version, datetime in versions.items %}
+            <tr>
+               <td>Version {{version.version}} </td>
+               <td> {{ datetime|safe }} </td>
+               {% if version.id|stringformat:"s" == object_versions.current|stringformat:"s" %}
+                   <td style='font-weight:bold;color:green'>Current</td>
+                   <td>
+                       <span class='delete' id='delete{{version.version}}' objectid='{{version.id}}'
+                             objectType='{{ object_type }}' onclick='deleteVersion("delete{{version.version}}")'>
+                           <a href="#" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                       </span>
+                   </td>
+               {% elif version.id|stringformat:"s" in object_versions.deletedVersions %}
+                   <td style='color:red'>Deleted</td>
+                   <td>
+                       <span class='retrieve' id='restore{{version.version}}' objectid='{{version.id}}'
+                             objectType='{{ object_type }}' onclick='restoreVersion("restore{{version.version}}")'>
+                           <a class="btn btn-default" href="#"><i class="fa fa-undo"></i>Restore</a>
+                       </span>
+                   </td>
+               {% else %}
+                   <td>
+                       <span class='long' id='setcurrent{{version.version}}' objectid='{{version.id}}'
+                             objectType='{{ object_type }}'
+                             onclick='setCurrentVersion("setcurrent{{version.version}}")'>
+                           <a class="btn btn-default" href="#"><i class="fa fa-edit"></i> Set Current</a>
+                       </span>
+                   </td>
+                   <td>
+                       <span class='delete' id="delete{{version.version}}" objectid='{{version.id}}'
+                             objectType='{{ object_type }}' onclick='deleteVersion("delete{{version.version}}")'>
+                           <a href="#" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+                       </span>
+                   </td>
+               {% endif %}
+           </tr>
+            {% endfor %}
+        </tbody>
+   </table>
+</div>
+
+
+{%endblock%}
+
+{% block popups %}
+<div id="dialog-deleteversion-message" title="Confirm Delete" style="display:none;">
+<p></p>
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 10px 0;"></span>
+    <p>Are you sure you want to delete this version?</p>
+    <p id="delete_custom_message"></p>
+  </p>
+</div>
+{%endblock%}
+
+{% block extra_scripts %}
+<script src="{% static 'inc/controllers/js/xsd_mgr.js' %}"></script>
+{% endblock %}

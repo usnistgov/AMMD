@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://siam.nist.gov/Database-Navigation-Ontology#"
+     xml:base="http://siam.nist.gov/Database-Navigation-Ontology"
+     xmlns:qudt="http://qudt.org/1.1/schema/qudt#"
+     xmlns:quantity="http://qudt.org/1.1/schema/quantity#"
+     xmlns:vaem="http://www.linkedmodel.org/1.2/schema/vaem#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+     xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+     xmlns:voag="http://voag.linkedmodel.org/1.0/schema/voag#"
+     xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:dtype="http://www.linkedmodel.org/1.0/schema/dtype#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:ace_lexicon="http://attempto.ifi.uzh.ch/ace_lexicon#"
+     xmlns:dimension="http://qudt.org/1.1/schema/dimension#"
+     xmlns:cql="http://siam.nist.gov/Database-Navigation-Ontology#cql:">
+    <owl:Ontology rdf:about="http://siam.nist.gov/Database-Navigation-Ontology"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#cql:filter -->
+
+    <owl:AnnotationProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#cql:filter"/>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#cql:projection -->
+
+    <owl:AnnotationProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#cql:projection"/>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#cql:view -->
+
+    <owl:AnnotationProperty rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#cql:view"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#All_ids -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#All_ids">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Name1"/>
+        <cql:projection>{&quot;_id&quot;:1}</cql:projection>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#InElement1 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#InElement1">
+        <cql:filter>{ &quot;content.element1&quot;: { &quot;$exists&quot;: True } }</cql:filter>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#InElement2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#InElement2">
+        <cql:filter rdf:datatype="http://www.w3.org/2001/XMLSchema#string">{ &quot;content.element2&quot;: { &quot;$exists&quot;: True } }</cql:filter>
+        <cql:projection>{&quot;content.element2.name&quot;:1}</cql:projection>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Name1 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Name1">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#InElement1"/>
+        <cql:filter>{ &quot;content.element1.name&quot;: &quot;name1&quot;}</cql:filter>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Name2 -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Name2">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#InElement1"/>
+        <cql:filter>{ &quot;content.element1.name&quot;: &quot;name2&quot;}</cql:filter>
+        <cql:projection>{&quot;content.element1.value&quot;:1}</cql:projection>
+    </owl:Class>
+    
+
+
+    <!-- http://siam.nist.gov/Database-Navigation-Ontology#Value1_ids -->
+
+    <owl:Class rdf:about="http://siam.nist.gov/Database-Navigation-Ontology#Value1_ids">
+        <rdfs:subClassOf rdf:resource="http://siam.nist.gov/Database-Navigation-Ontology#Name1"/>
+        <cql:filter>{ &quot;content.element1.value&quot;: &quot;value1&quot;}</cql:filter>
+        <cql:projection>{&quot;_id&quot;:1}</cql:projection>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotations
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Thing">
+        <owl:deprecated></owl:deprecated>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.2.5.20160517-0735) https://github.com/owlcs/owlapi -->
+
