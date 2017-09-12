@@ -18,6 +18,7 @@
 #
 ################################################################################
 """
+import os #
 import json
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
@@ -34,7 +35,16 @@ from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.core.cache import caches
 from django.contrib.sessions.models import Session
+#from mgi.models import Template, TemplateVersion ##
+#from django.template import RequestContext, loader ##
+#from mgi.models import template_list_current ##
 
+#from os.path import join#
+#from os import listdir#
+#import requests#
+#import json#
+#import sys#
+#from pymongo import MongoClient#
 
 navigation_cache = caches['navigation']
 html_tree_cache  = caches['html_tree']
@@ -87,6 +97,7 @@ def exploration_tree(request):
     else:
         active_ontologies = get_ontology(status=1)
         active_ontologies_nb = len(active_ontologies)
+        # FIXME -> more than one active is bad
 
         try:
             navigation=None
@@ -101,7 +112,8 @@ def exploration_tree(request):
             if ( n_key in html_tree_cache ):
                 html_tree = html_tree_cache.get(n_key)
             else:
-                html_tree = render_navigation(navigation)
+                tpl_version = active_ontologies[0].template_version
+                html_tree = render_navigation(navigation, tpl_version.current)
                 html_tree_cache.set(n_key, html_tree)
 
         except Exception as exc:

@@ -25,6 +25,7 @@ TEMPLATES_PATH = join(BASE_DIR, 'explore_tree', 'parser', 'templates')
 
 
 def render_navigation(navigation, template_id):
+
     """
     Renders a navigation tree
     :param navigation:
@@ -52,6 +53,7 @@ def render_navigation(navigation, template_id):
                     'branch_id': navigation_id,
                     'branch_name': name,
                     'branches': render_navigation(navigation_child, template_id)
+
                 }
 
             if 'view' in navigation_child.options and navigation_child.options['view'] is not None:
@@ -63,7 +65,6 @@ def render_navigation(navigation, template_id):
             nav_tree_html += li_template.render(Context(context))
 
     return nav_tree_html
-
 
 def render_documents(navigation, template_id):
     doc_tree_html = ""
