@@ -201,3 +201,52 @@ def update_publish(request):
 def update_unpublish(request):
     XMLdata.update_unpublish(request.GET['result_id'])
     return HttpResponse(json.dumps({}), content_type='application/javascript')
+
+################################################################################
+#
+# Function Name: show_people_records(request) // dashboard_otherusers_records
+# Inputs:        request -
+# Outputs:
+# Exceptions:    None
+# Description:   Display other users records
+#
+################################################################################
+def ddashboard_otherusers_records(request):
+    json_content = ''
+    return HttpResponse(json_content, HTTP_200_OK)
+
+def dasshboard_otherusers_records(request):
+    template = loader.get_template('dashboard/my_dashboard_my_records.html')
+    query = {}
+
+    query['iduser'] = str(request.user.id)
+    userXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+
+    templates_used = sorted(Template.find(query), key=lambda data: data['content'], reverse=True)
+    user_form = UserForm(request.user)
+
+    otherUsers = User.objects.all()
+    idotherUsers = User.objects.only('_id')
+    otherUXMLdatas = [] # sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+
+    otherUXMLd =[]
+    context = RequestContext(request, {'XMLdatas': userXmlData,
+                                       # 'ispublished': ispublished,
+                                       'user_form': user_form,
+                                       'Templates': templates_used,
+                                       'OtherUXMLdatas': otherUXMLdatas,
+                                       'OtherUsers': otherUsers,
+                                       'IdotherUsers':idotherUsers,
+                                       'OtherUXMLd' : otherUXMLd
+    })
+    #If the user is an admin, we get records for other users
+    if request.user.is_staff:
+        #Get user name for admin
+        usernames = dict((str(x.id), x.username) for x in User.objects.all())
+        query['iduser'] = {"$ne": str(request.user.id)}
+        otherUsersXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+        context.update({'OtherUsersXMLdatas': otherUsersXmlData, 'usernames': usernames})
+    print "{{{{{{-}}}}}"
+    print otherUsersXmlData
+    print type(otherUsersXmlData)
+    return HttpResponse(template.render(context))

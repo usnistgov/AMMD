@@ -7,6 +7,11 @@ from explore_tree.api.navigation.operations import get_navigation_node_by_name
 from explore_tree.parser.renderer import get_projection
 from mgi.models import XMLdata
 
+my_list = []
+my_dict = {}
+i = 0
+ids_docs_to_query = []
+ids_docs_to_querys = []
 
 def retrieve_data_in_path(xml_data_object, data_path):
     """
@@ -119,6 +124,10 @@ def processview(navigation_root_id, document_id, json_content):
                         pathflag = False
                         pviewdict['name'] = pviewname
                         pviewdict['error'] = path
+
+                        my_dict[pviewname] = path
+                        my_list.append(my_dict)
+
                         pviewoutlist.append(pviewdict)
                         break
 
@@ -126,19 +135,33 @@ def processview(navigation_root_id, document_id, json_content):
                     pviewdict['name'] = pviewname
                     pviewdict['value'] = tempobject1
 
+                    my_dict[pviewname] = tempobject1
+
                     if "link" in item:
                         linked_node = get_navigation_node_by_name(navigation_root_id, item["link"])
 
                         if linked_node is None:
                             pviewdict["link"] = "error"
+                            my_dict["link"] = "error"
                         else:
                             pviewdict["link"] = "%s %s" % (str(linked_node.pk), document_id)
-
+                            my_dict["link"] = pviewdict["link"]
                     pviewoutlist.append(pviewdict)
+                    global i
+                    if i == 0:
+                        my_list.append(my_dict)
+                        i +=1
+                    else:
+                        for l in my_list:
+                            if l == my_dict:
+                                print ""
+                            else:
+                                my_list.append(my_dict)
 
                 tempobject1 = object1
 
-    return pviewoutlist	
+
+    return pviewoutlist
 
 
 def processviewdocidlist(navigation_root_id, document_id, json_content):
@@ -160,7 +183,6 @@ def processviewdocidlist(navigation_root_id, document_id, json_content):
     for docid in document_id:
         pviewoutlist = processview(navigation_root_id, docid, json_content)
         totalpviewoutlist.append(pviewoutlist)
-
     return totalpviewoutlist
 
 
@@ -180,6 +202,7 @@ def process_cross_query(navigation_root_id, document_id, query, json_content):
     }
 
     document = XMLdata.executeQueryFullResult(doc_query, doc_projection)
+
     document_projection_value = get_projection(document[0])
 
     cross_query = {
@@ -192,9 +215,15 @@ def process_cross_query(navigation_root_id, document_id, query, json_content):
     cross_documents = XMLdata.executeQueryFullResult(cross_query, cross_projection)
     cross_documents_ids = [get_projection(cross_doc) for cross_doc in cross_documents]
 
+    # Gives the crossed documents and their id
+    global ids_docs_to_querys
+    ids_docs_to_querys = cross_documents_ids
+
     # FIXME won't work for the case where we need several item from a same document
     cross_document_data = processviewdocidlist(navigation_root_id, cross_documents_ids, json_content)
+
+
     return [content for contents in cross_document_data for content in contents]
 
-
-
+def doc_to_query(doc_id):
+    return ids_docs_to_querys

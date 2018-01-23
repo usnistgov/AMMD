@@ -33,8 +33,8 @@ def _is_advanced_filter(str_filter):
 
 
 def execute_query(templateID, filters=list(), projection=None):
-    """
 
+    """
     :param filters:
     :param projection:
     :return:
@@ -44,6 +44,7 @@ def execute_query(templateID, filters=list(), projection=None):
     # }
 
     results_id = {xml_data["_id"] for xml_data in XMLdata.executeFullTextQuery("", [templateID])}
+
     results = []
 
     # Parsing filters if present
@@ -56,7 +57,7 @@ def execute_query(templateID, filters=list(), projection=None):
             documents_field = json_filter["documents"].values()[0]
 
             values = get_filter_values(documents_field)
-            matching_documents = get_matching_document(json_filter["documents"].keys()[0], values, json_filter["query"])
+            matching_documents = get_matching_document(templateID, json_filter["documents"].keys()[0], values, json_filter["query"])
 
             # Extract correct documents
             filter_result = []
@@ -71,6 +72,7 @@ def execute_query(templateID, filters=list(), projection=None):
         results_id = results_id.intersection(filter_id)
 
         results = [doc for doc in filter_result if doc["_id"] in results_id]
+
 
     return results
 
@@ -88,7 +90,7 @@ def get_filter_values(field):
     return {get_projection(doc) for doc in documents}
 
 
-def get_matching_document(field, values, query):
+def get_matching_document(templateId, field, values, query):
     """
 
     :param field:
@@ -105,8 +107,6 @@ def get_matching_document(field, values, query):
             json.dumps({field: value})
         ]
 
-        document_set += execute_query(tmp_query, json.dumps(document_projection))
+        document_set += execute_query(templateId, tmp_query, json.dumps(document_projection))
 
     return document_set
-
-

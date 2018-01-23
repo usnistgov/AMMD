@@ -2,7 +2,7 @@
 #
 # File Name: urls.py
 # Application: mgi
-# Purpose:   
+# Purpose:
 #
 # Author: Sharief Youssef
 #         sharief.youssef@nist.gov
@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^curate/', include('curate.urls')),
     # url(r'^explore/', include('explore.urls')),
     url(r'^explore/', include('explore_tree.urls')),
+    url(r'^explore_tree/', 'explore_tree.ajax.download_xml', name='download_xml'),#
     url(r'^compose/', include('compose.urls')),
     url(r'^rest/', include('api.urls')),
     url(r'^modules/', include('modules.urls')),
@@ -51,6 +52,3 @@ urlpatterns = patterns('',
 
 
 urlpatterns += staticfiles_urlpatterns()
-
-
-

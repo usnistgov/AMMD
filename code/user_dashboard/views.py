@@ -40,7 +40,10 @@ from password_policies.views import PasswordChangeFormView
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from utils.DateTimeDecoder import DateTimeEncoder
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK#
 
+from django.template.defaulttags import register#
+other_users = []
 ################################################################################
 #
 # Function Name: my_profile(request)
@@ -117,12 +120,39 @@ def dashboard_records(request):
     #     ispublished = ispublished == 'true'
     #     query['ispublished'] = ispublished
     query['iduser'] = str(request.user.id)
+    print "[[[[[[[[[[--]]]]]]]]]]"
     userXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+    # Get all the templates
+    #templates_used = Template.find()
+    templates_used = sorted(Template.find(query), key=lambda data: data['content'], reverse=True)
     #Add user_form for change owner
     user_form = UserForm(request.user)
+    #user = User.objects.create_user(username="clarisse", password="clarisse", first_name="clarisse", last_name="ndiaye", email="ndeye.ndiaye@telecomnancy.net")
+
+    #print "user created"
+    #user.save()
+    #otherUsers = sorted(User.objects.all(), key=lambda data: data['username'], reverse=True)
+    otherUsers = User.objects.all()
+    #otherUXMLdatas = sorted(XMLdata.objects(user=str(userId)).distinct(field='title'), key=lambda data: data['lastmodificationdate'], reverse=True)
+    idotherUsers = User.objects.only('_id')
+    otherUXMLdatas = [] # sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+    otherUsersTemplates = []
+    otherUXMLd =[]
+    usernames = []
+#    for idotherUser in idotherUsers:
+#        otherUXMLdata = Template.objects(user = str(idotherUser)).distinct(field ='title')
+#        otherUXMLdatas.append(otherUXMLdata)
+
+    #otherXMLdatas = XMLdata.objects(user = (str()))
     context = RequestContext(request, {'XMLdatas': userXmlData,
                                        # 'ispublished': ispublished,
-                                       'user_form': user_form
+                                       'user_form': user_form,
+                                       'Templates': templates_used,
+                                       'OtherUsersXMLdatas': otherUXMLdatas,
+                                       'OtherUsers': otherUsers,
+                                       'IdotherUsers':idotherUsers,
+                                       'OtherUXMLd' : otherUXMLd,
+                                       'usernames' : usernames
     })
     #If the user is an admin, we get records for other users
     if request.user.is_staff:
@@ -132,9 +162,26 @@ def dashboard_records(request):
         otherUsersXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
         context.update({'OtherUsersXMLdatas': otherUsersXmlData, 'usernames': usernames})
 
+        i = None
+        for elem in context['OtherUsersXMLdatas']:
+            i = context['OtherUsersXMLdatas'].index(elem)
+            j = 0
+            for k,v in context['usernames'].items():
+                if j == i:
+                    other_users.append((k,v))
+    #    print "--------------------------"
+    #    for k, v in (context['OtherUsersXMLdatas'][0]):
+        #    if k == "_id":
+                #print k
+#    print len(other_users)
     return HttpResponse(template.render(context))
 
-
+@register.filter
+def get_username(iduser):
+    print "((((((((((((((()))))))))))))))"
+    for elem in other_users:
+        if iduser == elem[0]:
+            return str(elem[1])
 ################################################################################
 #
 # Function Name: dashboard_my_forms(request)
@@ -337,10 +384,16 @@ def getListFiles(listBlob):
 #
 ################################################################################
 @login_required(login_url='/login')
-def dashboard_detail_record(request):
-    template = loader.get_template('dashboard/my_dashboard_detail_record.html')
+def dashboard_detail_record(request,otherUser=None):
+    template = None#loader.get_template('dashboard/my_dashboard_detail_record.html')
     record_id = request.GET['id']
     record_type = request.GET['type']
+    user_id = None#request.POST.get('user_id','default value')
+    if otherUser:
+        user_id = otherUser#request.GET['user_id']
+        template = loader.get_template('dashboard/my_dashboard_detail_recordotherusers.html')
+    else:
+        template = loader.get_template('dashboard/my_dashboard_detail_record.html')
 
     if record_type == 'form':
         form_data = FormData.objects.get(pk=ObjectId(record_id))
@@ -380,15 +433,28 @@ def dashboard_detail_record(request):
         newdom = transform(dom)
 
     result = str(newdom)
+
     context = RequestContext(request, {
         'XMLHolder': result,
         'title': title,
-        'type': record_type
+        'type': record_type,
     })
+    if otherUser:
+        context["user_id"] = otherUser
 
     return HttpResponse(template.render(context))
-
-
+################################################################################
+#
+# Function Name: dashboard_detail_record
+# Inputs:        request -
+# Outputs:       Detail of another user record
+# Exceptions:    None
+# Description:   function that allows to see detail record from a selected record from another user
+#
+################################################################################
+@login_required(login_url='/login')
+def dashboard_detail_record_otherusers(request):
+    return dashboard_detail_record(request,request.GET['user_id'])
 ################################################################################
 #
 # Function Name: change_owner_record(request)
@@ -440,3 +506,126 @@ if set, otherwise the URL to the :class:`PasswordChangeDoneView`.
         else:
             url = reverse('password_change_done')
         return url
+
+
+################################################################################
+#
+# Function Name: dashboard_otherusers_records(request)
+# Inputs:        request -
+# Outputs:       Dashboard - Other users Records
+# Exceptions:    None
+# Description:   Dashboard - Other users Records
+#
+################################################################################
+def daashboard_otherusers_records(request):
+    #print "proc_otherpeoplerecordsa"
+    iduser = request.GET['other_user']
+    #iduser = request.GET['iduser']
+
+    json_content = str(iduser)
+    return HttpResponse(json_content, HTTP_200_OK)
+
+@login_required(login_url='/login')
+def dashboard_otherusers_records(request):
+    template = loader.get_template('dashboard/my_dashboard_otherusersrecords.html')
+    query = {}
+
+    iduser = request.GET['iduser']
+
+
+    query['iduser'] = str(iduser)
+    userXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+    print "_____________"
+    templates_used = sorted(Template.find(query), key=lambda data: data['content'], reverse=True)
+    user_form = UserForm(request.user)
+
+    context = RequestContext(request, {'XMLdatass': userXmlData,
+                                       # 'ispublished': ispublished,
+                                       'user_formm': user_form,
+                                       'Templatess': templates_used,
+
+    })
+    #If the user is an admin, we get records for other users
+#    if request.user.is_staff:
+        #Get user name for admin
+#        usernames = dict((str(x.id), x.username) for x in User.objects.all())
+#        query['iduser'] = {"$ne": str(iduser)}
+#        otherUsersXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+#        context.update({'OtherUsersXMLdatas': otherUsersXmlData, 'usernames': usernames})
+
+    return HttpResponse(template.render(context))
+
+####################################################################################################################################
+def proc_otherpeoplerecords(request):
+    template = loader.get_template('dashboard/my_dashboard_otherusersrecords.html')
+    query = {}
+    #iduser = request.GET['iduser']
+    #otheruser = request.GET['other_user']
+    iduser = request.GET['iduser']
+    otherUsers = User.objects.all()
+
+    print iduser
+
+    #iduser = otheruser.get('_id')
+    query['iduser'] = str(iduser)
+    userXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+    print userXmlData
+
+    templates_used = sorted(Template.find(query), key=lambda data: data['content'], reverse=True)
+    user_form = UserForm(request.user)
+
+    #idotherUsers = User.objects.only('_id')
+    #print idotherUsers
+    otherUXMLdatas = [] # sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+
+    otherUXMLd =[]
+    context = RequestContext(request, {'XMLdatas': userXmlData,
+                                       # 'ispublished': ispublished,
+                                       'user_form': user_form,
+                                       'Templates': templates_used,
+                                       'OtherUXMLdatas': otherUXMLdatas,
+                                       'OtherUsers': otherUsers,
+                                       #'IdotherUsers':idotherUsers,
+                                       'OtherUXMLd' : otherUXMLd
+    })
+    #If the user is an admin, we get records for other users
+    if request.user.is_staff:
+        #Get user name for admin
+        usernames = dict((str(x.id), x.username) for x in User.objects.all())
+        query['iduser'] = {"$ne": str(request.user.id)}
+        otherUsersXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+        context.update({'OtherUsersXMLdatas': otherUsersXmlData, 'usernames': usernames})
+
+    return HttpResponse(template.render(context))
+def dacshboard_otherusers_records(request):
+    template = loader.get_template('dashboard/my_dashboard_my_records.html')
+    query = {}
+    # ispublished = request.GET.get('ispublished', None)
+    #If ispublished not None, check if we want publish or unpublish records
+    # if ispublished:
+    #     ispublished = ispublished == 'true'
+    #     query['ispublished'] = ispublished
+    query['iduser'] = str(request.user.id)
+    userXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+    # Get all the templates
+    #templates_used = Template.find()
+    templates_used = sorted(Template.find(query), key=lambda data: data['content'], reverse=True)
+    #Add user_form for change owner
+    user_form = UserForm(request.user)
+    otherUXMLdatas = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+
+    context = RequestContext(request, {'XMLdatas': userXmlData,
+                                       # 'ispublished': ispublished,
+                                       'user_form': user_form,
+                                       'Templates': templates_used,
+                                       'OtherUXMLdatas': otherUXMLdatas
+    })
+    #If the user is an admin, we get records for other users
+    if request.user.is_staff:
+        #Get user name for admin
+        usernames = dict((str(x.id), x.username) for x in User.objects.all())
+        query['iduser'] = {"$ne": str(request.user.id)}
+        otherUsersXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
+        context.update({'OtherUsersXMLdatas': otherUsersXmlData, 'usernames': usernames})
+
+    return HttpResponse(template.render(context))

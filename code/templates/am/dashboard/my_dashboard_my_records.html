@@ -1,8 +1,14 @@
+
+
 {#% extends "mdcs/extra/one_column.html" %#}
 {% extends 'base_main.html' %}
 {% load staticfiles %}
 {% load auth_extras %}
 {% load dict_key_extras %}
+
+
+
+
 {% comment %}
 <!--
 ################################################################################
@@ -25,7 +31,8 @@
 
 {% block content %}
 
-<h1 class="page-header">My Records</h1>
+<h1 id="my-records-title" class="page-header">My Records</h1>
+
   <div id="body">
 
 	<div class="width">
@@ -38,19 +45,42 @@
 
 {% if XMLdatas %}
 {% with canEdit=request.user|has_perm:'curate.curate_edit_document' canDelete=request.user|has_perm:'curate.curate_delete_document' %}
-
-        <table class="table table-bordered table-striped">
+{% if user.is_staff %}
+  <p>
+    <a href="#">
+      {% if OtherUser != user%}
+      <div id="shw-plp-r" title="proc_otherpeoplerecords">
+        <span class="icon legend result" class= "pull-right" onclick="show_users_records('{{OtherUser.id}}')">
+            Other users records
+        </span>
+      </div>
+        {%elif OtherUser == user%}
+              <!--Only this user found-->
+        {%endif%}
+    </a>
+  </p>
+{% endif %}
+<div id="users-records" title="Show people records" style="display:none;">
+  {% include 'dashboard/my_dashboard_otherusersrecords.html'  %}
+</div>
+        <table id ="user-record" class="table table-bordered table-striped">
             <tr>
-                <th width="75%">Resource name</th>
+                <th width="25%">Resource name</th>
                 <!--<th>Published</th>-->
                 <!--<th width="175em">Last Publication date</th>-->
+                {% if Templates %}
+                  <th>Associated schema name</th>
+                <!--  <th>User</th>-->
+                  <th>Associated schema ID</th>
+                {%endif%}
+                <th>Last modified date</th>
                 <th>Actions</th>
             </tr>
             {% for XMLdata in XMLdatas %}
                 {% cycle 'even' '' as rowcolors silent %}
                 <tr class="{{ rowcolors }}">
                     <td>
-                            {% if XMLdata.content.Resource.identity.title %}
+                            {% if XMLdata.content.Resource.identity.title %}++
                                 {{ XMLdata.content.Resource.identity.title }}
                             {%else%}
                                 <script>
@@ -58,10 +88,52 @@
                                 </script>
                             {% endif %}
                     </td>
+
+                    <!-- Get the associated schema name-->
+                    {% if Templates %}
+                      {% for Template in Templates %}
+                        {% cycle 'even' '' as rowcolorsTemplate silent %}
+                          <td class="{{ rowcolorsTemplate }}">
+                            {{XMLdata.schema|get_templ_object_from_Id}}
+                          </td>
+                          <!-- Get the User's name
+                          <td >++
+                              {% if XMLdata.schema = "59a72cb1c9b7090b8055b581" %}
+                                {{Template.user}}
+                              {%else%}
+                                <script>
+                                    document.write('{{ Template.filename }}'.replace(/\.[^/.]+$/, ""));
+                                </script>
+                              {% endif %}
+                          </td>-->
+                          <!-- Get the schema ID -->
+                          <td>
+                              {% if XMLdata.content.Resource.identity.schema %} # A revoir
+                                {{ XMLdata.content.Resource.identity.schema}}
+                              {%else%}
+                                <script>
+                                  document.write('{{ XMLdata.schema }}'.replace(/\.[^/.]+$/, ""));
+                                </script>
+                              {% endif %}
+                          </td>
+                        {%endfor%}
+                    {% endif %}
+
+                    <!-- Get the last modified date -->
+                    <td>
+                      {% if XMLdata.content.Resource.identity.lastmodificationdate %} # A revoir
+                          {{ XMLdata.content.Resource.identity.lastmodificationdate }}
+                      {%else%}
+                          <script>
+                              document.write('{{ XMLdata.lastmodificationdate }}'.replace(/\.[^/.]+$/, ""));
+                          </script>
+                      {% endif %}
+                    </td>
+                    <!-- Set the action : view or delete the xml document -->
                     <td>
                         {% with XMLdata|get:"_id" as XMLdata_id %}
                         {% autoescape on %}
-                        <a href="/dashboard/detail?type=record&id={{XMLdata_id}}"><span class="icon legend result">
+                        <a href="/dashboard/detail?type=record&user_id=abc&id={{XMLdata_id}}"><span class="icon legend result">
                             View
                         </span></a>
                         {% endautoescape %}
@@ -82,9 +154,8 @@
     	<div class="clear"></div>
     </div>
 	</div>
-
-            <div class="clear"></div>
-    {% endblock %}
+<div class="clear"></div>
+{% endblock %}
 
 {% block popups %}
 <div id="dialog-delete-result" title="Delete Document" style="display:none;">

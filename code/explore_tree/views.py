@@ -35,7 +35,7 @@ from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from django.core.cache import caches
 from django.contrib.sessions.models import Session
-#from mgi.models import Template, TemplateVersion ##
+from mgi.models import XMLdata, Template, TemplateVersion ##
 #from django.template import RequestContext, loader ##
 #from mgi.models import template_list_current ##
 
@@ -52,6 +52,7 @@ nav_id_cache     = caches['nav_id']
 tmpl_cache       = caches['tmpls']
 
 @cache_page(600 * 15)
+#@cache_page(60 * 1)
 @ensure_csrf_cookie
 def exploration_tree(request):
     """
@@ -134,5 +135,7 @@ def exploration_tree(request):
             },
             'navigation_tree': html_tree,
         })
-
+        #print context
+        #print html_tree
+        #print type(html_tree)
         return HttpResponse(template.render(context))

@@ -6,6 +6,9 @@ from utils.xml_utils.projection import get_projection
 from ..models import Navigation
 from .views import navigation_get
 
+#from django.template import RequestContext, loader
+from mgi.models import XMLdata
+from mgi.models import Template#
 CQL_NAMESPACE = "http://siam.nist.gov/Database-Navigation-Ontology#"
 
 
@@ -77,7 +80,15 @@ def get_navigation_node_for_document(node_id, document_id):
                 navigation_node = navigation_get(navigation_node.parent)
 
         # get the documents matching the query
-        documents_id = [str(get_projection(document)) for document in query.execute_query(filters, '{"_id": 1}')]
+        doc = XMLdata.getXMLdata(document_id)
+        #.getXMLdata_schema
+        template_id = ''
+        for k, v in doc.items():
+            if k == "schema":
+                template_id = v
+
+
+        documents_id = [str(get_projection(document)) for document in query.execute_query(template_id,filters, '{"_id": 1}')]
         #  End fixme
         # **************
 
@@ -100,8 +111,3 @@ def get_navigation_node_for_document(node_id, document_id):
                 return None
             else:
                 return navigation_nodes[0]
-
-
-
-
-

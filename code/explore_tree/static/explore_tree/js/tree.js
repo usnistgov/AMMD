@@ -13,9 +13,11 @@ var operateTree = function($treeElement) {
     if($subtree.is(':hidden')) {
         $icon.addClass("fa fa-chevron-down");
         $subtree.show();
+        console.log($subtree)
     } else {
         $icon.addClass("fa fa-chevron-right");
         $subtree.hide();
+        console.log($subtree)
     }
 };
 

@@ -2,7 +2,7 @@
 #
 # File Name: models.py
 # Application: mgi
-# Description: 
+# Description:
 #
 # Author: Sharief Youssef
 #         sharief.youssef@nist.gov
@@ -17,6 +17,8 @@ import numbers
 from lxml import etree
 from mongoengine import *
 from django_mongoengine import fields as dme_fields, Document as dme_Document
+from django.template.defaulttags import register
+
 
 # Specific to MongoDB ordered inserts
 from collections import OrderedDict
@@ -103,6 +105,68 @@ class Template(dme_Document):
 
     def __str__(self):
         return self.title
+
+
+    @staticmethod
+#@app.route('/my_dashboard_my_records')
+    def getcursor(p1=None,p2=None):
+        # create a connection
+        #client = MongoClient(MONGODB_URI, document_class=OrderedDict)
+        # connect to the db 'mgi'
+        client = MongoClient(MONGODB_URI)
+        db = client[MGI_DB]
+        # get the xmldata collection
+        template = db['template']
+        # find the associated object
+        if (p2 is not None):
+            cursor = template.find({p1:p2})
+        else:
+            cursor = (template.find())#.get('schema')
+            #c = cursore.get('schema')
+        return cursor
+
+    #@staticmethod
+    @register.filter
+    def get_templ_object_from_Id(p1): #type = Type.objects(pk=object_id).get()
+        # create a connection
+        # connect to the db 'mgi'
+        client = MongoClient(MONGODB_URI)
+        db = client[MGI_DB]
+        # get the xmldata collection
+        template = db['template']
+        # find the associated object
+        template = Template.objects(pk=p1).get()
+        #return cursor
+        return template.title
+
+    @register.filter
+    def get_id_doc(postID):
+        """
+            Returns the object with the given id
+        """
+        # create a connection
+        client = MongoClient(MONGODB_URI, document_class=OrderedDict)
+        # connect to the db 'mgi'
+        db = client[MGI_DB]
+        # get the xmldata collection
+        template = db['template']
+        return template.find_one({'_id': ObjectId(postID)})
+
+    @staticmethod
+    def find(param1=None, param2=None):
+        # create a connection
+        client = MongoClient(MONGODB_URI)
+        # connect to the db 'mgi'
+        db = client[MGI_DB]
+        # get all templates of the db
+        template = db['template']
+        # find the templates matching the parameters
+        if (param2 is not None):
+            cursor = template.find({param1:param2})
+        else:
+            cursor = (template.find())#.get('schema')
+        return cursor
+
 
 
 def delete_template(object_id):
@@ -284,7 +348,7 @@ class TemplateVersion(dme_Document):
         return Template.objects.get(pk=self.current).filename
 
 
-class Type(Document):    
+class Type(Document):
     """Represents an XML schema type to use to compose XML Schemas"""
     title = StringField(required=True)
     filename = StringField(required=True)
@@ -308,8 +372,8 @@ class TypeVersion(Document):
 class Instance(Document):
     """Represents an instance of a remote MDCS"""
     name = StringField(required=True, unique=True)
-    protocol = StringField(required=True) 
-    address = StringField(required=True) 
+    protocol = StringField(required=True)
+    address = StringField(required=True)
     port = IntField(required=True)
     access_token = StringField(required=True)
     refresh_token = StringField(required=True)
@@ -318,13 +382,13 @@ class Instance(Document):
 
 class QueryResults(Document):
     """Stores results from a query (Query By Example)"""
-    results = ListField(required=True) 
+    results = ListField(required=True)
 
-    
+
 class SavedQuery(Document):
     """Represents a query saved by the user (Query by Example)"""
     user = StringField(required=True)
-    template = StringField(required=True)    
+    template = StringField(required=True)
     query = StringField(required=True)
     displayedQuery = StringField(required=True)
 
@@ -336,11 +400,11 @@ class Module(Document):
     view = StringField(required=True)
     multiple = BooleanField(required=True)
 
-    
+
 class XML2Download(Document):
     """Temporarily stores the content of an XML document to download"""
     title = StringField(required=True)
-    xml = StringField(required=True)    
+    xml = StringField(required=True)
 
 
 class PrivacyPolicy(Document):
@@ -401,29 +465,29 @@ class XMLdata(object):
 
     def __init__(self, schemaID=None, xml=None, json=None, title="", iduser=None, ispublished=False,
                  publicationdate=None, oai_datestamp=None):
-        """                                                                                                                                                                                                                   
-            initialize the object                                                                                                                                                                                             
-            schema = ref schema (Document)                                                                                                                                                                                    
-            xml = xml string 
-            title = title of the document                                                                                                                                                                                                 
         """
-        # create a connection                                                                                                                                                                                                 
+            initialize the object
+            schema = ref schema (Document)
+            xml = xml string
+            title = title of the document
+        """
+        # create a connection
         client = MongoClient(MONGODB_URI)
         # connect to the db 'mgi'
         db = client[MGI_DB]
         # get the xmldata collection
         self.xmldata = db['xmldata']
-        # create a new dict to keep the mongoengine order                                                                                                                                                                     
+        # create a new dict to keep the mongoengine order
         self.content = OrderedDict()
-        # insert the ref to schema                                                                                                                                                                                            
+        # insert the ref to schema
         self.content['schema'] = schemaID
-        # insert the title                                                                                                                                                                                                    
+        # insert the title
         self.content['title'] = title
         if (json is not None):
-            # insert the json content after                                                                                                                                                                                       
+            # insert the json content after
             self.content['content'] = json
         else:
-            # insert the json content after                                                                                                                                                                                       
+            # insert the json content after
             self.content['content'] = xmltodict.parse(xml, postprocessor=postprocessor)
 
         #id user
@@ -438,6 +502,98 @@ class XMLdata(object):
             self.content['oai_datestamp'] = oai_datestamp
 
         self.content['status'] = Status.ACTIVE
+
+    @staticmethod
+    def getXMLdata(xml_id):
+        doc = XMLdata.find({'_id': ObjectId(xml_id)})
+        results = []
+        if len(doc)==1:
+            res = doc[0]
+            return res
+        else:
+            for result in doc:
+                results.append(result)
+            return results
+
+    def getXMLdata_title(self):
+        #doc = XMLdata.find({'_id': ObjectId(xml_id)})
+        return self.title
+    @staticmethod
+    def getXMLdata_schema(self):
+        #doc = XMLdata.find({'_id': ObjectId(xml_id)})
+        return self.schema
+
+    @staticmethod
+    def findm(p1,p2, includeDeleted=False):
+        """
+        returns all objects that match params as a list of dicts
+         /!\ Doesn't return the same kind of objects as mongoengine.Document.objects()
+        """
+    # create a connection
+        client = MongoClient(MONGODB_URI, document_class=OrderedDict)
+    # connect to the db 'mgi'
+        db = client[MGI_DB]
+    # get the xmldata collection
+        xmldata = db['xmldata']
+    # find all objects of the collection
+        cursor = xmldata.find({p1: p2})
+    # build a list with the objects
+        results = []
+        for result in cursor:
+        # Check the deleted records
+            if includeDeleted:
+                results.append(result)
+            elif result.get('status') != Status.DELETED:
+                results.append(result)
+        return results
+
+    @staticmethod
+    def gets_content(xmldata,p1,p2):
+	  # create a connection
+      #client = MongoClient(MONGODB_URI, document_class=OrderedDict)
+      # connect to the db 'mgi'
+      client = MongoClient(MONGODB_URI)
+      db = client[MGI_DB]
+      # get the xmldata collection
+      xmldata = db['xmldata']
+      # find the associated object
+      if (p2 is not None):
+          cursor = xmldata.find({p1: p2})
+      else:
+          cursor = (xmldata.find())#.get('schema')
+      #c = cursore.get('schema')
+      #return
+      return self.content['content']
+
+
+    @staticmethod
+    def find_data(p1,p2=None):
+        # create a connection
+        #client = MongoClient(MONGODB_URI, document_class=OrderedDict)
+        # connect to the db 'mgi'
+        client = MongoClient(MONGODB_URI)
+        db = client[MGI_DB]
+        # get the xmldata collection
+        xmldata = db['xmldata']
+        # find the associated object
+        if (p2 is not None):
+            cursor = xmldata.find({p1: p2})
+        else:
+            cursor = (xmldata.find())#.get('schema')
+        #c = cursore.get('schema')
+        results = []
+        for result in cursor:
+            # Check the deleted records
+            if includeDeleted:
+                results.append(result)
+            elif result.get('status') != Status.DELETED:
+                results.append(result)
+        return results
+
+
+    @staticmethod
+    def find_content_by_id(self):
+        return self.content['content']
 
     @staticmethod
     def unparse(json_dict):
@@ -480,20 +636,34 @@ class XMLdata(object):
         xmldata = db['xmldata']
         # find all objects of the collection
         cursor = xmldata.find()
-        # build a list with the objects        
+        # build a list with the objects
         results = []
         for result in cursor:
+            #print result
             # Check the deleted records
             if includeDeleted:
                 results.append(result)
             elif result.get('status') != Status.DELETED:
                 results.append(result)
         return results
-    
+
+    @staticmethod
+    def get_objects():
+        # create a connection
+        # connect to the db 'mgi'
+        client = MongoClient(MONGODB_URI)
+        db = client[MGI_DB]
+        # get the xmldata collection
+        xmldata = db['xmldata']
+        # find all the objects
+        xmldata = XMLdata.objects
+        print type(xmldata)
+        return xmldata
+
     @staticmethod
     def find(params, includeDeleted=False):
         """
-            returns all objects that match params as a list of dicts 
+            returns all objects that match params as a list of dicts
              /!\ Doesn't return the same kind of objects as mongoengine.Document.objects()
         """
         # create a connection
@@ -504,7 +674,7 @@ class XMLdata(object):
         xmldata = db['xmldata']
         # find all objects of the collection
         cursor = xmldata.find(params)
-        # build a list with the objects        
+        # build a list with the objects
         results = []
         for result in cursor:
             # Check the deleted records
@@ -513,7 +683,7 @@ class XMLdata(object):
             elif result.get('status') != Status.DELETED:
                 results.append(result)
         return results
-    
+
     @staticmethod
     def executeQuery(query, includeDeleted=False):
         """queries mongo db and returns results data"""
@@ -525,7 +695,7 @@ class XMLdata(object):
         xmldata = db['xmldata']
         # query mongo db
         cursor = xmldata.find(query)
-        # build a list with the xml representation of objects that match the query      
+        # build a list with the xml representation of objects that match the query
         queryResults = []
 
         for result in cursor:
@@ -535,7 +705,7 @@ class XMLdata(object):
             elif result.get('status') != Status.DELETED:
                 queryResults.append(result['content'])
         return queryResults
-    
+
     @staticmethod
     def executeQueryFullResult(query, projection=None, includeDeleted=False):
         """queries mongo db and returns results data"""
@@ -562,6 +732,10 @@ class XMLdata(object):
                 results.append(result)
 
         return results
+
+    @staticmethod
+    def get_content(self):
+        return self.content['content']
 
     @staticmethod
     def get(postID):
@@ -671,7 +845,7 @@ class XMLdata(object):
 
         json_content = xmltodict.parse(content, postprocessor=postprocessor)
         json = {'content': json_content, 'title': title, 'lastmodificationdate': datetime.datetime.now()}
-                    
+
         xmldata.update({'_id': ObjectId(postID)}, {"$set": json}, upsert=False)
 
     @staticmethod
@@ -730,18 +904,18 @@ class XMLdata(object):
         wordList = re.sub("[^\w]", " ",  text).split()
         wordList = ['"{0}"'.format(x) for x in wordList]
         wordList = ' '.join(wordList)
-    
+
         if len(wordList) > 0:
             full_text_query = {'$text': {'$search': wordList}, 'schema' : {'$in': templatesID}, }
         else:
-            full_text_query = {'schema' : {'$in': templatesID} } 
-        
+            full_text_query = {'schema' : {'$in': templatesID} }
+
         if len(refinements.keys()) > 0:
             full_text_query.update(refinements)
         full_text_query.update({'ispublished': True})
 
         cursor = xmldata.find(full_text_query).sort('publicationdate', DESCENDING)
-        
+
         results = []
         for result in cursor:
             # Check the deleted records
@@ -751,6 +925,8 @@ class XMLdata(object):
                 results.append(result)
         return results
 
+def find_content_by_id(self):
+    return self.content['content']
 
 class OaiSettings(Document):
     repositoryName = StringField(required=True)

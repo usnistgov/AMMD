@@ -1,6 +1,6 @@
 <!-- template-based caching -->
 {% load cache %}
-
+{% block content %}
 <div id="tree-panel" class="col-sm-4 col-md-3 sidebar">
     <div id="tree">
         <h4 id="tree-loading">
@@ -8,7 +8,7 @@
             <span>Loading tree...</span>
         </h4>
         <ul id="tree-details" class="hide">
-            <li class="root"><i class="fa fa-database"></i> Database</li>
+            <li class="root"><i class="fa fa-database" ></i> Database</li>
             {{ navigation_tree | safe }}
         </ul>
     </div>
@@ -22,14 +22,53 @@
             <span>Loading ...</span>
         </h4>
     </div>
+
+<!--    <div id="explore-view-download">  active=false>
+      <h1 class="page-header">Download document</h1>
+        <div class="row">
+            <div class="toolbar">
+                <div class="btn-group pull-right">
+                    <button class="btn btn-default download"><i class="fa fa-download" disabled></i> Download </button>
+                </div>
+            </div>
+       </div>
+    </div>  -->
+<!--    <div class="btn-group pull-right">
+      <input id="Button" type="button" value="download the XML document" style="background-color:grey" onclick="Me();" disabled/>
+    </div>
+-->
+
+<!--    <button id="explore-view-download" class="btn-group pull-right" class="btn btn-default download" onclick="downloadExploreTree();" disabled >
+      <i class="fa fa-download"></i> Download onclick="downloadExploreTree();"
+    </button>-->
+
+  <!--  <button id="explore-view-download" class="btn btn-default download" class="btn-group pull-right" onclick="afficher();" disabled >-->
+  <button id="explore-view-download" class="btn-group pull-right" class="btn btn-default download"  onclick="downloadExploreTree();" disabled >
+    <i class="fa fa-download"></i> Download
+  </button>
+
+  <!--div id="dialog-download-options" title="Download Options" class="btn-group pull-right" style="display:none;">
+    <p></p>
+    <p>
+      <span class="btn-group">
+        <button class="btn btn-default" onclick="download_xml_tree();"><i class="icon-arrow-down"></i> Download current schema</button>
+      </span>
+    </p>
+    <p>
+      <span class="btn-group">
+        <button class="btn btn-default" onclick="download_all_xml_tree();"><i class="icon-arrow-down"></i> Download all the schema</button>
+      </span>
+    </p>
+  </div-->
+
     <div id="explore-view">
         <h1 class="page-header">Exploration panel</h1>
-
         <p class="alert alert-info">
             <i class="fa fa-question-circle"></i> Please browse the left panel and select a viewable object to toggle
             this screen.
         </p>
     </div>
+
     <div id="explore-view-error">
         <h1 class="page-header">Exploration error</h1>
         <p class="alert alert-danger">
@@ -38,4 +77,23 @@
         </p>
     </div>
 </div>
+{% endblock %}
 
+{% block popups %}
+
+<div id="dialog-download-options" title="Download Options" style="display:none;">
+  <p></p>
+  <p>
+    <span class="btn-group">
+      <button class="btn btn-default" onclick="download_all_xml_tree();"><i class="icon-arrow-down"></i> Download the source file</button>
+    </span>
+  </p>
+  <p>
+    <span class="btn-group">
+      <button class="btn btn-default" onclick="download_xml_tree_corrolation();"><i class="icon-arrow-down"></i> Download the displayed data</button>
+    </span>
+  </p>
+
+</div>
+
+{% endblock %}
