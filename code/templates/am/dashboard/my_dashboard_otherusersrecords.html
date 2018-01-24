@@ -1,0 +1,151 @@
+
+{#% extends "mdcs/extra/one_column.html" %#}
+{% load staticfiles %}
+{% load auth_extras %}
+{% load dict_key_extras %}
+
+
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: my_dashboard_otherusersrecords.html
+# Application: user_dashboard
+# Description:
+#
+# Author: Yande Ndiaye
+#         ndeye.ndiaye@nist.gov
+#
+#
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block content %}
+
+<h1 class="page-header">Other users Records</h1>
+
+  <div id="body">
+
+	<div class="width">
+
+    <!--<ul class="nav nav-tabs">-->
+        <!--{% if not ispublished %} <li class="active"> {%else%} <li> {% endif%} <a href="/dashboard/records">All</a></li>-->
+        <!--{% if ispublished == "true" %} <li class="active"> {%else%} <li> {% endif%}<a href="/dashboard/records?ispublished=true">Published</a></li>-->
+        <!--{% if ispublished == "false" %} <li class="active"> {%else%} <li> {% endif%}<a href="/dashboard/records?ispublished=false">Not Published</a></li>-->
+    <!--</ul>-->
+    <div class="toolbar">
+    	<button class="btn-group pull-right">
+        	<span class="btn " onclick="backToResults();" style="text-decoration:none">Back to records</span>
+      	</button>
+    	<br/><br/>
+    </div>
+
+    <br/><br/>
+    <br/><br/>
+{%if OtherUsers%}
+    {% if OtherUser != user %}
+      {% if OtherUsersXMLdatas %}
+        <br/><br/>
+        <br/><br/>
+          <table class="table table-bordered table-striped">
+            <tr>
+                <th width="25%">Resource name</th>
+                  <th>Associated schema name</th>
+                  <th>Associated schema ID</th>
+                  <th>User</th>
+                  <th>Last modified date</th>
+                  <th>Action</th>
+            </tr>
+            {%for OtherUsersXMLdata in OtherUsersXMLdatas%}
+            {% with canEdit=request.user|has_perm:'curate.curate_edit_document' canDelete=request.user|has_perm:'curate.curate_delete_document' %}
+            <tr class="{{ rowcolors }}">
+                <td>
+                        {% if OtherUsersXMLdata.content.Resource.identity.title %}++
+                            {{ OtherUsersXMLdata.content.Resource.identity.title }}
+                        {%else%}
+                            <script>
+                                document.write('{{ OtherUsersXMLdata.title }}'.replace(/\.[^/.]+$/, ""));
+                            </script>
+                        {% endif %}
+                </td>
+                <td>
+                  {% if Templates %}
+                      <script>
+                        document.write('{{OtherUsersXMLdata.schema|get_templ_object_from_Id}}'.replace(/\.[^/.]+$/, ""));
+                      </script>
+                  {% endif %}
+                </td>
+                <td>
+                    {% if OtherUsersXMLdata.content.Resource.identity.schema %} # A revoir
+                      {{ OtherUsersXMLdata.content.Resource.identity.schema}}
+                    {%else%}
+                      <script>
+                        document.write('{{ OtherUsersXMLdata.schema }}'.replace(/\.[^/.]+$/, ""));
+                      </script>
+                    {% endif %}
+                </td>
+                <td>
+                  {{OtherUsersXMLdata.iduser|get_username}}
+                </td>
+                <td>
+                  {% if OtherUsersXMLdata.content.Resource.identity.lastmodificationdate %} # A revoir
+                      {{ OtherUsersXMLdata.content.Resource.identity.lastmodificationdate }}
+                  {%else%}
+                      <script>
+                          document.write('{{ OtherUsersXMLdata.lastmodificationdate }}'.replace(/\.[^/.]+$/, ""));
+                      </script>
+                  {% endif %}
+                </td>
+                <!-- Set the action : view the xml document -->
+                <td>
+                    {% with OtherUsersXMLdata|get:"_id" as OtherUsersXMLdata_id %}
+                    {% autoescape on %}
+                    <a href="/dashboard/otheruserdetail?type=record&user_id={{OtherUsersXMLdata.iduser|get_username}}&id={{OtherUsersXMLdata_id}}"><span class="icon legend result">
+                        View
+                    </span></a>
+                    {% endautoescape %}
+                    {% endwith%}
+                </td>
+            </tr>
+            {% endwith%}
+            {%endfor%}
+          </table>
+
+
+      {%else%}
+        No Resources found for the user {{ OtherUser }}
+      {%endif%}
+    {%endif%}
+{%else%}
+    No Resources found {{ OtherUXMLdatas }}
+{%endif%}
+    	<div class="clear"></div>
+    </div>
+	</div>
+<div class="clear"></div>
+{% endblock %}
+
+{% block popups %}
+<div id="dialog-delete-result" title="Delete Document" style="display:none;">
+Are you sure you want to delete this document?
+</div>
+<div id="dialog-publish" title="Publish Document" style="display:none;">
+Are you sure you want to publish this document?
+</div>
+<div id="dialog-unpublish" title="Unpublish Document" style="display:none;">
+Are you sure you want to unpublish this document?
+</div>
+<div id="dialog-detail-result" title="Resource Details" style="display:none;">
+<div id="result_detail">
+</div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="{% static 'js/dashboard/dashboard.js' %}"></script>
+{% endblock %}

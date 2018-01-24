@@ -1,0 +1,210 @@
+# AMMD Installation Instruction (Version 1.5)
+
+* Created on: 01/08/2018
+* Last modified: 01/09/2019
+
+## CAVEAT
+
+  These installation instructions were originally written for offline/standalone installations where all 
+  of the required libraries and applications were downloaded and installed offline. Future installs using 
+  this method should download each applicaiton and library as necessary.
+
+## NOTES
+	1 - These instructions support the manual installation process for AMMD MDCS software version 1.5.
+	
+	2 - Certain actions should only take place within a "virtual environment" in which the AMMD application is created. Commands that should happen in only virtual-environment command-line shell windows will be prefixed with '$$', all other commands that should NOT occur in a virtual-environment command-line shell window will be prefixed with '$'.
+	
+	3 - The instructions make no assumptions about any pre-existing installations/applications. Thus, they include instructions and packages for including even some auxiliary utilities/programs - such as notepad++ and protege - if they are necessary to fully setup work/development on a given machine. In addition, if a given environment has not yet had python installed (or its installation package manager, pip) then these are included as well, to ensure a common baseline.
+
+	4 - These instructions were created from a set of pre-downloaded packages that were manually copied onto the system for installation. In the future, however, individuals may prefer to download those applications from the internet and/or download the code and data from appropriate repositories. Please adjust the procedures and necessary to support those alternative processes.
+	
+## CONVENTIONS
+	1 - regular (non-virtualenv) command-line window commands are prefixed with '$'
+		- example:  $ program.exe
+	2 - virtualenv cmdline-window commands are prefixed with '$$'
+		- example:  $$ python manage.py migrate
+		
+## INSTALLATION STEPS
+	1  - create directories for release
+		$ mkdir c:\mdcs\ammd\1.5\
+		$ mkdir c:\mdcs\ammd\1.5\installer-pkg\
+	2  - copy installation materials from INSTALLATION_MEDIA ("x:\") into RELEASE_INSTALLER_DIR from installation-media
+		$ copy x:\installer-pkg\* c:\mdcs\ammd\1.5\installer-pkg\.
+	3  - create installation base directory
+		$ mkdir c:\mdcs\ammd\1.5\ammd15\
+	4  - extract code from repository into base directory
+		$ cd c:\mdcs\ammd\1.5\ammd15\
+		$ unzip c:\mdcs\ammd\1.5\installer-pkg\packages\code\mgi-mdcs-ammd-1.5.zip
+	5  - open command line shell for performing installation commands
+		- Start -> cmd.exe
+	6  - install supporting applications (as necessary)
+		- install notepadd++
+			$ c:\mdcs\ammd\1.5\installer-pkg\packages\notepad_pp\npp.6.8.6.Installer.exe
+		- install protege	
+			- install graphviz/dot
+					$ c:\mdcs\ammd\1.5\installer-pkg\packages\graphviz-dot\graphviz-2.38.msi
+			- install protege
+				$ c:\mdcs\ammd\1.5\installer-pkg\packages\protege\install_protege_4.3.exe
+					- use its built-in JVM for consistency/compatibility of installation
+			- configure protege to use dot
+				- open protoge -> File -> Preferences -> 
+				  OWLViz Tab -> Dot Application Path (C:\Program Files (x86)\Graphviz2.38\bin or equivalent)
+	7  - ensure supporting infrastructure is installed	
+		- install python
+			$ c:\mdcs\ammd\1.5\installer-pkg\packages\python\python-2.7.10.msi
+		- install pip
+			- execute get-pip.py
+				$ python c:\mdcs\ammd\1.5\installer-pkg\packages\pip\get-pip.py
+				$ python -m pip install -U pip
+		- install virtualenv
+			$ pip install virtualenvwrapper-win
+		- install mongodb
+			- install and configure mongodb
+					$ c:\mdcs\ammd\1.5\installer-pkg\packages\mongodb\mongodb-win32-x86_64-2008plus-ssl-3.4.2-signed.msi
+					$ cd c:\mdcs\ammd\1.5\ammd15\
+					$ mkdir data\db
+				- update configuration file to refer to data directory
+					- edit c:\mdcs\ammd\1.5\ammd15\conf\mongodb.conf	
+						- change line: '../data/db' -> 'c:/mdcs/ammd/1.5/ammd15/data/db'
+				- create mongodb users
+					- open a separate command window
+						$ cd c:\mdcs\ammd\1.5\ammd15\
+						$ mongod --config conf\mongodb.conf
+					- open yet another separate window and create mongodb users (using mongodb client program = 'mongo')
+						- create admin-user
+							$ mongo
+								use admin
+								db.createUser(
+								{
+								user: "admin",
+								pwd: "admin",
+								roles: [ { role: "userAdminAnyDatabase", db: "admin"},"backup","restore"]
+								}
+								)
+								exit										
+						- create mgi-user
+							$ mongo --port 27017 -u "admin" -p "admin" --authenticationDatabase admin
+								use mgi
+								db.createUser(
+								{
+								user: "mgi",
+								pwd: "mgi",
+								roles: ["readWrite"]
+								}
+								)
+								exit			
+				- update mgi\settings.py with mgi-user login info (username and password)					
+					- edit c:\mdcs\ammd\1.5\ammd15\mgi\settings.py
+					- change lines as follows:
+						- line 1: MONGO_MGI_USER = "mgi_user" -> MONGO_MGI_USER = "mgi"
+						- line 2: MONGO_MGI_PASSWORD = "mgi_password" -> MONGO_MGI_PASSWORD = "mgi"
+		- install redis
+			$ c:\mdcs\ammd\1.5\installer-pkg\packages\\redis\Redis-x64-3.2.100.msi
+	8  - ensure apps are appropriately referenced in system environment variables
+			- PATH
+				- ensure the following are in the PATH
+					- python
+						PATH=C:\Python27\;C:\Python27\Scripts;
+						PYTHONPATH
+					- redis
+						PATH=C:\Program Files\Redis\;
+					- mongodb
+						PATH=C:\Program Files\MongoDB\Server\3.4\bin;
+				- and for auxiliary apps
+					- graphviz
+						PATH=C:\Program Files (x86)\Graphviz2.38\bin;
+	9  - create new virtual environment
+		$ cd c:\mdcs\ammd\1.5\ammd15\
+		$ mkvirtualenv ammd15env
+	10 - open new virtual environment
+		$ workon ammd15env		
+			NOTE: After running this command, this particular window will indicate that it has been moved
+				  into the virtual environment by including the virtual environment name in the command-prompt.
+				  For example:
+					(ammd15env)
+				  Thus, any commands after this which are intended for this virtual-environment-window command-line shell will be
+				  designated with the '$$' command.
+	11 - install supporting application packages
+		- install required packages
+			$$ pip install -r docs\requirements.txt
+		- install supporting components
+			- install django-mongoengine inside virtualenv
+				$$ cd c:\mdcs\ammd\1.5\installer-pkg\packages\mongoengine\		
+				$$ python setup.py install
+				$$ cd c:\mdcs\ammd\1.5\ammd15\
+	12 - initialize application operating state
+		- initialize django app data
+			- in another, non virtual environment window, ensure mongodb is running
+				$ mongod --config conf\mongodb.conf
+			- in the virtual envrionment window  (i.e., window running ammd15env)
+				- ensure are in RELEASE_INSTALL_BASE_DIR=c:\mdcs\ammd\1.5\ammd15\
+					$$ cd c:\mdcs\ammd\1.5\ammd15\
+				- initialize application data models
+					$$ python manage.py migrate
+				- create primary user for webapp
+					$$ python manage.py createsuperuser
+						NOTE: Enter information when prompted
+							username: admin 
+							email:    youremail@nist.gov 
+							password: admin									
+	13 - run application
+		- run supporting component services in separate command-line shell windows from the main ammd application
+			- start mongodb in its own command-line shell window (if not already running)
+				$ cd c:\mdcs\ammd\1.5\ammd15\
+				$ mongod --config conf\mongodb.conf				
+			- start redis-server and celery in its own command-line shell window
+				$ cd c:\mdcs\ammd\1.5\ammd15\
+				$ redis-server.exe
+				$ pip install Celery
+				$ celery -A mgi worker -l info -Ofair --purge
+		- run ammd application in virtualenv window
+				- if not running virtual-env, open it in a separate command-line shell window
+					$ cd c:\mdcs\ammd\1.5\ammd15\
+					$ workon ammd15env
+				- start app
+					$$ cd c:\mdcs\ammd\1.5\ammd15\
+					$$ python manage.py runserver --noreload
+		- open app in browswer
+			- open browser to: http://127.0.0.1:8000/ 
+		- login to app
+			NOTE: Enter information at login screen
+				username: admin 
+				password: admin	
+		- load / set active ontology
+			- after login
+			- click schema viewer -> admin -> Admin 
+				-> Exploration Tree -> Upload new OWL
+			- Select file -> c:\mdcs\ammd\1.5\installer-pkg\data\ontology\AMMD_Ontology_R1.owl
+			- Save file
+			- Activate -> Yes, activate this ontology
+		- use the application
+	14 - shutdown app
+		- logout of app running in browser
+		- close app by closing browser window in which app is running
+		- CTRL-C in primary app (virtualenv) command-line shell window
+			$$ CTRL-C
+		- stop all supporting/component services (i.e., CTRL-C in respective windows)
+		- exit virtual environment
+			- in app's virtualenv window
+				$$ deactivate
+				
+	15 - bulk-load ammd-specific data
+		- ensure app is up and running
+		- open another command-line shell window
+			$ cd c:\mdcs\ammd\1.5\installer-pkg\data
+			$ pip install djangorestframework
+			$ python bulk_upload_data.py
+			
+IF DESIRED, PREVIOUS MONGODB DATA BACKUP PROCEDURE
+	- start mongodb
+		$ mongod --conf conf/mongodb.conf
+	- in another command-line shell window, backup
+		$ mkdir 2017-05-26-mongodb-bkp-dir\
+		$ mongodump --port 27017 -u "admin" -p "admin" --authenticationDatabase admin --out 2017-05-26-mongodb-bkp-dir\
+		
+IF DESIRED, MONGODB DATA RESTORE PROCEDURE
+	- start mongodb
+		$ mongod --conf conf/mongodb.conf
+	- in another command-line shell window, backup
+		$ mkdir 2017-05-26-mongodb-bkp-dir\
+		$ mongorestore --port 27017 -u "admin" -p "admin" --authenticationDatabase admin 2017-05-26-mongodb-bkp-dir\	

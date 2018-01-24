@@ -1,0 +1,53 @@
+{#% extends "mdcs/extra/one_column.html" %#}
+{% extends 'base_main.html' %}
+{% load staticfiles %}
+
+{% comment %}
+<!--
+################################################################################
+#
+# File Name: my_dashboard_detail_record.html
+# Application: profile/dashboard
+# Description:
+#
+# Author: Sharief Youssef
+#         sharief.youssef@nist.gov
+#
+#		  Xavier SCHMITT
+#		  xavier.schmitt@nist.gov
+#
+# Sponsor: National Institute of Standards and Technology
+#
+################################################################################
+-->
+{% endcomment %}
+
+{% block extra_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/curate/XMLTree.css' %}" media="screen" />
+{% endblock %}
+
+
+{% block content %}
+
+<h1 class="page-header"> {{user_id}} {{type}}: {{title}}</h1>
+
+<div class="toolbar">
+	<div class="btn-group pull-right">
+    	<span class="btn btn-default" onclick="backToResults();">Back to {{type}}s</span>
+  	</div>
+	<br/><br/>
+</div>
+
+<div class="clearer">&nbsp;</div>
+
+<div id="XMLHolder">
+        {% autoescape off %}
+    	{{XMLHolder}}
+    	{% endautoescape %} </div>
+<br/><br/>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/dashboard/explore.js' %}"></script>
+{% endblock %}
