@@ -31,7 +31,7 @@
 
 {% block content %}
 
-<h1 id="my-records-title" class="page-header">My Records</h1>
+<h1 id="my-records-title" class="page-header">My Records </h1>
 
   <div id="body">
 
@@ -42,27 +42,32 @@
         <!--{% if ispublished == "true" %} <li class="active"> {%else%} <li> {% endif%}<a href="/dashboard/records?ispublished=true">Published</a></li>-->
         <!--{% if ispublished == "false" %} <li class="active"> {%else%} <li> {% endif%}<a href="/dashboard/records?ispublished=false">Not Published</a></li>-->
     <!--</ul>-->
+    {% if user.is_staff %}
+      <p>
+        {% if OtherUser != user%}
+        <a href="#">
 
+          <div id="shw-plp-r" title="other_users_records">
+            <span class="icon legend result" class= "pull-right" onclick="show_users_records('{{OtherUser.id}}')">
+                Other users records {{OtherUser.id}}
+            </span>
+          </div>
+        </a>
+        {%elif OtherUser == user%}
+          <!--Only this user found-->
+        {%endif%}
+      </p>
+
+    {% endif %}
+    <div id="users-records" style="display:none;"> <!--title="Show people records"-->
+      {% include 'dashboard/my_dashboard_otherusersrecords.html'  %}
+    </div><br/>
 {% if XMLdatas %}
 {% with canEdit=request.user|has_perm:'curate.curate_edit_document' canDelete=request.user|has_perm:'curate.curate_delete_document' %}
-{% if user.is_staff %}
-  <p>
-    <a href="#">
-      {% if OtherUser != user%}
-      <div id="shw-plp-r" title="proc_otherpeoplerecords">
-        <span class="icon legend result" class= "pull-right" onclick="show_users_records('{{OtherUser.id}}')">
-            Other users records
-        </span>
-      </div>
-        {%elif OtherUser == user%}
-              <!--Only this user found-->
-        {%endif%}
-    </a>
-  </p>
-{% endif %}
-<div id="users-records" title="Show people records" style="display:none;">
-  {% include 'dashboard/my_dashboard_otherusersrecords.html'  %}
-</div>
+
+
+
+  <div id="totaldoc" class="right_align" >Total of documents: {{totaldocs_user}} </div><br/><br/>
         <table id ="user-record" class="table table-bordered table-striped">
             <tr>
                 <th width="25%">Resource name</th>
@@ -77,6 +82,7 @@
                 <th>Actions</th>
             </tr>
             {% for XMLdata in XMLdatas %}
+
                 {% cycle 'even' '' as rowcolors silent %}
                 <tr class="{{ rowcolors }}">
                     <td>
@@ -91,8 +97,6 @@
 
                     <!-- Get the associated schema name-->
                     {% if Templates %}
-                      {% for Template in Templates %}
-                        {% cycle 'even' '' as rowcolorsTemplate silent %}
                           <td class="{{ rowcolorsTemplate }}">
                             {{XMLdata.schema|get_templ_object_from_Id}}
                           </td>
@@ -116,7 +120,6 @@
                                 </script>
                               {% endif %}
                           </td>
-                        {%endfor%}
                     {% endif %}
 
                     <!-- Get the last modified date -->
@@ -143,9 +146,10 @@
                         {% endwith%}
                     </td>
                 </tr>
+
+
             {% endfor %}
         </table>
-
 {% endwith%}
 {%else%}
     No Resources found

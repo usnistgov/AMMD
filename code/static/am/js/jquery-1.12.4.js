@@ -8855,6 +8855,7 @@ jQuery.fn.extend( {
 
 		if ( !arguments.length ) {
 			return this.attr( "class", "" );
+
 		}
 
 		if ( typeof value === "string" && value ) {
@@ -8862,30 +8863,38 @@ jQuery.fn.extend( {
 
 			while ( ( elem = this[ i++ ] ) ) {
 				curValue = getClass( elem );
-
+				//console.log(elem);
+				//console.log(curValue);
 				// This expression is here for better compressibility (see addClass)
 				cur = elem.nodeType === 1 &&
 					( " " + curValue + " " ).replace( rclass, " " );
-
+				//console.log("----------------");
+				//console.log(cur);
 				if ( cur ) {
 					j = 0;
 					while ( ( clazz = classes[ j++ ] ) ) {
-
+						//console.log("2");
+						//console.log(clazz);
 						// Remove *all* instances
 						while ( cur.indexOf( " " + clazz + " " ) > -1 ) {
 							cur = cur.replace( " " + clazz + " ", " " );
+							//console.log("3");
 						}
 					}
 
 					// Only assign if different to avoid unneeded rendering.
 					finalValue = jQuery.trim( cur );
+					//console.log("+-+-+-+-+-+-+-+-+");
+					//console.log(cur)
+					//console.log(finalValue);
+				//	console.log(elem)
 					if ( curValue !== finalValue ) {
 						jQuery.attr( elem, "class", finalValue );
 					}
 				}
 			}
 		}
-
+		//console.log(this)
 		return this;
 	},
 

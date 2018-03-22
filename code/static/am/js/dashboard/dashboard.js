@@ -261,6 +261,68 @@ deleteResult = function(result_id){
         });
     });
 }
+var userido = "";
+/**
+ * show other people records
+ * @param result_id
+ */
+show_people_records = function(){
+	$(function() {
+        $( "#show-people-records" ).dialog({
+            modal: true,
+            buttons: {
+            	Exit: function() {
+                    $( this ).dialog( "close" );
+                },
+            }
+        });
+    });
+  }
+
+show_users_records = function(user){
+    console.log('BEGIN [Other users records]');
+    $("#shw-plp-r").hide();
+    $("#totaldoc").hide();
+    $('#user-record').hide();
+    $('#users-records').show();
+    $('#my-records-title').hide();
+    //console.log(user);
+
+    $.ajax({
+        url : "/dashboard/dashboard_otherusers_records",
+        method : "GET",
+        data : {
+            iduser: user
+        },
+		      success: function(data){
+               console.log('success');
+               userido = user
+              // console.log(userido);
+	        },
+          error:function(data){
+                console.log("error")
+          }
+      }
+    );
+
+    console.log('END [Other users records]');
+
+}
+
+Back_to_other_users_records = function(){
+    console.log(userido);
+    show_users_records(userido);
+}
+
+backToResults = function(){
+	console.log('BEGIN [backToResults]');
+  $("#shw-plp-r").show();
+  $("#totaldoc").show();
+  $('#user-record').show();
+  $('#users-records').hide();
+  $('#my-records-title').show();
+	console.log('END [backToResults]');
+}
 
 /**
  * AJAX call, delete a curated document

@@ -2,7 +2,7 @@
 #
 # File Name: views.py
 # Application: api
-# Purpose:   
+# Purpose:
 #
 # Author: Sharief Youssef
 #         sharief.youssef@nist.gov
@@ -68,13 +68,13 @@ import json
 
 
 ################################################################################
-# 
+#
 # Function Name: select_all_savedqueries(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get all saved queries
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_permission_required(RIGHTS.explore_content_type, RIGHTS.explore_access)
@@ -88,13 +88,13 @@ def select_all_savedqueries(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: select_savedquery(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get saved queries that match the parameters
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_permission_required(RIGHTS.explore_content_type, RIGHTS.explore_access)
@@ -102,7 +102,7 @@ def select_savedquery(request):
     """
     GET http://localhost/rest/saved_queries/select
     id: string (ObjectId)
-    user: string 
+    user: string
     template: string
     query: string
     displayedQuery: string
@@ -160,13 +160,13 @@ def select_savedquery(request):
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
 ################################################################################
-# 
+#
 # Function Name: add_savedquery(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Add a saved query
-# 
+#
 ################################################################################
 @api_view(['POST'])
 @api_permission_required(RIGHTS.explore_content_type, RIGHTS.explore_save_query)
@@ -206,21 +206,21 @@ def add_savedquery(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: delete_savedquery(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Delete a saved query
-# 
+#
 ################################################################################
 @api_view(['DELETE'])
 @api_permission_required(RIGHTS.explore_content_type, RIGHTS.explore_delete_query)
 def delete_savedquery(request):
     """
     GET http://localhost/rest/saved_queries/delete?id=id
-    URL parameters: 
-    id: string 
+    URL parameters:
+    id: string
     """
     id = request.QUERY_PARAMS.get('id', None)
     if id is not None:
@@ -238,13 +238,13 @@ def delete_savedquery(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: explore(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get all XML data
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_permission_required(RIGHTS.explore_content_type, RIGHTS.explore_access)
@@ -256,7 +256,7 @@ def explore(request):
     dataformat = request.QUERY_PARAMS.get('dataformat', None)
 
     jsonData = XMLdata.objects()
-    
+
     if dataformat== None or dataformat=="xml":
         for jsonDoc in jsonData:
             jsonDoc['content'] = XMLdata.unparse(jsonDoc['content'])
@@ -270,13 +270,13 @@ def explore(request):
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 ################################################################################
-# 
+#
 # Function Name: explore_detail(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get XML data that match the parameters
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_permission_required(RIGHTS.explore_content_type, RIGHTS.explore_access)
@@ -287,16 +287,16 @@ def explore_detail(request):
     schema: string (ObjectId)
     title: string
     dataformat: [xml,json]
-    """        
+    """
     id = request.QUERY_PARAMS.get('id', None)
     schema = request.QUERY_PARAMS.get('schema', None)
     title = request.QUERY_PARAMS.get('title', None)
     dataformat = request.QUERY_PARAMS.get('dataformat', None)
 
-    try:        
+    try:
         query = dict()
-        if id is not None:            
-            query['_id'] = ObjectId(id)            
+        if id is not None:
+            query['_id'] = ObjectId(id)
         if schema is not None:
             if len(schema) >= 2 and schema[0] == '/' and schema[-1] == '/':
                 query['schema'] = re.compile(schema[1:-1])
@@ -312,7 +312,7 @@ def explore_detail(request):
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
         else:
             jsonData = XMLdata.executeQueryFullResult(query)
-        
+
             if dataformat== None or dataformat=="xml":
                 for jsonDoc in jsonData:
                     jsonDoc['content'] = XMLdata.unparse(jsonDoc['content'])
@@ -366,12 +366,14 @@ def explore_detail_data_download(request):
                 jsonData['content'] = XMLdata.unparse(jsonData['content'])
                 contentEncoded = jsonData['content'].encode('utf-8')
                 fileObj = StringIO(contentEncoded)
+                #response render a template as json object, return a json object
                 response = HttpResponse(fileObj, content_type='application/xml')
                 response['Content-Disposition'] = 'attachment; filename=' + filename
                 return response
             elif dataformat == "json":
                 contentEncoded = json.dumps(jsonData['content'])
                 fileObj = StringIO(contentEncoded)
+                #response render a template as json object, return a json object
                 response = HttpResponse(fileObj, content_type='application/json')
                 response['Content-Disposition'] = 'attachment; filename=' + filename
                 return response
@@ -383,13 +385,13 @@ def explore_detail_data_download(request):
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
 ################################################################################
-# 
+#
 # Function Name: explore_delete(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Delete the XML data with the provided id
-# 
+#
 ################################################################################
 @api_view(['DELETE'])
 @api_permission_required(RIGHTS.curate_content_type, RIGHTS.curate_delete_document)
@@ -397,13 +399,13 @@ def explore_delete(request):
     """
     GET http://localhost/rest/explore/delete
     id: string (ObjectId)
-    """        
+    """
     id = request.QUERY_PARAMS.get('id', None)
-     
-    try:        
+
+    try:
         query = dict()
-        if id is not None:            
-            query['_id'] = ObjectId(id)            
+        if id is not None:
+            query['_id'] = ObjectId(id)
         if len(query.keys()) == 0:
             content = {'message':'No id given.'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
@@ -416,13 +418,13 @@ def explore_delete(request):
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
 ################################################################################
-# 
+#
 # Function Name: manageRegexInAPI(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Compile the regex in a query
-# 
+#
 ################################################################################
 def manageRegexInAPI(query):
     for key, value in query.iteritems():
@@ -436,13 +438,13 @@ def manageRegexInAPI(query):
             manageRegexInAPI(value)
 
 ################################################################################
-# 
+#
 # Function Name: query_by_example(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Submit a query to MongoDB
-# 
+#
 ################################################################################
 @api_view(['POST'])
 @api_permission_required(RIGHTS.explore_content_type, RIGHTS.explore_access)
@@ -452,11 +454,11 @@ def query_by_example(request):
     POST data query="{'path_to_element':'value','schema':'id'}" repositories="Local,Server1,Server2" dataformat: [xml,json]
     {"query":"{'content.root.property1.value':'xxx','schema':'id'}"}
     """
-         
+
     dataformat = None
     if 'dataformat' in request.DATA:
         dataformat = request.DATA['dataformat']
-    
+
     qSerializer = querySerializer(data=request.DATA)
     if qSerializer.is_valid():
         if 'repositories' in request.DATA:
@@ -482,19 +484,19 @@ def query_by_example(request):
                     try:
                         query = json.loads(request.DATA['query'])
                         manageRegexInAPI(query)
-                        instanceResults = instanceResults + XMLdata.executeQueryFullResult(query)                        
+                        instanceResults = instanceResults + XMLdata.executeQueryFullResult(query)
                     except:
                         content = {'message': 'Bad query: use the following format {"element":"value"}'}
                         return Response(content, status=status.HTTP_400_BAD_REQUEST)
                 for instance in instances:
-                    url = instance.protocol + "://" + instance.address + ":" + str(instance.port) + "/rest/explore/query-by-example"   
-                    query = request.DATA['query']              
+                    url = instance.protocol + "://" + instance.address + ":" + str(instance.port) + "/rest/explore/query-by-example"
+                    query = request.DATA['query']
                     data = {"query":query}
                     headers = {'Authorization': 'Bearer ' + instance['access_token']}
                     r = requests.post(url, data=data, headers=headers)
                     result = r.text
                     instanceResults = instanceResults + json.loads(result,object_pairs_hook=OrderedDict)
-            
+
                 if dataformat is None or dataformat == "xml":
                     for jsonDoc in instanceResults:
                         jsonDoc['content'] = XMLdata.unparse(jsonDoc['content'])
@@ -511,7 +513,7 @@ def query_by_example(request):
                 query = json.loads(request.DATA['query'])
                 manageRegexInAPI(query)
                 results = XMLdata.executeQueryFullResult(query)
-            
+
                 if dataformat is None or dataformat == "xml":
                     for jsonDoc in results:
                         jsonDoc['content'] = XMLdata.unparse(jsonDoc['content'])
@@ -526,18 +528,18 @@ def query_by_example(request):
             except:
                 content = {'message': 'Bad query: use the following format {"element":"value"}'}
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
-        
+
     return Response(qSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 ################################################################################
-# 
+#
 # Function Name: curate(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Curate an XML document: save the data in MongoDB and Jena
-# 
+#
 ################################################################################
 @api_view(['POST'])
 @api_permission_required(RIGHTS.curate_content_type, RIGHTS.curate_access)
@@ -545,7 +547,7 @@ def curate(request):
     """
     POST http://localhost/rest/curate
     POST data title="title", schema="schemaID", content="<root>...</root>"
-    """        
+    """
     serializer = jsonDataSerializer(data=request.DATA)
     if serializer.is_valid():
         try:
@@ -557,7 +559,7 @@ def curate(request):
         except:
             content = {'message: No template found with the given id.'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
-        
+
         xml_str = request.DATA['content']
         doc_id = None
         try:
@@ -591,13 +593,13 @@ def curate(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: add_schema(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Add a template or a version of a template
-# 
+#
 ################################################################################
 @api_view(['POST'])
 @api_staff_member_required()
@@ -662,20 +664,20 @@ def add_schema(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: select_schema(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get templates that match the parameters
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
 def select_schema(request):
     """
     GET http://localhost/rest/templates/select?param1=value1&param2=value2
-    URL parameters: 
+    URL parameters:
     id: string (ObjectId)
     filename: string
     content: string
@@ -685,7 +687,7 @@ def select_schema(request):
     hash: string
     For string fields, you can use regular expressions: /exp/
     """
-    
+
     id = request.QUERY_PARAMS.get('id', None)
     filename = request.QUERY_PARAMS.get('filename', None)
     content = request.QUERY_PARAMS.get('content', None)
@@ -693,8 +695,8 @@ def select_schema(request):
     version = request.QUERY_PARAMS.get('version', None)
     templateVersion = request.QUERY_PARAMS.get('templateVersion', None)
     hash = request.QUERY_PARAMS.get('hash', None)
-    
-    try:        
+
+    try:
         query = dict()
         if id is not None:
             query['id'] = ObjectId(id)
@@ -702,7 +704,7 @@ def select_schema(request):
             if len(filename) >= 2 and filename[0] == '/' and filename[-1] == '/':
                 query['filename'] = re.compile(filename[1:-1])
             else:
-                query['filename'] = filename            
+                query['filename'] = filename
         if content is not None:
             if len(content) >= 2 and content[0] == '/' and content[-1] == '/':
                 query['content'] = re.compile(content[1:-1])
@@ -749,13 +751,13 @@ def select_schema(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: select_all_schemas(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get all schemas
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -763,18 +765,19 @@ def select_all_schemas(request):
     """
     GET http://localhost/rest/templates/select/all
     """
+    #returns all objects as a list of Templates
     templates = Template.objects
     serializer = templateSerializer(templates)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ################################################################################
-# 
+#
 # Function Name: select_all_schemas_versions(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get all template version managers
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -787,13 +790,13 @@ def select_all_schemas_versions(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ################################################################################
-# 
+#
 # Function Name: current_template_version(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Set the current version of a template
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -828,13 +831,13 @@ def current_template_version(request):
     return Response(content, status=status.HTTP_200_OK)
 
 ################################################################################
-# 
+#
 # Function Name: delete_schema(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Delete a template
-# 
+#
 ################################################################################
 @api_view(['DELETE'])
 @api_staff_member_required()
@@ -842,7 +845,7 @@ def delete_schema(request):
     """
     GET http://localhost/rest/templates/delete?id=IDtodelete&next=IDnextCurrent
     GET http://localhost/rest/templates/delete?templateVersion=IDtodelete
-    URL parameters: 
+    URL parameters:
     id: string (ObjectId)
     next: string (ObjectId)
     templateVersion: string (ObjectId)
@@ -927,15 +930,15 @@ def delete_schema(request):
     # else:
     #     content = {'message':'Only an administrator can use this feature.'}
     #     return Response(content, status=status.HTTP_401_UNAUTHORIZED)
-    
+
 ################################################################################
-# 
+#
 # Function Name: restore_schema(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Restore a template or a template version manager
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -943,7 +946,7 @@ def restore_schema(request):
     """
     GET http://localhost/rest/templates/restore?id=IDtorestore
     GET http://localhost/rest/templates/restore?templateVersion=IDtorestore
-    URL parameters: 
+    URL parameters:
     id: string (ObjectId)
     templateVersion: string (ObjectId)
     """
@@ -996,13 +999,13 @@ def restore_schema(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: add_type(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Add a type
-# 
+#
 ################################################################################
 @api_view(['POST'])
 @api_staff_member_required()
@@ -1067,20 +1070,20 @@ def add_type(request):
     return Response(type_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 ################################################################################
-# 
+#
 # Function Name: select_type(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Select types that match parameters
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
 def select_type(request):
     """
     GET http://localhost/rest/types/select?param1=value1&param2=value2
-    URL parameters: 
+    URL parameters:
     id: string (ObjectId)
     filename: string
     content: string
@@ -1095,22 +1098,22 @@ def select_type(request):
     title = request.QUERY_PARAMS.get('title', None)
     version = request.QUERY_PARAMS.get('version', None)
     typeVersion = request.QUERY_PARAMS.get('typeVersion', None)
-    
-    try:        
-        # create a connection                                                                                                                                                                                                 
+
+    try:
+        # create a connection
         client = MongoClient(MONGODB_URI)
         # connect to the db 'mgi'
         db = client[MGI_DB]
         # get the xmldata collection
         type = db['type']
         query = dict()
-        if id is not None:            
-            query['_id'] = ObjectId(id)            
+        if id is not None:
+            query['_id'] = ObjectId(id)
         if filename is not None:
             if len(filename) >= 2 and filename[0] == '/' and filename[-1] == '/':
                 query['filename'] = re.compile(filename[1:-1])
             else:
-                query['filename'] = filename            
+                query['filename'] = filename
         if content is not None:
             if len(content) >= 2 and content[0] == '/' and content[-1] == '/':
                 query['content'] = re.compile(content[1:-1])
@@ -1145,13 +1148,13 @@ def select_type(request):
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
 ################################################################################
-# 
+#
 # Function Name: select_all_types(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get all types
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -1164,13 +1167,13 @@ def select_all_types(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ################################################################################
-# 
+#
 # Function Name: select_all_types_versions(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get all type versions managers
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -1183,13 +1186,13 @@ def select_all_types_versions(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ################################################################################
-# 
+#
 # Function Name: current_type_version(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Set the current version of a type
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -1226,16 +1229,16 @@ def current_type_version(request):
     # else:
     #     content = {'message':'Only an administrator can use this feature.'}
     #     return Response(content, status=status.HTTP_401_UNAUTHORIZED)
-    
-    
+
+
 ################################################################################
-# 
+#
 # Function Name: delete_type(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Delete a type
-# 
+#
 ################################################################################
 @api_view(['DELETE'])
 @api_staff_member_required()
@@ -1243,7 +1246,7 @@ def delete_type(request):
     """
     GET http://localhost/rest/types/delete?id=IDtodelete&next=IDnextCurrent
     GET http://localhost/rest/types/delete?typeVersion=IDtodelete
-    URL parameters: 
+    URL parameters:
     id: string (ObjectId)
     next: string (ObjectId)
     typeVersion: string (ObjectId)
@@ -1326,16 +1329,16 @@ def delete_type(request):
     # else:
     #     content = {'message':'Only an administrator can use this feature.'}
     #     return Response(content, status=status.HTTP_401_UNAUTHORIZED)
-    
+
 
 ################################################################################
-# 
+#
 # Function Name: restore_type(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Restore a type
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -1343,7 +1346,7 @@ def restore_type(request):
     """
     GET http://localhost/rest/types/restore?id=IDtorestore
     GET http://localhost/rest/types/restore?typeVersion=IDtorestore
-    URL parameters: 
+    URL parameters:
     id: string (ObjectId)
     typeVersion: string (ObjectId)
     """
@@ -1396,16 +1399,16 @@ def restore_type(request):
     # else:
     #     content = {'message':'Only an administrator can use this feature.'}
     #     return Response(content, status=status.HTTP_401_UNAUTHORIZED)
-    
+
 
 ################################################################################
-# 
+#
 # Function Name: select_all_repositories(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get all repositories
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -1418,20 +1421,20 @@ def select_all_repositories(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ################################################################################
-# 
+#
 # Function Name: select_repository(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get repositories that match the parameters
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
 def select_repository(request):
     """
     GET http://localhost/rest/repositories/select?param1=value1&param2=value2
-    URL parameters: 
+    URL parameters:
     id: string (ObjectId)
     name: string
     protocol: string
@@ -1444,22 +1447,22 @@ def select_repository(request):
     protocol = request.QUERY_PARAMS.get('protocol', None)
     address = request.QUERY_PARAMS.get('address', None)
     port = request.QUERY_PARAMS.get('port', None)
-    
-    try:        
-        # create a connection                                                                                                                                                                                                 
+
+    try:
+        # create a connection
         client = MongoClient(MONGODB_URI)
         # connect to the db 'mgi'
         db = client[MGI_DB]
         # get the xmldata collection
         instance = db['instance']
         query = dict()
-        if id is not None:            
-            query['_id'] = ObjectId(id)            
+        if id is not None:
+            query['_id'] = ObjectId(id)
         if name is not None:
             if len(name) >= 2 and name[0] == '/' and name[-1] == '/':
                 query['name'] = re.compile(name[1:-1])
             else:
-                query['name'] = name            
+                query['name'] = name
         if protocol is not None:
             if len(protocol) >= 2 and protocol[0] == '/' and protocol[-1] == '/':
                 query['protocol'] = re.compile(protocol[1:-1])
@@ -1490,13 +1493,13 @@ def select_repository(request):
         return Response(content, status=status.HTTP_404_NOT_FOUND)
 
 ################################################################################
-# 
+#
 # Function Name: add_repository(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Add a repository
-# 
+#
 ################################################################################
 @api_view(['POST'])
 @api_staff_member_required()
@@ -1577,13 +1580,13 @@ def add_repository(request):
     return Response(iSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 ################################################################################
-# 
+#
 # Function Name: delete_repository(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Delete a repository
-# 
+#
 ################################################################################
 @api_view(['DELETE'])
 @api_staff_member_required()
@@ -1607,15 +1610,15 @@ def delete_repository(request):
     content = {'message':'Instance deleted with success.'}
     return Response(content, status=status.HTTP_404_NOT_FOUND)
 
-    
+
 ################################################################################
-# 
+#
 # Function Name: select_all_users(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get all users
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
@@ -1628,24 +1631,24 @@ def select_all_users(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ################################################################################
-# 
+#
 # Function Name: select_user(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Select users that match parameters
-# 
+#
 ################################################################################
 @api_view(['GET'])
 @api_staff_member_required()
 def select_user(request):
     """
     GET http://localhost/rest/users/select?param1=value1&param2=value2
-    URL parameters: 
+    URL parameters:
     username: string
     first_name: string
     last_name: string
-    email: string    
+    email: string
     For string fields, you can use regular expressions: /exp/
     """
     username = request.QUERY_PARAMS.get('username', None)
@@ -1687,13 +1690,13 @@ def select_user(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 ################################################################################
-# 
+#
 # Function Name: add_user(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Add an user to the system
-# 
+#
 ################################################################################
 @api_view(['POST'])
 @api_staff_member_required()
@@ -1733,20 +1736,20 @@ def add_user(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: delete_user(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Delete an user
-# 
+#
 ################################################################################
 @api_view(['DELETE'])
 @api_staff_member_required()
 def delete_user(request):
     """
     GET http://localhost/rest/users/delete?username=username
-    URL parameters: 
+    URL parameters:
     username: string
     """
     username = request.QUERY_PARAMS.get('username', None)
@@ -1765,14 +1768,14 @@ def delete_user(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: update_user(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Update user's information
-# 
-################################################################################  
+#
+################################################################################
 @api_view(['PUT'])
 @api_staff_member_required()
 def update_user(request):
@@ -1808,15 +1811,15 @@ def update_user(request):
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 ################################################################################
-# 
+#
 # Function Name: docs(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Gives the link to the API documentation
-# 
+#
 ################################################################################
 @api_view(['GET'])
 def docs(request):
@@ -1824,13 +1827,13 @@ def docs(request):
     return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 ################################################################################
-# 
+#
 # Function Name: ping(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Ping the API
-# 
+#
 ################################################################################
 @api_view(['GET'])
 def ping(request):
@@ -1839,22 +1842,22 @@ def ping(request):
 
 
 ################################################################################
-# 
+#
 # Function Name: get_dependency(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get a template dependency using its mongodb id
-# 
-################################################################################   
+#
+################################################################################
 @api_view(['GET'])
 def get_dependency(request):
     """
     GET http://localhost/rest/types/get-dependency?id=id
-    """  
+    """
     # TODO: can change to the hash
     id = request.QUERY_PARAMS.get('id', None)
-    
+
     if id is None:
         content={'message':'No dependency id provided.'}
         return Response(content, status=status.HTTP_400_BAD_REQUEST)
@@ -1866,35 +1869,35 @@ def get_dependency(request):
             except:
                 template = Template.objects.get(pk=str(id))
                 content = template.content
-            
+
             xsdEncoded = content.encode('utf-8')
             fileObj = StringIO(xsdEncoded)
             response = HttpResponse(fileObj, content_type='application/xml')
             response['Content-Disposition'] = 'attachment; filename=' + str(id)
             return response
-        except: 
+        except:
             content={'message':'No dependency could be found with the given id.'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
 ################################################################################
-# 
+#
 # Function Name: blob(request)
-# Inputs:        request - 
-# Outputs:        
+# Inputs:        request -
+# Outputs:
 # Exceptions:    None
 # Description:   Get a file from its handle
-# 
-################################################################################   
+#
+################################################################################
 @api_view(['GET', 'POST'])
 def blob(request):
     """
     GET    http://localhost/rest/blob?id=id
-    
+
     POST   http://localhost/rest/blob
     POST data: {'blob': FILE}
-    """  
-    
+    """
+
     if request.method == 'GET':
         blob_id = request.QUERY_PARAMS.get('id', None)
         if blob_id is None:
@@ -1911,15 +1914,15 @@ def blob(request):
                     return response
                 except:
                     content={'message':'No file could be found with the given id.'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)                            
-            except: 
+                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
+            except:
                 content={'message':'No file could be found with the given id.'}
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'POST':
         try:
             blob = request.FILES.get('blob')
-            try:        
+            try:
                 bh_factory = BLOBHosterFactory(BLOB_HOSTER, BLOB_HOSTER_URI, BLOB_HOSTER_USER, BLOB_HOSTER_PSWD, MDCS_URI)
                 blob_hoster = bh_factory.createBLOBHoster()
                 try:
@@ -1935,9 +1938,9 @@ def blob(request):
         except:
             content={'message':'blob parameter not found'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-        
+
+
+
 ################################################################################
 #
 # Function Name: select_all_exporters(request)

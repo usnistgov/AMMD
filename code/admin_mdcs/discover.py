@@ -69,7 +69,6 @@ def init_rules():
         defaultGroup.permissions.add(curate_edit_document_perm)
         defaultGroup.permissions.add(curate_delete_document_perm)
         #### END CURATE ####
-
         #### COMPOSE ####
         compose_access_perm = Permission.objects.get(codename=compose_access)
         compose_save_template_perm = Permission.objects.get(codename=compose_save_template)
@@ -78,7 +77,6 @@ def init_rules():
         defaultGroup.permissions.add(compose_save_template_perm)
         defaultGroup.permissions.add(compose_save_type_perm)
         #### END COMPOSE ####
-
         #### API ####
         api_access_perm = Permission.objects.get(codename=api_access)
         defaultGroup.permissions.add(api_access_perm)
@@ -86,7 +84,6 @@ def init_rules():
         ###########################################
         ##### END Get or Create the default group #
         ###########################################
-
     except Exception, e:
         print('ERROR : Impossible to init the rules : ' + e.message)
 

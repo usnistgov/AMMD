@@ -56,12 +56,7 @@ downloadOptions_file = function(){
 * Download the document
 */
 downloadExploreTree = function(){
-    //console.log('BEGIN [downloalXML]');
-    // call the function to download the displaying xml document
-  //  $("#dialog-download-options").show();
     $('#btn.download').on('click', downloadOptions_file());
-    //download_xml_tree(filename,text);
-  //  console.log('END [downloalXML]');
 }
 
 /**
@@ -78,11 +73,12 @@ download_xml_tree = function(){
   link.click();
   console.log('END [downloalXML]');
 }
-
 /**
 * Download the displaying data into an XML document
 */
 download_all_xml_tree = function(){
+  $('#explorer-panel-transparent-bgd').show();
+  $('#explore-panel-loading').show();
 
   $.ajax({
       url: "download_xml",
@@ -93,27 +89,30 @@ download_all_xml_tree = function(){
           //curent_node: curent_node
       },
       success: function(data) {
+        $('#explorer-panel-transparent-bgd').hide();
+        $('#explore-panel-loading').hide();
         console.log('BEGIN [downloadXML]');
         var link = document.createElement('a');
         link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
         link.setAttribute('download', filename);
         link.click();
         console.log('END [downloalXML]');
+        //$("#dialog-download-options").style.display='none';
+        //document.getElementById("dialog-download-options").style.display='none';
       },
       error: function() {
         console.error("An error occured while downloading the xml document");
+        //$("#dialog-download-options" ).hide();
       }
     })
 }
 /**
 * Download data corrolated to the attribute
 */
-
 download_xml_tree_corrolation = function(event){
   $('#explorer-panel-transparent-bgd').show();
   $('#explore-panel-loading').show();
 
-  console.log("DWNLDING FOR : " + xml_doc_id)
   $.ajax({
       url: "download_corrolated_xml",
       method: "GET",
@@ -128,12 +127,14 @@ download_xml_tree_corrolation = function(event){
         console.log('BEGIN [downloadCorrolatedXML]');
         var link = document.createElement('a');
         link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
-        link.setAttribute('download', filename);//"xmldata"
+        link.setAttribute('download', filename);
         link.click();
         console.log('END [downloalCorrolatedXML]');
+        //$("#dialog-download-options" ).hide();
       },
       error: function() {
         console.error("No corrolated xml document");
+        //$("#dialog-download-options" ).hide();
       }
     })
 }
@@ -150,15 +151,10 @@ var displayLeafView = function(event) {
 
     xml_doc_id = documentId;
 
-  //  console.log("Loading leaf view for " + documentId + "...");
     $(this).parents("span:first").addClass("highlight");
 
     $('#explorer-panel-transparent-bgd').show();
     $('#explore-panel-loading').show();
-
-  //  console.log("Navigation id : " + navigationId);
-  //  console.log("Document id : " + documentId);
-  //  console.log("Node id : " + nodeId);
 
     $.ajax({
         url: "load_view",
@@ -180,12 +176,8 @@ var displayLeafView = function(event) {
             // retrieve the data in case the user wants to download the displaying data
             text = data
             curent_node = nodeId
-    //        console.log("Navigation id : " + navigationId);
-    //        console.log("Document id : " + documentId);
-    //        console.log("Node id : " + nodeId);
-    //        console.log("File name :"+ filename)
-    //        console.log("View successfully loaded");
-            console.log("Curent_node:"+ curent_node);
+
+            console.log("Curent_doc:"+ documentId);
 
         },
         error: function() {
@@ -207,7 +199,7 @@ var displayBranchView = function(event) {
     var nodeId = nodeClasses[1];
     var navigationId = $.urlParam("nav_id");
 
-    console.log("Loading branch view for " + nodeId + "...");
+  //  console.log("Loading branch view for " + nodeId + "...");
     $(this).parents("span:first").addClass("highlight");
 
     $('#explorer-panel-transparent-bgd').show();
@@ -249,15 +241,8 @@ var displayLinkView = function(event) {
     var navigationId = $.urlParam("nav_id");
     xml_doc_id = documentId;
 
-    console.log("Loading link view for doc" + documentId + "...");
-//    console.log("node "+ nodeId)
-//    console.log("nav "+ navigationId)
-//    console.log("doc "+ documentId)
     $('#explorer-panel-transparent-bgd').show();
     $('#explore-panel-loading').show();
-    console.log("nav_id :"+ navigationId);
-    console.log("doc_id :"+ documentId);
-    console.log("ref_node_id :"+ nodeId);
     $.ajax({
         url: "load_view",
         method: "POST",
@@ -279,8 +264,6 @@ var displayLinkView = function(event) {
             text = JSON.stringify(data)
             curent_node = nodeId
             console.log("View successfully loaded");
-            console.log("Curent_node:"+ curent_node);
-
         },
         error: function() {
             $('#explorer-panel-transparent-bgd').hide();
@@ -293,35 +276,6 @@ var displayLinkView = function(event) {
     })
 };
 
-function Test(event){
- var d = new Date();
-
- console.log("TimerIn");
- console.log(d.getHours());
- console.log(d.getMinutes());
-
- var navigationId = $.urlParam("nav_id");
-
- //if (d.getHours()==12 && d.getMinutes()==35){
- console.log("TimerSet");
- var navigationId = $.urlParam("nav_id");//"5a42a982c9b70981e53386dc"
- console.log("navigationId :" + navigationId);
- $.ajax({
-    url: "cache_docs",
-    method: "POST",
-    dataType: "json",
-    data: {
-      nav_id: navigationId,
-    },
-    success: function(data) {
-        console.log("Documents successfully cached");
-    },
-    error: function() {
-        console.error("An error occured while caching the documents...");
-    }
- })
-};
-
 $("#explore-view-error").hide();
 $('#explorer-panel-transparent-bgd').hide();
 $('#explore-panel-loading').hide();
@@ -329,4 +283,3 @@ $('#explore-panel-loading').hide();
 $(document).on("click", ".projection", displayLeafView);
 $(document).on("click", ".branch", displayBranchView);
 $(document).on("click", ".link", displayLinkView);
-//Test();

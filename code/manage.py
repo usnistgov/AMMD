@@ -26,6 +26,5 @@ if __name__ == "__main__":
         os.environ.setdefault("SELENIUM", "true")
     if '--test' in args:
         args.remove('--test')
-
     from django.core.management import execute_from_command_line
     execute_from_command_line(args)

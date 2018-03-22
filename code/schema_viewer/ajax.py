@@ -36,10 +36,13 @@ def render_schema(request):
     if "xsd_id" not in request.POST:
         return HttpResponse(status=HTTP_400_BAD_REQUEST)
 
-    xsd_id = request.POST["xsd_id"]
-    xsd_file = Template.objects.get(pk=xsd_id)
-    xsd_tree = etree.fromstring(str(xsd_file.content.encode("utf-8")))
 
+    xsd_id = request.POST["xsd_id"]
+
+    xsd_file = Template.objects.get(pk=xsd_id)
+
+    xsd_tree = etree.fromstring(str(xsd_file.content.encode("utf-8")))
+    
     annotations = xsd_tree.findall(".//{}annotation".format(LXML_SCHEMA_NAMESPACE))
     for annotation in annotations:
         annotation.getparent().remove(annotation)

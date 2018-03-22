@@ -7,17 +7,16 @@ var isFolder = function($treeElement) {
 var operateTree = function($treeElement) {
     var $icon = $treeElement.find("i.fa:first");
     var $subtree = $treeElement.find('ul:first');
-
     $icon.removeClass();
 
     if($subtree.is(':hidden')) {
         $icon.addClass("fa fa-chevron-down");
         $subtree.show();
-        console.log($subtree)
+      //  console.log($subtree)
     } else {
         $icon.addClass("fa fa-chevron-right");
         $subtree.hide();
-        console.log($subtree)
+  //      console.log($subtree)
     }
 };
 

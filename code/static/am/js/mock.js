@@ -1,4 +1,5 @@
 console.log('Mock successfully loaded!');
+//var $tree = $('#tree');//Yande
 
 $(document).ready( function() {
     var waitingTime = 500;

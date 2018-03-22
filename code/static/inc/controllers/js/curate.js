@@ -1,14 +1,14 @@
 /**
- * 
+ *
  * File Name: curate.js
  * Author: Sharief Youssef
  *            sharief.youssef@nist.gov
  *
  *        Guillaume SOUSA AMARAL
  *        guillaume.sousa@nist.gov
- * 
+ *
  * Sponsor: National Institute of Standards and Technology (NIST)
- * 
+ *
  */
 
 /**
@@ -18,7 +18,7 @@
 verifyTemplateIsSelected = function(selectedLink)
 {
     console.log('BEGIN [verifyTemplateIsSelected]');
-    
+
     $.ajax({
         url : "/curate/verify_template_is_selected",
         type : "GET",
@@ -104,7 +104,7 @@ loadTemplateSelectionControllers = function()
     $('.btn.set-curate-user-template').on('click', setCurrentUserTemplate);
 
     init_curate();
-    console.log('END [loadTemplateSelectionControllers]');    
+    console.log('END [loadTemplateSelectionControllers]');
 }
 
 
@@ -148,7 +148,7 @@ clearFields = function()
 
 
 /**
- * AJAX call, clears fields 
+ * AJAX call, clears fields
  */
 clear_fields = function(){
     $.ajax({
@@ -248,7 +248,7 @@ changeChoice = function(selectObj)
 {
     console.log('BEGIN [changeChoice(' + selectObj.id + ' : ' + selectObj.selectedIndex + ')]');
 
-    // get the index of the selected option 
+    // get the index of the selected option
     var idx = selectObj.selectedIndex;
 
     // change the displayed choice
@@ -271,7 +271,7 @@ changeChoice = function(selectObj)
             $(this).removeAttr("checked");
         });
         $("input:checkbox:checked").each(function(){
-        
+
             $(this).attr("checked", true);
         });
         $("textarea").each(function(){
@@ -526,10 +526,10 @@ downloadXSD = function()
     console.log('BEGIN [downloadXSD]');
 
     console.log('[downloadXSD] Downloading XSD...');
-    
+
     window.location = '/curate/enter-data/download-XSD';
     $( "#dialog-download-options" ).dialog("close");
-    
+
     console.log('[downloadXSD] Schema downloaded');
 
     console.log('END [downloadXSD]');
@@ -674,18 +674,18 @@ XMLDataSaved = function()
             }
         });
     });
-    
+
     console.log('END [savedXMLDataToDB]');
 }
 
 
 /**
- * Save XML data to DB error message. 
+ * Save XML data to DB error message.
  */
 saveXMLDataToDBError = function()
 {
     console.log('BEGIN [saveXMLDataToDBError]');
-    
+
     $(function() {
         $( "#dialog-save-error-message" ).dialog({
             modal: true,
@@ -696,7 +696,7 @@ saveXMLDataToDBError = function()
             }
         });
     });
-    
+
     console.log('END [saveXMLDataToDBError]');
 }
 
@@ -710,7 +710,7 @@ saveXMLDataToDBError = function()
 changeHTMLForm = function(operation, tagID)
 {
     console.log('BEGIN [changeHTMLForm(' + operation + ')]');
-    
+
     // save values in the form
     $("input:text").each(function(){
         $(this).attr("value", $(this).val());
@@ -721,7 +721,7 @@ changeHTMLForm = function(operation, tagID)
         $(this).removeAttr("checked");
     });
     $("input:checkbox:checked").each(function(){
-    
+
         $(this).attr("checked", true);
     });
     $("textarea").each(function(){
@@ -732,7 +732,7 @@ changeHTMLForm = function(operation, tagID)
         // the element has to be created
         if ($("#element"+tagID).children("ul").length == 0 && // complex element not generated
         $("#element"+tagID).children("input").length == 0 && // input element not generated
-        $("#element"+tagID).children("select").length == 0 && // enumeration not generated 
+        $("#element"+tagID).children("select").length == 0 && // enumeration not generated
         $("#element"+tagID).children("div.module").length == 0){ // module not generated
             generate(tagID, "element");
         }
@@ -891,7 +891,7 @@ $.ajax({
 
 
 /**
- * Set the current template 
+ * Set the current template
  * @returns {Boolean}
  */
 setCurrentTemplate = function()
@@ -988,7 +988,7 @@ load_start_form = function(){
 
 
 /**
- * 
+ *
  */
 enterKeyPressSubscription = function ()
 {
@@ -1040,14 +1040,14 @@ validateStartCurate = function(){
 			}
 		}
 	}
-		
+
 	if (errors != ""){
 		$("#form_start_errors").html(errors);
 		$("#banner_errors").show(500)
 		return (false);
 	}else{
 		return (true)
-	}	
+	}
 }
 
 

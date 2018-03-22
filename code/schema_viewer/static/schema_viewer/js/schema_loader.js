@@ -34,7 +34,8 @@ var render_schema = function(xsd_id, xsd_name) {
                 $("#download-schema").off("click", false);
 
                 $("#schema-viewer").html(data);
-                $("#oxygen-viewer").attr("href", "oxygen?name="+xsd_name);
+                //$("#oxygen-viewer").attr("href", "oxygen?name="+xsd_name);
+                $("#oxygen-viewer").attr("href", "/static/schema_viewer/oxygen/"+xsd_name+".html");
                 $("#schema_view").attr("href", "tabbed?name="+xsd_name+"&sid="+xsd_id);
                 $("#sandbox_view").attr("href", "sandbox?id="+xsd_id);
             },
@@ -60,4 +61,3 @@ $(document).on("change", "#id_schema", load_schema);
 $(document).ready(function() {
     render_schema($("#id_schema").val(), $("#id_schema option:selected").text());
 });
-

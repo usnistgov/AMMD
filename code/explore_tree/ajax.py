@@ -1,6 +1,7 @@
 """ Ajax calls for the exploration tree
 
 """
+# -*- coding: utf-8 -*-
 import json
 from django.http.response import HttpResponse
 from django.shortcuts import render
@@ -22,10 +23,7 @@ import xml.etree.cElementTree as ET#
 
 from rest_framework.response import Response#
 from rest_framework import status#
-from utils.XSDParser.renderer import DefaultRenderer#
-from utils.XSDParser.renderer.list import ListRenderer#
-from utils.XSDParser.renderer.xml import XmlRenderer#
-from curate.models import SchemaElement#
+
 from cStringIO import StringIO#
 from django.core.servers.basehttp import FileWrapper#
 
@@ -40,8 +38,8 @@ from itertools import izip, chain #
 from copy import deepcopy#
 from itertools import tee#
 
+from django.core import serializers#
 
-import dicttoxml
 import random
 #import sys
 from threading import Thread
@@ -74,6 +72,7 @@ caching_docs = False
 docs_already_cached = False
 my_list_of_cross_results_f = []
 my_list_of_tag_text_initialdoccurrent = []
+mystring= "MMMMMMMMM"#"MAMIIIIII"
 
 @cache_page(600 * 15)
 def load_view(request):
@@ -630,7 +629,6 @@ def json2xml(json_obj, line_padding=""):
             result_list.append("%s<%s>" % (line_padding, tag_name))
             result_list.append(json2xml(sub_obj, "\t" + line_padding))
             result_list.append("%s</%s>" % (line_padding, tag_name))
-
         return "\n".join(result_list)
 
     return "%s%s" % (line_padding, json_obj)
@@ -646,7 +644,7 @@ def remove_empty_nodes(xml):
             pass
         else:
         #if child.text!='':
-            if (str(child.text)[0:9])=="MAMIIIIII":# or child.text!=None:
+            if (str(child.text))[0:9]==mystring:
                 pass#print (child.tag,child.text)
             else:
                 try:
@@ -662,7 +660,7 @@ def check_empty_nodes(xml):
             pass
         else:
         #if child.text!='':
-            if (str(child.text))[0:9]=="MAMIIIIII":
+            if (str(child.text))[0:9]==mystring:
                 pass
             else:
                 return True
@@ -692,7 +690,7 @@ def download_corrolated_xml(request):
         navigation_name = get_node_name(navigation_id)
         my_listof_ordereddicts = my_listof_ordereddicts_tab[j]
         result_doc = resultat[j]
-        #global listeof
+            #global listeof
 
         for i in list_od_dwnld_files:
             if i[0] == navigation_name and i[1] == request.GET["doc_id"]:
@@ -704,7 +702,6 @@ def download_corrolated_xml(request):
             json_contents = list_od_dwnld_files[index_i][2]
         else:
             #print "--------------DOC never dwld-----------------"
-            j1 = download_corrolated_xml_initial_file(query_and_results)
             j2 = download_corrolated_xml_others_files(my_listof_ordereddicts_cross_docs,listeof)
 
             doc_name = request.GET["file_name"]
@@ -714,67 +711,64 @@ def download_corrolated_xml(request):
 
             nb = 0
             for child in xml.iter():
-                car = False
+                    #car = False
                 if child.text=="":
                     pass
                 else:
                     nb +=1
 
             pare = 0
+            missing=liste_of_txt
+            to_add=liste_of_txt
+
             for l in liste_of_txt:
+                taken = False
+                car= False
                 for child in xml.iter():
-                    car = False
-                    if child.text == l[1]:
+                    if (child.tag == l[0]):
                         car = True
-                        ct = child.text
-                        child.text = "MAMIIIIII"+ct
-                        pare +=1
-            par = 0
+                        if (child.text == l[1]):
+                        # or child.text.split() == l[1].split():
+                            ct = child.text
+                            child.text = mystring+ct
+                            pare +=1
+                            taken=True
+
             for child in xml.iter():
                 b=''
                 if child.text:
-                    if (child.text)[0:9] == "MAMIIIIII":
-                        ancien = (child.text)[9:]
-                        #child.text = ancien
-                        par +=1
+                    if (child.text)[0:9] == mystring:
+                        pass
                     else:
                         child.text=b
-
             while (check_empty_nodes(xml)==True):
                 remove_empty_nodes(xml)
-
             for child in xml.iter():
                 if child.text:
-                    if (child.text)[0:9] == "MAMIIIIII":
+                    if (child.text)[0:9] == mystring:
                         ancien = (child.text)[9:]
                         child.text = ancien
-        #    for child in xml.iter():
-        #        if child.getchildren():
-        #            pass#print('')
-        #        else:
-        #            if child.text!='':
-        #                pass
-        #            else:
-        #                try:
-        #                    xml.remove(child)
-        #                except:
-        #                    pass
+
             xmle=xml
+            y= etree.tostring(xmle,encoding='UTF-8')#, pretty_print=True)
+            #z = '<xml version="1.0" encoding="UTF-8"?>\n'+j2+y+'</xml>'
+            z = "<xml>\n"+y+j2+"</xml>"
+            z = u''.join((z)).encode('utf-8')
+            z = str(z)
+            z = z.replace("\t","")
+            z = z.replace("\n","")
 
-            y= etree.tostring(xmle, pretty_print=True)
-            json_contents = "<xml>\n"+j2+y+"</xml>"
 
+            json_contentt = etree.fromstring(z)
+            #xsdEncoded = z.encode('utf-8')
+            json_contents = etree.tostring(json_contentt, pretty_print=True,encoding='UTF-8', method="xml")
             list_od_dwnld_files.append((navigation_name,request.GET["doc_id"],json_contents))
-        #print listeof
+
+        return HttpResponse(json_contents, HTTP_200_OK)
     except:
-        pass
-    return HttpResponse(json_contents, HTTP_200_OK)
+        json_contents = {'message':'No resource found.'}
+        return HttpResponse(json_contents, status=status.HTTP_404_NOT_FOUND)
 
-
-def download_corrolated_xml_initial_file(L):
-    tree = aggregate_query(L)
-    json_contents = print_xml_string(tree_to_xml_string(tree))
-    return json_contents
 
 
 def recuperaationtextes(L):
@@ -908,7 +902,6 @@ def download_corrolated_xml_others_files(L,listeof):
                         var_p +=1
                 if var_p == len(li) & len(li) == len(lii):
                         del docid_and_trees[ii]
-        print docid_and_trees
         table_id=[]
         my_ordered_xml_list = []
         lesdocsvus =[]
@@ -933,6 +926,7 @@ def download_corrolated_xml_others_files(L,listeof):
 
             if y:
                 my_ordered_xml_list.append((t1[0],y))
+
         for t in docid_and_trees:
             if t [0] in lesdocsvus:
                 pass
@@ -946,19 +940,12 @@ def download_corrolated_xml_others_files(L,listeof):
             json_to_render = json_contents
         montab=[]
         for xml in my_ordered_xml_list:
-
             s = LTree_to_xml_string(xml[1])
             string_xml += s
 
             uni = unicode(s, 'utf-8')
-            tree = ET.XML(uni)
             tree2 = etree.fromstring(s)
-            xmlbase = etree.Element("xml")
-            xmlb = etree.Element("data")
-            xml_r = None
-            firsttime = True
-            dek = False
-            pu_var = True
+
             i=1
 
             global sz
@@ -966,30 +953,79 @@ def download_corrolated_xml_others_files(L,listeof):
             if sz == 0:
                 for child in tree2.iter():
                     if child.getchildren():
-                        print('')
+                        pass
                     else:
                         sz +=1
 
                 listeof2 = listeof[:sz]
                 fill_xml(tree2,listeof2)#[sz:])
-                #toto(xmlb,listeof2)
+                #checkandremove(xmlb,listeof2)
             else:
                 fill_xml(tree2,listeof[sz:])
-            montab.append(tree2)
-        for t in montab:
-            toto(t,listeof)
+
+                sz +=1
+            montab.append((xml[0],tree2))
+        #    print etree.tostring(tree2,pretty_print=True)
 
         for t in montab:
-            json_to_render += etree.tostring(t, pretty_print=True)
+            checkandremove(t[1],listeof)
+            #getattributes(t)
+
+        for t in montab:
+            json_to_render += etree.tostring(t[1])#, pretty_print=True)
+
     else:
         json_to_render = json_contents
 
     global sz
     sz = 0
-    #return tko
+
     return json_to_render
 
-def toto(xml,listeof):
+def getattributes(xmlpart):
+    xmlID = xmlpart[0]
+    xml_to_render = xmlpart[1]
+    xml_from_db = etree.fromstring(retrieve_xml(xmlID))
+    liste = []
+    liste2 = []
+    for child1 in xml_to_render.iter():
+        liste.append((child1.tag,child1.text))
+        liste2.append(child1.tag)
+    present = False
+    for child2 in xml_from_db.iter():
+        for l in liste:
+            if str(child2.tag) == str(l[0])and str(child2.text)== str(l[1]):
+                present = True
+                break
+            if present==True:
+                break
+        if present==True:
+            present = False
+        else:
+            try:
+                xmlpere = child2.findall("..")
+                xmlpere[0].remove(child2)
+            except:
+                pass
+
+    #xml = etree.fromstring(xml_from_db.iter)
+    for l in xml_from_db.iter():
+        if str(l.tag) in liste2:
+            pass
+        else:
+            xmlpere = l.findall("..")
+            xmlpere[0].remove(l)
+    for l in xml_from_db.iter():
+        if str(l.tag) in liste2:
+            pass
+        else:
+            xmlpere = l.findall("..")
+            xmlpere[0].remove(l)
+
+    json = etree.tostring(xml_from_db,pretty_print=True)
+
+
+def checkandremove(xml,listeof):
     maliste = listeof
     for child in xml.iter():
         if child.getchildren():
@@ -998,7 +1034,7 @@ def toto(xml,listeof):
             for s in listeof:
                 if str(child.tag) == str(s[0]):
                     try :
-                        if (str(child.text))[0:9] == "MAMIIIIII":
+                        if (str(child.text))[0:9] == mystring:
                             maliste.remove(s)
                     except:
                         maliste.remove(s)
@@ -1009,40 +1045,56 @@ def toto(xml,listeof):
             for s in maliste:
                 if str(child.tag) == str(s[0]):
                     try :
-                        if (child.text)[0:9] == "MAMIIIIII":
+                        if (child.text)[0:9] == mystring:
                             pass
                         else:
-                            child.text = "MAMIIIIII"+str(s[1])
+                            child.text = mystring+str(s[1])
                     except:
-                        child.text = "MAMIIIIII"+str(s[1])
+                        child.text = mystring+str(s[1])
     for child in xml.iter():
         if child.getchildren():
             pass
         else:
-            if (child.text)[0:9] == "MAMIIIIII":
+            if (child.text)[0:9] == mystring:
                 ancien = (child.text)[9:]
                 child.text = ancien
+
 def fill_xml(xml,listeof):
     i=0
     global sz
-    myliste = listeof
+
+    empty_nodes = 0
+    first_time = True
+    for child in xml.iter():
+        if child.getchildren():
+            pass#print('')
+        else:
+            if first_time == True:
+                first_time = False
+            else:
+                empty_nodes+=1
+    myliste = []
+    if empty_nodes==0:
+        myliste = listeof
+    else:
+        myliste = listeof[0:empty_nodes]
 
     for child in xml.iter():
         if child.getchildren():
             pass#print('')
         else:
-            for s in listeof:
-                tab = False
-                if str(child.tag) == str(s[0]):
-                    child.text = "MAMIIIIII" + str(s[1])
-                    myliste.remove(s)
-                    #break
-                i +=1
-    xmlb = xml
-    #print "xml"
-    print etree.tostring(xml, pretty_print=True)
-    #print "xmlb"
-    #print etree.tostring(xmlb, pretty_print=True)
+            if empty_nodes==0:
+                if str(child.tag) == str(listeof[0][0]):
+                    child.text = mystring + str(listeof[0][1])
+                    myliste.remove(myliste[0])
+            else:
+                for s in listeof[0:empty_nodes]:
+                    tab = False
+                    if str(child.tag) == str(s[0]):
+                        child.text = mystring + str(s[1])
+                        myliste.remove(s)
+                        #break
+                    i +=1
     for l in myliste:
         for child in xml.iter():
             if child.getchildren():
@@ -1050,7 +1102,9 @@ def fill_xml(xml,listeof):
             else:
                 if child.text =='':
                     child.text = l[1]
-    #print etree.tostring(xml, pretty_print=True)
+                    print "child.text"
+                    print child.text
+
     return xml
 
 def get_tree(xml_string):
@@ -1194,19 +1248,23 @@ def print_xml_string(xml_string):
     return tim
 
 def download_file(request):
-    xml_data = XMLdata.get(request.GET["doc_id"])
-    xml_dta = json.dumps(xml_data.items()[3][1],sort_keys=False)
-    xml_d = json.loads(xml_dta, object_pairs_hook=OrderedDict) # Convert the ordered dict in dict
-    j = json.dumps(xml_d)
-    jk = json.loads(j)
-    #dicttoxml.set_debug(False)
-    xml_object = dicttoxml.dicttoxml(jk, custom_root='data',attr_type=False)#, root=True)
-    return etree.fromstring(xml_object)
-def download_xml(request):
-    xml_data = XMLdata.get(request.GET["doc_id"])
-    xml_dta = json.dumps(xml_data.items()[3][1],sort_keys=False)
-    xml_d = json.loads(xml_dta, object_pairs_hook=OrderedDict) # Convert the ordered dict in dict
+    xmlID = request.GET["doc_id"]
+    xml = retrieve_xml(xmlID)
+    return  etree.fromstring(xml)
 
-    json_content = json2xml(xml_d)
+def download_xml(request):
+    xmlID = request.GET["doc_id"]
+    xmltree = retrieve_xml(xmlID)
+    xml = etree.fromstring(xmltree)
+    json_content = etree.tostring(xml,pretty_print=True)
 
     return HttpResponse(json_content, HTTP_200_OK)
+
+def retrieve_xml(xmlID):
+    xml_data = XMLdata.getXMLdata(xmlID)
+    xml_dta = json.dumps(xml_data.items()[3][1],sort_keys=False)
+    xml_d = json.loads(xml_dta, object_pairs_hook=OrderedDict) # Convert the ordered dict in dict
+    xsdDocData = XMLdata.unparse(xml_d)
+    xsdEncoded = xsdDocData.encode('utf-8')
+
+    return xsdEncoded

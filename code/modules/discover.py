@@ -18,17 +18,17 @@ def __assemble_endpoint_data__(pattern, prefix='', filter_path=None):
     prefix -- the API path prefix (used by recursion)
     """
     path = simplify_regex(prefix + pattern.regex.pattern)
-    
+
     if filter_path is not None:
         if re.match('^/?%s(/.*)?$' % re.escape(filter_path), path) is None:
             return None
-    
+
     path = path.replace('<', '{').replace('>', '}')
-    
+
     return {
         'url': path,
         'view': pattern._callback_str,
-        'name': pattern.name,        
+        'name': pattern.name,
     }
 
 
@@ -39,17 +39,17 @@ def __flatten_patterns_tree__(patterns, prefix='', filter_path=None, excluded=[]
     prefix -- (optional) Prefix for URL pattern
     """
     pattern_list = []
-    
+
     for pattern in patterns:
         if isinstance(pattern, RegexURLPattern):
-            if pattern.name is not None and pattern.name in excluded: 
+            if pattern.name is not None and pattern.name in excluded:
                 continue
-            
+
             endpoint_data = __assemble_endpoint_data__(pattern, prefix, filter_path=filter_path)
-    
+
             if endpoint_data is None:
                 continue
-    
+
             pattern_list.append(endpoint_data)
         elif isinstance(pattern, RegexURLResolver):
             pref = prefix + pattern.regex.pattern
@@ -59,7 +59,7 @@ def __flatten_patterns_tree__(patterns, prefix='', filter_path=None, excluded=[]
                 filter_path=filter_path,
                 excluded=excluded,
             ))
-    
+
     return pattern_list
 
 
@@ -90,7 +90,7 @@ def discover_modules():
 
     # Remove all existing modules
     Module.objects.all().delete()
-        
+
     try:
         for pattern in patterns:
             module = Module(

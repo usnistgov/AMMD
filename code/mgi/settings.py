@@ -62,9 +62,9 @@ CACHES = {
 			'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
 			'LOCATION': 'loc6',
 			'TIMEOUT': None,
-		#	'OPTIONS': {
-        #    	'MAX_ENTRIES': 1000
-        #	}
+			'OPTIONS': {
+            	'MAX_ENTRIES': 2000
+        	}
 		},
 		'branch': {
 			'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -74,7 +74,10 @@ CACHES = {
 		'link': {
 			'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
 			'LOCATION': 'loc8',
-			'TIMEOUT': None
+			'TIMEOUT': None,
+			'OPTIONS': {
+            	'MAX_ENTRIES': 2000
+        	}
 		},
 }
 # - - - - - - - - - - - - - - - - - - - - - -
@@ -465,9 +468,5 @@ CELERYBEAT_SCHEDULE = {
     'clean_db_sandbox': {
         'task': 'clean_db_sandbox',
         'schedule': crontab(minute=0, hour=0)   # Everyday at midnight
-    }#,
-#	'cache_docs': {
-	#	'task': 'cache_docs',
-#		'schedule': timedelta(seconds=30)#crontab(minute=51, hour=11)   # Everyday at midnight
-	#}
+    }
 }

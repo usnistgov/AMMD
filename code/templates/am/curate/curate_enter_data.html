@@ -8,7 +8,7 @@
 #
 # File Name: curate_enter_data.html
 # Application: templates
-# Description: 
+# Description:
 #
 # Author: Sharief Youssef
 #         sharief.youssef@nist.gov
@@ -53,6 +53,7 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <div id="xsdForm">
         <div class="alert alert-info">
@@ -109,6 +110,9 @@
 
 </div>
 
+
+
+
 <div id="dialog-save-error-message" title="Validation Error" style="display:none;">
 <p></p>
   <div id="saveErrorMessage">
@@ -121,7 +125,7 @@ Some <span style="color:red;">required</span> or <span style="color:blue;">recom
 </p>
   <div id="useErrorMessage">
   </div>
- <p>Edit the form or proceed to review page.</p> 
+ <p>Edit the form or proceed to review page.</p>
 </div>
 {% endblock %}
 
@@ -145,4 +149,3 @@ verifyTemplateIsSelectedCurateEnterData();
 $("body").on("click", ".btn.view-data", validateXML);
 </script>
 {% endblock %}
-

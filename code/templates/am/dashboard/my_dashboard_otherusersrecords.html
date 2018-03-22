@@ -40,17 +40,15 @@
     <!--</ul>-->
     <div class="toolbar">
     	<button class="btn-group pull-right">
-        	<span class="btn " onclick="backToResults();" style="text-decoration:none">Back to records</span>
-      	</button>
-    	<br/><br/>
+      	<span class="btn " onclick="backToResults();" style="text-decoration:none">Back to records</span>
+      </button>
+    	<br/>
     </div>
-
-    <br/><br/>
-    <br/><br/>
 {%if OtherUsers%}
     {% if OtherUser != user %}
       {% if OtherUsersXMLdatas %}
         <br/><br/>
+        <div class="right_align" >Total of documents: {{totaldocs_other_users}} </div>
         <br/><br/>
           <table class="table table-bordered table-striped">
             <tr>
@@ -118,7 +116,7 @@
 
 
       {%else%}
-        No Resources found for the user {{ OtherUser }}
+        No Resources found for the other users {{ OtherUser }}
       {%endif%}
     {%endif%}
 {%else%}

@@ -120,7 +120,6 @@ def dashboard_records(request):
     #     ispublished = ispublished == 'true'
     #     query['ispublished'] = ispublished
     query['iduser'] = str(request.user.id)
-    print "[[[[[[[[[[--]]]]]]]]]]"
     userXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
     # Get all the templates
     #templates_used = Template.find()
@@ -152,7 +151,9 @@ def dashboard_records(request):
                                        'OtherUsers': otherUsers,
                                        'IdotherUsers':idotherUsers,
                                        'OtherUXMLd' : otherUXMLd,
-                                       'usernames' : usernames
+                                       'usernames' : usernames,
+                                       'totaldocs_user' : len(userXmlData),
+                                       'totaldocs_other_users' : len(otherUXMLdatas)
     })
     #If the user is an admin, we get records for other users
     if request.user.is_staff:
@@ -160,7 +161,7 @@ def dashboard_records(request):
         usernames = dict((str(x.id), x.username) for x in User.objects.all())
         query['iduser'] = {"$ne": str(request.user.id)}
         otherUsersXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
-        context.update({'OtherUsersXMLdatas': otherUsersXmlData, 'usernames': usernames})
+        context.update({'OtherUsersXMLdatas': otherUsersXmlData, 'usernames': usernames, 'totaldocs_other_users': len(otherUsersXmlData)})
 
         i = None
         for elem in context['OtherUsersXMLdatas']:
@@ -169,16 +170,12 @@ def dashboard_records(request):
             for k,v in context['usernames'].items():
                 if j == i:
                     other_users.append((k,v))
-    #    print "--------------------------"
-    #    for k, v in (context['OtherUsersXMLdatas'][0]):
-        #    if k == "_id":
-                #print k
-#    print len(other_users)
+
     return HttpResponse(template.render(context))
 
 @register.filter
 def get_username(iduser):
-    print "((((((((((((((()))))))))))))))"
+#    print "((((((((((((((()))))))))))))))"
     for elem in other_users:
         if iduser == elem[0]:
             return str(elem[1])
@@ -193,7 +190,8 @@ def get_username(iduser):
 ################################################################################
 @login_required(login_url='/login')
 def dashboard_my_forms(request):
-    template = loader.get_template('dashboard/my_dashboard_my_forms.html')
+    template = loader.get_template('dashboard/my_dashboard_my_forms.html')#dashboard/my_dashboard_my_forms.html')
+
     # xml_data_id False if document not curated
     forms = FormData.objects(user=str(request.user.id), xml_data_id__exists=False,
                                  xml_data__exists=True).order_by('template')
@@ -519,32 +517,32 @@ if set, otherwise the URL to the :class:`PasswordChangeDoneView`.
 ################################################################################
 def daashboard_otherusers_records(request):
     #print "proc_otherpeoplerecordsa"
-    iduser = request.GET['other_user']
-    #iduser = request.GET['iduser']
+    #iduser = request.GET['other_user']
+    iduser = request.GET['iduser']
 
     json_content = str(iduser)
+    query['title'] = str(iduser)
+    dashboard_otherusers_records(request2)
     return HttpResponse(json_content, HTTP_200_OK)
 
 @login_required(login_url='/login')
 def dashboard_otherusers_records(request):
     template = loader.get_template('dashboard/my_dashboard_otherusersrecords.html')
     query = {}
-
     iduser = request.GET['iduser']
-
 
     query['iduser'] = str(iduser)
     userXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
-    print "_____________"
+
     templates_used = sorted(Template.find(query), key=lambda data: data['content'], reverse=True)
     user_form = UserForm(request.user)
 
     context = RequestContext(request, {'XMLdatass': userXmlData,
                                        # 'ispublished': ispublished,
                                        'user_formm': user_form,
-                                       'Templatess': templates_used,
-
+                                       'Templatess': templates_used
     })
+
     #If the user is an admin, we get records for other users
 #    if request.user.is_staff:
         #Get user name for admin
@@ -556,7 +554,7 @@ def dashboard_otherusers_records(request):
     return HttpResponse(template.render(context))
 
 ####################################################################################################################################
-def proc_otherpeoplerecords(request):
+def other_users_records(request):
     template = loader.get_template('dashboard/my_dashboard_otherusersrecords.html')
     query = {}
     #iduser = request.GET['iduser']
@@ -564,12 +562,9 @@ def proc_otherpeoplerecords(request):
     iduser = request.GET['iduser']
     otherUsers = User.objects.all()
 
-    print iduser
-
     #iduser = otheruser.get('_id')
     query['iduser'] = str(iduser)
     userXmlData = sorted(XMLdata.find(query), key=lambda data: data['lastmodificationdate'], reverse=True)
-    print userXmlData
 
     templates_used = sorted(Template.find(query), key=lambda data: data['content'], reverse=True)
     user_form = UserForm(request.user)

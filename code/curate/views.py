@@ -2,7 +2,7 @@
 #
 # File Name: views.py
 # Application: curate
-# Purpose:   
+# Purpose:
 #
 # Author: Sharief Youssef
 #         sharief.youssef@nist.gov
@@ -22,7 +22,7 @@ from django.core.servers.basehttp import FileWrapper
 from bson.objectid import ObjectId
 import lxml.etree as etree
 from lxml.etree import XMLSyntaxError
-import json 
+import json
 from curate.ajax import load_config
 from curate.models import SchemaElement
 from mgi.models import Template, TemplateVersion, XML2Download, FormData, XMLdata
@@ -37,10 +37,10 @@ from io import BytesIO
 ################################################################################
 #
 # Function Name: index(request)
-# Inputs:        request - 
+# Inputs:        request -
 # Outputs:       Main Page of Curate Application
 # Exceptions:    None
-# Description:   Page that allows to select a template to start curating         
+# Description:   Page that allows to select a template to start curating
 #
 ################################################################################
 from utils.XSDParser.parser import delete_branch_from_db, generate_form
@@ -152,17 +152,17 @@ def curate_from_schema(request):
     try:
         schema_name = request.GET['template']
         templates = Template.objects(title=schema_name)
-        
+
         # if the schemas are all versions of the same schema
         if len(set(templates.values_list('templateVersion'))) == 1:
             template_id = TemplateVersion.objects().get(pk=templates[0].templateVersion).current
             request.session['currentTemplateID'] = template_id
-            
+
             form_data = FormData(user=str(request.user.id), template=template_id, name=schema_name)
             form_data.save()
 
             request.session['curateFormData'] = str(form_data.pk)
-            request.session['curate_edit'] = False            
+            request.session['curate_edit'] = False
 
             if 'xmlDocTree' in request.session:
                 del request.session['xmlDocTree']
@@ -173,8 +173,8 @@ def curate_from_schema(request):
             raise MDCSError(error_message)
     except Exception as exc:
         raise MDCSError("The template you are looking for doesn't exist.")
-    
-    
+
+
 ################################################################################
 #
 # Function Name: curate_enter_data(request)
@@ -188,7 +188,7 @@ def curate_from_schema(request):
 @permission_required(content_type=RIGHTS.curate_content_type, permission=RIGHTS.curate_access, login_url='/login')
 def curate_enter_data(request):
     print "BEGIN curate_enter_data(request)"
-   
+
     try:
         context = RequestContext(request, {})
         if 'id' in request.GET:
@@ -199,9 +199,9 @@ def curate_enter_data(request):
             curate_from_schema(request)
         elif 'templateid' in request.GET:
             pass
-        
+
         template = loader.get_template('curate/curate_enter_data.html')
-        
+
         return HttpResponse(template.render(context))
     except MDCSError, e:
         template = loader.get_template('curate/errors.html')
@@ -268,7 +268,7 @@ def curate_enter_data_downloadxsd(request):
         template_filename = templateObject.filename
 
         xsdDocData = templateObject.content
-
+        
         xsdEncoded = xsdDocData.encode('utf-8')
         fileObj = StringIO(xsdEncoded)
 
@@ -405,11 +405,11 @@ def start_curate(request):
                                                             xml_data_id__exists=False))
                 new_form = NewForm()
                 upload_form = UploadForm()
-                
+
                 context_params['new_form'] = new_form
                 context_params['open_form'] = open_form
                 context_params['upload_form'] = upload_form
-                
+
                 context = RequestContext(request, context_params)  # , 'options_form': options_form})
 
                 if ajaxCall:
@@ -430,11 +430,11 @@ def start_curate(request):
 #
 # Function Name: save_xml_data_to_db(request)
 # Inputs:        request -
-# Outputs:       
+# Outputs:
 # Exceptions:    None
 # Description:   Save the current XML document in MongoDB. The document is also
 #                converted to RDF format and sent to a Jena triplestore.
-#                
+#
 #
 ################################################################################
 @permission_required(content_type=RIGHTS.curate_content_type, permission=RIGHTS.curate_access, login_url='/login')

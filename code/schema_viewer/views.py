@@ -55,7 +55,9 @@ def tabbed_viewer(request):
 
 def oxygen_viewer(request):
     template_name = request.GET.get("name", None)
-    file_name = "wrap_" + template_name + ".html"
+    #file_name = "wrap_" + template_name + ".html"
+    file_name = template_name + ".html"
+
     if file_name in listdir(path.join(SITE_ROOT, 'schema_viewer', 'templates', 'schema_viewer', 'oxygen')):
         return render(request, "schema_viewer/oxygen/" + file_name)
     else:

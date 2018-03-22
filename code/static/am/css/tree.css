@@ -40,6 +40,7 @@ div#tree ul li:after {
 
 div#tree ul li.root {
   margin: 0px 0px 0px -20px;
+  /*visibility: hidden;*/
 }
 
 div#tree ul li.root:before {

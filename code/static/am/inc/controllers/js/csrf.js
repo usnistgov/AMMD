@@ -1,14 +1,14 @@
 /**
- * 
+ *
  * File Name: csrf.js
  * Author: Sharief Youssef
  * 		   sharief.youssef@nist.gov
  *
  *         Guillaume SOUSA AMARAL
  *         guillaume.sousa@nist.gov
- * 
+ *
  * Sponsor: National Institute of Standards and Technology (NIST)
- * 
+ *
  */
 function getCookie(name) {
     var cookieValue = null;
