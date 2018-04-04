@@ -193,7 +193,7 @@
 		- open another command-line shell window
 			$ cd c:\mdcs\ammd\1.5\installer-pkg\data
 			$ pip install djangorestframework
-			$ python bulk_upload_data.py
+			$ python bulk_upload.py
 			
 IF DESIRED, PREVIOUS MONGODB DATA BACKUP PROCEDURE
 	- start mongodb
