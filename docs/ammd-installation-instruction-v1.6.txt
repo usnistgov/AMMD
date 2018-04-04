@@ -174,7 +174,7 @@
 			- after login
 			- click schema viewer -> admin -> Admin 
 				-> Exploration Tree -> Upload new OWL
-			- Select file -> c:\mdcs\ammd\1.5\installer-pkg\data\ontology\AMMD_Ontology_R1.owl
+			- Select file -> c:\mdcs\ammd\1.5\installer-pkg\data\ontology\AMMD_Ontology_R2018a.owl
 			- Save file
 			- Activate -> Yes, activate this ontology
 		- use the application
