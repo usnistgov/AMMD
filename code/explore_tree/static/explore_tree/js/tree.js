@@ -1,5 +1,26 @@
 var $tree = $('#tree');
 
+// Hide initially every nodes
+function hideNodes(){
+    var $treeElement = $('#tree');
+    var $treeElement1 = ($treeElement).children()
+    var $a = $('#tree').find('li');
+
+    for (i = 0; i < $a.length; i++) {
+      //var $child = $a[i].children[0];//$a.target.children[0];
+      var $myQuery = new jQuery.fn.init($a[i], "i.fa.fa-chevron-down" );
+      
+      if(isFolder($myQuery)) {
+        var $icon = $myQuery.find("i.fa:first");
+        var $subtree = $myQuery.find('ul:first');
+
+        $icon.removeClass();
+        $icon.addClass("fa fa-chevron-right");
+        $subtree.hide();
+        }
+      }
+};
+
 var isFolder = function($treeElement) {
     return $treeElement.find('ul').size() !== 0;
 };
@@ -49,3 +70,5 @@ $(window).on("scroll", function() {
     }
 
 });
+
+hideNodes();

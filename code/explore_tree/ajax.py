@@ -72,7 +72,7 @@ caching_docs = False
 docs_already_cached = False
 my_list_of_cross_results_f = []
 my_list_of_tag_text_initialdoccurrent = []
-mystring= "MMMMMMMMM"#"MAMIIIIII"
+mystring= "MMMMMMMMM"
 
 @cache_page(600 * 15)
 def load_view(request):
@@ -109,12 +109,12 @@ def load_view(request):
             r = render(request, "explore_tree/components/view.html", load_doc)
             leaf_cache.set(c_id, r)#,30)
             leaf = r
-            xmldata_objects = XMLdata.objects()
-            tableau = []
-            for x in xmldata_objects:
-                for k, v in x.items():
-                    if k == "_id" and str(v)!= str(doc_id):
-                        tableau.append(v)
+        #    xmldata_objects = XMLdata.objects()
+        #    tableau = []
+        #    for x in xmldata_objects:
+        #        for k, v in x.items():
+        #            if k == "_id" and str(v)!= str(doc_id):
+        #                tableau.append(v)
 
         return leaf
 
@@ -845,22 +845,6 @@ def tree_to_xml_string(tree):
     filtered_list = ["<{}>".format(x) for i, x in enumerate(xml_str_split) if (i not in remove_idx_set)]
     return '<?xml version="1.0"?>{}'.format(''.join(filtered_list))
 
-def print_xml_string(xml_string):
-    tab = ' ' * 2
-    compteur = 0
-    # First we split the tags
-    s = xml_string.split('><')
-    s[0] = s[0][1:]
-    s[-1] = s[-1][:-1]
-    str_split = ["<{}>".format(x) for x in s]
-    for tag in str_split:
-        if tag.startswith("</"):
-            compteur -= 1
-            print("{}{}".format(compteur*tab, tag))
-        else:
-            print("{}{}".format(compteur*tab, tag))
-            compteur += 1
-
 def generate_xml(content):
     tree = etree.fromstring(content)
     return tree
@@ -969,7 +953,6 @@ def download_corrolated_xml_others_files(L,listeof):
 
         for t in montab:
             checkandremove(t[1],listeof)
-            #getattributes(t)
 
         for t in montab:
             json_to_render += etree.tostring(t[1])#, pretty_print=True)
@@ -981,49 +964,6 @@ def download_corrolated_xml_others_files(L,listeof):
     sz = 0
 
     return json_to_render
-
-def getattributes(xmlpart):
-    xmlID = xmlpart[0]
-    xml_to_render = xmlpart[1]
-    xml_from_db = etree.fromstring(retrieve_xml(xmlID))
-    liste = []
-    liste2 = []
-    for child1 in xml_to_render.iter():
-        liste.append((child1.tag,child1.text))
-        liste2.append(child1.tag)
-    present = False
-    for child2 in xml_from_db.iter():
-        for l in liste:
-            if str(child2.tag) == str(l[0])and str(child2.text)== str(l[1]):
-                present = True
-                break
-            if present==True:
-                break
-        if present==True:
-            present = False
-        else:
-            try:
-                xmlpere = child2.findall("..")
-                xmlpere[0].remove(child2)
-            except:
-                pass
-
-    #xml = etree.fromstring(xml_from_db.iter)
-    for l in xml_from_db.iter():
-        if str(l.tag) in liste2:
-            pass
-        else:
-            xmlpere = l.findall("..")
-            xmlpere[0].remove(l)
-    for l in xml_from_db.iter():
-        if str(l.tag) in liste2:
-            pass
-        else:
-            xmlpere = l.findall("..")
-            xmlpere[0].remove(l)
-
-    json = etree.tostring(xml_from_db,pretty_print=True)
-
 
 def checkandremove(xml,listeof):
     maliste = listeof
@@ -1121,14 +1061,6 @@ def pairwise(iterable):
     it = iter(iterable)
     return izip(it, it)
 
-
-def get_union(tree1, tree2):
-    if len(tree1) == len(tree2) and tree1[::2] == tree2[::2]:
-        for (tag1, tail1), (tag2, tail2) in zip(pairwise(tree1), pairwise(tree2)):
-            return [tag1, get_union(tail1, tail2)]
-    else:
-        return list(chain(tree1, tree2))
-
 def union_tree(tree1, tree2, verbose = False):
 
     if verbose:
@@ -1222,30 +1154,6 @@ def LTree_to_xml_string(tree):
     remove_idx_set = set(remove_idx) | set([x+1 for x in remove_idx])
     filtered_list = ["<{}>".format(x) for i, x in enumerate(xml_str_split) if (i not in remove_idx_set)]
     return ''.join(filtered_list)
-
-def print_xml_string(xml_string):
-    tab = ' ' * 2
-    compteur = 0
-    # First we split the tags
-    s = xml_string.split('><')
-    s[0] = s[0][1:]
-    s[-1] = s[-1][:-1]
-    str_split = ["<{}>".format(x) for x in s]
-    tim = ""
-    for tag in str_split:
-        if tag.startswith("</"):
-            compteur -= 1
-            a = "{}{}".format(compteur*tab, tag)
-            #print("{}{}".format(compteur*tab, tag))
-            tim +="\n" + a
-            print a
-        else:
-            b = "{}{}".format(compteur*tab, tag)
-            #print("{}{}".format(compteur*tab, tag))
-            tim +="\n" + b
-            print b
-            compteur += 1
-    return tim
 
 def download_file(request):
     xmlID = request.GET["doc_id"]

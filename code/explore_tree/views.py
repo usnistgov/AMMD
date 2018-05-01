@@ -29,7 +29,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_405_METHOD_NOT_ALLOWED
 from api.navigation.views import navigation_post
 from explore_tree.api.models import Navigation
-from explore_tree.parser.renderer import render_navigation
+from explore_tree.parser.renderer import render_navigation, get_html_tree#,
 from api.query_ontology.views import get_ontology
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
@@ -114,7 +114,9 @@ def exploration_tree(request):
                 html_tree = html_tree_cache.get(n_key)
             else:
                 tpl_version = active_ontologies[0].template_version
-                html_tree = render_navigation(navigation, tpl_version.current)
+                #html_tree = render_navigation(navigation, tpl_version.current)
+                render_navigation(navigation, tpl_version.current)#
+                html_tree = get_html_tree(navigation,tpl_version.current)#
                 html_tree_cache.set(n_key, html_tree)
 
         except Exception as exc:
