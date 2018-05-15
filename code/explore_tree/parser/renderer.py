@@ -59,7 +59,7 @@ def render_navigation(navigation, template_id):
             else:
                 context = {
                     'branch_id': navigation_id,
-                    'branch_name': str(get_number_of_node_doc(navigation_id,name)),
+                    'branch_name': str(get_number_of_node_by_doc(navigation_id,name)),
                     'branches': render_navigation(navigation_child, template_id)
                 }
             global number_of_doc
@@ -213,7 +213,7 @@ def get_number_of_doc():
         return " ("+str(number_of_doc)+")"
     else:
         return " (0)"
-def get_number_of_node_doc(id_node, name):
+def get_number_of_node_by_doc(id_node, name):
     try:
         return " "+str(nav_table[id_node]['branch_name'])
     except:
