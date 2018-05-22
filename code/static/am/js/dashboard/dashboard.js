@@ -280,13 +280,12 @@ show_people_records = function(){
   }
 
 show_users_records = function(user){
-    console.log('BEGIN [Other users records]');
+    //console.log('BEGIN [Other users records]');
     $("#shw-plp-r").hide();
     $("#totaldoc").hide();
     $('#user-record').hide();
     $('#users-records').show();
     $('#my-records-title').hide();
-    //console.log(user);
 
     $.ajax({
         url : "/dashboard/dashboard_otherusers_records",
@@ -297,7 +296,6 @@ show_users_records = function(user){
 		      success: function(data){
                console.log('success');
                userido = user
-              // console.log(userido);
 	        },
           error:function(data){
                 console.log("error")

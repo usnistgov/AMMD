@@ -137,7 +137,5 @@ def exploration_tree(request):
             },
             'navigation_tree': html_tree,
         })
-        #print context
-        #print html_tree
-        #print type(html_tree)
+        
         return HttpResponse(template.render(context))

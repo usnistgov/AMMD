@@ -34,8 +34,10 @@ li_table={}
 def render_navigation(navigation, template_id):
 
     """
-    Renders a navigation tree # Build the tree
+    Build the navigation tree
     :param navigation:
+        - navigation root
+        - template id
     :return:
     """
     nav_tree_html = ""
@@ -80,6 +82,13 @@ def render_navigation(navigation, template_id):
 
 
 def get_html_tree(navigation,template_id):
+    """
+    Modify the name of the node by adding the number of documents under each node
+    :param request:
+        - navigation root
+        - template id
+    :return:
+    """
     doc_dict = {}
     dashtable=[]
     nav_tree_html=''
@@ -93,9 +102,9 @@ def get_html_tree(navigation,template_id):
             doc_dict[t[0]]=t[1]
             dashtable.append(t[0])
 
-    my_func(navigation,doc_dict)#,nav_table)
+    get_doc_by_nodes(navigation,doc_dict)
 
-    global nav_table#nav_table=dict
+    global nav_table
     for k,v in nav_table.iteritems():
 
         if "(" in v['branch_name']:
@@ -108,6 +117,14 @@ def get_html_tree(navigation,template_id):
     return nav_tree_html
 
 def render_html_tree(navigation,template_id,navigation_table):
+    """
+    Renders the navigation tree that contains the number of docs under each node of the tree
+    :param request:
+        - navigation root
+        - template id
+        - table with the id of the navigation nodes
+    :return:
+    """
     nav_tree_html=""
     for navigation_id in navigation.children:
         navigation_child = navigation_get(navigation_id)
@@ -130,6 +147,13 @@ def render_html_tree(navigation,template_id,navigation_table):
     return nav_tree_html
 
 def render_documents(navigation, template_id):
+    """
+    Build the documents in the navigation tree
+    :param request:
+        - navigation root
+        - template id
+    :return:
+    """
     doc_tree_html = ""
     doc_and_content=[]
     global number_of_doc
@@ -171,19 +195,10 @@ def render_documents(navigation, template_id):
                     'branch_name': branch_name,
                 }
 
-                """doc_tree = get_leaf_name(document)
-                while doc_tree is dict or isinstance(doc_tree,OrderedDict):
-                    y = get_leaf_name(doc_tree)
-                    doc_tree = y"""
                 doc_tree_html += li_template.render(Context(context))
             #    doc_and_content.append((doc_tree,li_template.render(Context(context))))
                 global number_of_doc
                 number_of_doc +=1
-            """if len(doc_and_content)>0:
-                my_tree = sorted(doc_and_content)
-            for leaf in my_tree:
-                doc_tree_html += leaf[1]"""
-
     except Exception, e:
         with open(join(TEMPLATES_PATH, 'li_error.html'), 'r') as li_file:
             li_content = li_file.read()
@@ -197,6 +212,12 @@ def render_documents(navigation, template_id):
     return doc_tree_html
 
 def get_leaf_name(document):
+    """
+    Get the name of the document
+    :param request:
+        - dict
+    :return:
+    """
     key = next(reversed(document))
     try:
         myliste = document[key].items()
@@ -208,21 +229,41 @@ def get_leaf_name(document):
         return document[key]
 
 def get_number_of_doc():
+    """
+    Write the number of documents under a leaf (node that contains documents)
+    :param request:
+    :return:
+    """
     global number_of_doc
     if number_of_doc!=0:
         return " ("+str(number_of_doc)+")"
     else:
         return " (0)"
+
 def get_number_of_node_doc(id_node, name):
+    """
+    Write the number of documents under a node that contains other nodes
+    :param request:
+        - id node
+        - name of the document
+    :return:
+    """
     try:
         return " "+str(nav_table[id_node]['branch_name'])
     except:
         return name
 
-def my_func(node, dico):#,nav_tree):
+def get_doc_by_nodes(node, dico):
+    """
+    Recursive function that calculates the number of docs under each node of the tree
+    :param request:
+        - node
+        - dict
+    :return:
+    """
     try:# Type(node)=Navigation
         if node.children:
-            node_doc = sum([my_func(child_id, dico) for child_id in node.children])
+            node_doc = sum([get_doc_by_nodes(child_id, dico) for child_id in node.children])
             dico[node.id] = node_doc
             return node_doc
         else:
@@ -231,7 +272,7 @@ def my_func(node, dico):#,nav_tree):
     except:#node=ID of a Navigation object
         nav_child = navigation_get(node)
         if nav_child.children:
-            node_doc = sum([my_func(child_id, dico) for child_id in nav_child.children])
+            node_doc = sum([get_doc_by_nodes(child_id, dico) for child_id in nav_child.children])
             dico[node] = node_doc
             return node_doc
         else:

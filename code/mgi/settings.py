@@ -318,7 +318,6 @@ INSTALLED_APPS = (
     'password_policies',
     'explore_tree',
     'schema_viewer',
-	#'django_crontab',#
 )
 
 OAUTH2_PROVIDER = {

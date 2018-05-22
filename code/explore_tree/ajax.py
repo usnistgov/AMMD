@@ -8,6 +8,7 @@ from django.shortcuts import render
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 from explore_tree.api.models import Navigation, MyParser, MaxDepth, Node
 from explore_tree.api.navigation.operations import retrieve_navigation_filters, get_navigation_node_for_document
+from explore_tree.parser.renderer import get_projection#
 from mgi.models import XMLdata
 from mgi.models import Template#
 from utils.json_parser.processview import processview, processviewdocidlist, process_cross_query, doc_to_query, ids_docs_to_query, ids_docs_to_querys
@@ -18,41 +19,36 @@ from django.core.cache import caches
 
 from xml.dom import minidom #
 from xml.dom.minidom import parse, parseString, Document #
+from lxml import etree#
 import xml.etree.ElementTree as ET #
 import xml.etree.cElementTree as ET#
+from xml.etree.ElementTree import XMLParser, fromstring#,ElementTree
 
-from rest_framework.response import Response#
-from rest_framework import status#
+#from rest_framework.response import Response#
+#from rest_framework import status#
 
-from cStringIO import StringIO#
-from django.core.servers.basehttp import FileWrapper#
+#from cStringIO import StringIO##
+#from django.core.servers.basehttp import FileWrapper##
 
-from mgi.models import find_content_by_id#
-from lxml import etree#
-from collections import OrderedDict, deque #
+#from mgi.models import find_content_by_id##
+
 import collections
+from collections import OrderedDict, deque #
 from bson.objectid import ObjectId#
-from explore_tree.parser.renderer import get_projection#
-from xml.etree.ElementTree import XMLParser, ElementTree, fromstring#
+
 from itertools import izip, chain #
 from copy import deepcopy#
-from itertools import tee#
+from itertools import tee, izip
 
-from django.core import serializers#
-
-import random
-#import sys
-from threading import Thread
-import time
-
+#from django.core import serializers##
+#import random##
+#import sys##
+#from threading import Thread##
+#import time
 
 leaf_cache   = caches['leaf']
 branch_cache = caches['branch']
 link_cache   = caches['link']
-
-
-AmTest_list=[]
-AmTest_list1=[]
 
 my_result_to_d = []
 
@@ -66,22 +62,21 @@ list_od_dwnld_files =[]
 navigation_name_tab= []#''
 my_tab = []
 resultat = []
-tailles = []
-sz = 0
-caching_docs = False
-docs_already_cached = False
+
+
 my_list_of_cross_results_f = []
 my_list_of_tag_text_initialdoccurrent = []
 mystring= "MMMMMMMMM"
+sz = 0
 
 @cache_page(600 * 15)
+
+# First function called when clicking on a document or a link in the tree
 def load_view(request):
     """
-
     :param request:
     :return:
     """
-
     # nav_id parameter is mandatory, if it doesn't exist we delete other parameters to raise and error
     if "nav_id" not in request.POST:
         request.POST = {}
@@ -90,31 +85,24 @@ def load_view(request):
     doc_id =''
     ref_node_id=''
 
-
+    # if clicking on a document in the tree
     if "node_id" in request.POST and "doc_id" in request.POST:
         node_id = request.POST['node_id']
         doc_id  = request.POST['doc_id']
         leaf    = None
-        #c_id    = str(node_id) + '_' + str(doc_id)
         nod_name = Navigation.get_name(node_id)
         indexx = (nod_name).rfind("#")
         node_name = nod_name[indexx+1:]
         c_id    = str(node_name) + '_' + str(doc_id)
+        # Get the document from the cache if this one had ever been accessed
         if ( c_id in leaf_cache ):
-            #print "-----------GET FROM CACHE------------"
             leaf = leaf_cache.get(c_id)
+        # Else :Query the database, process the documents
         else:
-            #print "-----------PROCESSING-----------"
             load_doc = load_leaf_view(request, doc_id)
             r = render(request, "explore_tree/components/view.html", load_doc)
-            leaf_cache.set(c_id, r)#,30)
+            leaf_cache.set(c_id, r)
             leaf = r
-        #    xmldata_objects = XMLdata.objects()
-        #    tableau = []
-        #    for x in xmldata_objects:
-        #        for k, v in x.items():
-        #            if k == "_id" and str(v)!= str(doc_id):
-        #                tableau.append(v)
 
         return leaf
 
@@ -124,7 +112,6 @@ def load_view(request):
 
         if ( node_id in branch_cache ):
             branch = branch_cache.get(node_id)
-
         else:
             branch = __load_branch_view(request)
             branch_cache.set(node_id, branch)
@@ -151,141 +138,12 @@ def load_view(request):
         }
         return HttpResponse(json.dumps(error), status=HTTP_400_BAD_REQUEST)
 
-
-def __load_leaf_view(request):
-    """ Load view for a leaf
-
-    Parameters:
-        -   request:
-
-    Returns:
-    """
-
-    print "\n___LOAD_LEAF_VIEW___:"
-    navigation_name2=request.POST["node_id"]
-    print request.POST["node_id"]
-
-    print request
-
-    xml_document = XMLdata.get(request.POST["doc_id"])
-    navigation_node = Navigation.objects.get(pk=request.POST["node_id"])
-
-
-
-    # Display XML file if "projection_view" annotation is not configured
-    if "projection_view" not in navigation_node.options:
-        # TODO transform the XML into a data table
-        return HttpResponse(json.dumps({}), HTTP_200_OK)
-
-    projection_views = json.loads(navigation_node.options["projection_view"])
-
-    view_data = {
-        "header": xml_document.get("title"),
-        "type": "leaf",
-        "views": []
-    }
-    my_listof_ordereddicts_cross_docs2 =[]
-    query_and_results2 = []
-    my_listof_ordereddicts2 = []
-    # Send the annotation to the processor and collect the data
-    my_list_of_cross_results = []
-
-    for projection_view in projection_views:
-        result_data = {
-            "title": projection_view["title"],
-            "data": None
-        }
-
-        # FIXME better handling of x-
-        if "query" in projection_view.keys():
-
-            my_projections = []
-            # Get the names of the brakets which need to be displayed
-            for value in projection_view["data"]:
-                my_projections.append(value.get('path'))
-
-            result_data["data"] = process_cross_query(request.POST["nav_id"], request.POST["doc_id"],
-                                                      projection_view["query"], projection_view["data"])
-            # Set the documents which must be queried
-            doc_query_proc = {
-                "_id": ObjectId(request.POST["doc_id"])
-            }
-
-            truc = doc_to_query(1)
-            co_dict = {}
-
-            for id_doc in truc:
-                other_doc_query = {
-                    "_id" : ObjectId(id_doc)
-                }
-                for projection in my_projections:
-
-                    proj_co = {
-                        my_projections[my_projections.index(projection)] : 1
-                    }
-
-                    res_co = XMLdata.executeQueryFullResult(other_doc_query,proj_co)
-
-                    try:
-                        doc_projco = get_projection(res_co[0])
-                        s = str(my_projections[my_projections.index(projection)])
-                        y = s.split(".")
-                        attribute = y[len(y)-1]
-                        result_cross = doc_projco
-                        my_list_of_cross_results.append((attribute,result_cross))
-                        global list_of_ordered_dict_cross_docs
-                        list_of_ordered_dict_cross_docs = res_co
-                        my_listof_ordereddicts_cross_docs2.append(res_co)
-                    except:
-                        res_co = ''
-
-        else:
-            my_projections = []
-
-            for value in projection_view["data"]:
-                my_projections.append(value.get('path'))
-            id_doc_to_query = {
-                "_id": ObjectId(request.POST["doc_id"])
-            }
-
-            for projection in my_projections:
-                proj_co = {
-                    my_projections[my_projections.index(projection)] : 1
-                }
-
-                res_co = XMLdata.executeQueryFullResult(id_doc_to_query,proj_co)
-                query_and_results2.append(projection)
-                try:
-                    doc_projco = get_projection(res_co[0])
-                    global list_of_ordered_dict
-                    list_of_ordered_dict = res_co
-                    my_listof_ordereddicts2.append(res_co)
-                    results_initial_doc.append(doc_projco)
-
-                except:
-                    res_co = ''
-
-            result_data["data"] = processview(request.POST["nav_id"], request.POST["doc_id"], projection_view["data"])
-            my_result_to_d.append(result_data["data"])
-
-        view_data["views"].append(result_data)
-    my_node =str(get_node_name(navigation_name2))+"_"+str(request.POST["doc_id"])
-
-    query_and_results_tab.append(query_and_results2)
-    my_listof_ordereddicts_cross_docs_tab.append(my_listof_ordereddicts_cross_docs2)
-    navigation_name_tab.append(navigation_name2)
-    my_listof_ordereddicts_tab.append(my_listof_ordereddicts2)
-    #my_tab.append(str(request.GET["curent_node"])+"_"+str(request.POST["doc_id"]))
-    my_tab.append(my_node)
-    #my_tab.append(str(navigation_name2) + '_' + str(request.POST["doc_id"]))
-
-    return render(request, "explore_tree/components/view.html", view_data)
-
 def load_leaf_view(request, docid):
     """ Load view for a leaf
 
     Parameters:
-        -   request:
+        -   request
+        - doc id
 
     Returns:
     """
@@ -307,6 +165,7 @@ def load_leaf_view(request, docid):
         "type": "leaf",
         "views": []
     }
+    #Initialize parameters in order to download later some information
     my_listof_ordereddicts_cross_docs2 =[]
     query_and_results2 = []
     my_listof_ordereddicts2 = []
@@ -335,11 +194,11 @@ def load_leaf_view(request, docid):
                 "_id": ObjectId(docid)
             }
 
-            truc = doc_to_query(1)
+            quiered_docs = doc_to_query(1)
 
             co_dict = {}
 
-            for id_doc in truc:
+            for id_doc in quiered_docs:
                 other_doc_query = {
                     "_id" : ObjectId(id_doc)
                 }
@@ -429,7 +288,6 @@ def __load_branch_view(request):
     :param request:
     :return:
     """
-    print "___LOAD_BRANCH_VIEW:"
     # Retrieve the view annotation
     navigation_node = Navigation.objects.get(pk=request.POST["node_id"])
     filters = retrieve_navigation_filters(navigation_node)
@@ -470,10 +328,11 @@ def __load_branch_view(request):
 
 
 def __load_link_view(request):
-    # retrieve document id
-    # retrieve the projection content
+    """ Load link view for a link
 
-    print "___LOAD_LINK_VIEW:"
+    :param request:
+    :return:
+    """
     ref_node_id = request.POST["ref_node_id"]
 
 
@@ -517,11 +376,11 @@ def __load_link_view(request):
                         "_id": ObjectId(request.POST["doc_id"])
                     }
 
-                    truc = doc_to_query(1)
+                    quiered_docs = doc_to_query(1)
 
                     co_dict = {}
 
-                    for id_doc in truc:
+                    for id_doc in quiered_docs:
                         other_doc_query = {
                             "_id" : ObjectId(id_doc)
                         }
@@ -609,65 +468,54 @@ def __load_link_view(request):
         else:
             return HttpResponse(json.dumps({}), HTTP_200_OK)
     except:
-        "NOT FOUND"
+        #"NOT FOUND"
     #else:
         return HttpResponse(json.dumps({}), HTTP_200_OK)
 
+def download_file(request):
+    """Return the xml tree in a string format
 
-def json2xml(json_obj, line_padding=""):
-    result_list = list()
-    json_obj_type = type(json_obj)
+    :param request:
+    :return:
+    """
+    xmlID = request.GET["doc_id"]
+    xml = retrieve_xml(xmlID)
+    return  etree.fromstring(xml)
 
-    if json_obj_type is list:
-        for sub_elem in json_obj:
-            result_list.append(json2xml(sub_elem, line_padding))
-        return "\n".join(result_list)
+def download_xml(request):
+    """ Download the xml source file
 
-    if json_obj_type is dict or isinstance(json_obj, OrderedDict):
-        for tag_name in json_obj:
-            sub_obj = json_obj[tag_name]
-            result_list.append("%s<%s>" % (line_padding, tag_name))
-            result_list.append(json2xml(sub_obj, "\t" + line_padding))
-            result_list.append("%s</%s>" % (line_padding, tag_name))
-        return "\n".join(result_list)
+    :param request:
+    :return:
+    """
+    xmlID = request.GET["doc_id"]
+    xmltree = retrieve_xml(xmlID)
+    xml = etree.fromstring(xmltree)
+    json_content = etree.tostring(xml,pretty_print=True)
 
-    return "%s%s" % (line_padding, json_obj)
+    return HttpResponse(json_content, HTTP_200_OK)
 
-def get_node_name(node_id):
-    navigation_name0 = Navigation.get_name(node_id)
-    indexx = (navigation_name0).rfind("#")
-    return navigation_name0[indexx+1:]
+def retrieve_xml(docID):
+    """ Get the xml assiociated to the id
 
-def remove_empty_nodes(xml):
-    for child in xml.getiterator():
-        if child.getchildren():
-            pass
-        else:
-        #if child.text!='':
-            if (str(child.text))[0:9]==mystring:
-                pass#print (child.tag,child.text)
-            else:
-                try:
-                    xmlpere = child.findall("..")
-                    xmlpere[0].remove(child)
-                except:
-                    pass
+    :param request:
+    :return:
+    """
+    xml_data = XMLdata.getXMLdata(docID)
+    xml_dta = json.dumps(xml_data.items()[3][1],sort_keys=False)
+    xml_d = json.loads(xml_dta, object_pairs_hook=OrderedDict) # Convert the ordered dict in dict
+    xsdDocData = XMLdata.unparse(xml_d)
+    xsdEncoded = xsdDocData.encode('utf-8')
 
-def check_empty_nodes(xml):
-    myvar = False
-    for child in xml.getiterator():
-        if child.getchildren():
-            pass
-        else:
-        #if child.text!='':
-            if (str(child.text))[0:9]==mystring:
-                pass
-            else:
-                return True
-    return False
+    return xsdEncoded
 
 def download_corrolated_xml(request):
-    dejadwl = False
+    """ Download the displayed data
+
+    :param request:
+    :return:
+    """
+    alrdy_dwl = False
     index_i=''
     json_contents =""
     node_or_nav = str(get_node_name(request.GET["curent_node"]))+"_"+str(request.GET["doc_id"])
@@ -694,21 +542,18 @@ def download_corrolated_xml(request):
 
         for i in list_od_dwnld_files:
             if i[0] == navigation_name and i[1] == request.GET["doc_id"]:
-                dejadwl = True
+                alrdy_dwl = True
                 index_i = list_od_dwnld_files.index(i)
                 break
-        if dejadwl:
-            #print "--------------DOC already dwld--------------"
+        if alrdy_dwl:
+            #DOC has ever been dwld
             json_contents = list_od_dwnld_files[index_i][2]
         else:
-            #print "--------------DOC never dwld-----------------"
+            #DOC has never been dwld
             j2 = download_corrolated_xml_others_files(my_listof_ordereddicts_cross_docs,listeof)
-
             doc_name = request.GET["file_name"]
             xml = my_tree = download_file(request)
-
-            liste_of_txt = recuperaationtextes(my_listof_ordereddicts)
-
+            liste_of_txt = getTexts(my_listof_ordereddicts)
             nb = 0
             for child in xml.iter():
                     #car = False
@@ -716,7 +561,6 @@ def download_corrolated_xml(request):
                     pass
                 else:
                     nb +=1
-
             pare = 0
             missing=liste_of_txt
             to_add=liste_of_txt
@@ -750,17 +594,14 @@ def download_corrolated_xml(request):
                         child.text = ancien
 
             xmle=xml
-            y= etree.tostring(xmle,encoding='UTF-8')#, pretty_print=True)
-            #z = '<xml version="1.0" encoding="UTF-8"?>\n'+j2+y+'</xml>'
+            y= etree.tostring(xmle,encoding='UTF-8')
             z = "<xml>\n"+y+j2+"</xml>"
             z = u''.join((z)).encode('utf-8')
             z = str(z)
             z = z.replace("\t","")
             z = z.replace("\n","")
 
-
             json_contentt = etree.fromstring(z)
-            #xsdEncoded = z.encode('utf-8')
             json_contents = etree.tostring(json_contentt, pretty_print=True,encoding='UTF-8', method="xml")
             list_od_dwnld_files.append((navigation_name,request.GET["doc_id"],json_contents))
 
@@ -770,8 +611,124 @@ def download_corrolated_xml(request):
         return HttpResponse(json_contents, status=status.HTTP_404_NOT_FOUND)
 
 
+def download_corrolated_xml_others_files(L,listeof):
+    """ Download the xml coming from the other querried documents
 
-def recuperaationtextes(L):
+    :param request:
+        - list
+        - list
+    :return:
+    """
+    global my_list_of_tag_text_initialdoccurrent
+    my_list_of_tag_text_initialdoccurrent = listeof
+    xml_files = []
+    doc_ids = []
+    json_contents = ''
+    json_to_render=''
+    docid_and_trees = []
+    for ordereddict in L:
+        xml_data = (ordereddict[0]).items()[1][1]
+        xml_dta = json.dumps(xml_data)
+        xml_d = json.loads(xml_dta)
+
+        json_content = json2xml(xml_d)
+        my_xml_string = str(json_content)
+        my_tree = get_tree(my_xml_string)
+
+        doc_ids.append((ordereddict[0]).items()[0][1])
+        xml_files.append(json_content)
+        docid_and_trees.append(((ordereddict[0]).items()[0][1],my_tree))
+
+        json_contents = json_contents + '\n' + json_content
+
+    if len(docid_and_trees)>1:
+        for li in docid_and_trees:
+            i = docid_and_trees.index(li)
+            for lii in docid_and_trees[i+1:]:
+                ii = docid_and_trees.index(lii)
+                var_p = 0
+                for child1, child2 in izip(li,lii):
+                    if child1 == child2:
+                        var_p +=1
+                if var_p == len(li) & len(li) == len(lii):
+                        del docid_and_trees[ii]
+        table_id=[]
+        my_ordered_xml_list = []
+        lesdocsvus =[]
+        for t1 in docid_and_trees:
+            y=[]
+            i = docid_and_trees.index(t1)
+            already_see = False
+            for tab in table_id:
+                if tab == t1[0]:
+                    already_see = True
+            if already_see == False:
+                table_id.append(t1[0])
+                for t2 in docid_and_trees[i+1:]:
+                    if t1[0] == t2[0]:
+                        lesdocsvus.append(t1[0])
+                        if y!=[]:
+                            x = union_tree(t1[1],t2[1],verbose=False)
+                            y = union_tree(y,x,verbose=False)
+                        else:#Write for the first time
+                            y = union_tree(t1[1],t2[1],verbose=False)
+            if y:
+                my_ordered_xml_list.append((t1[0],y))
+
+        for t in docid_and_trees:
+            if t [0] in lesdocsvus:
+                pass
+            else:
+                my_ordered_xml_list.append((t[0],t[1]))
+
+        if my_ordered_xml_list==[]:
+            json_to_render = json_contents
+        mytab_of_tree=[]
+        for xml in my_ordered_xml_list:
+            s = LTree_to_xml_string(xml[1])
+            tree2 = etree.fromstring(s)
+            i=1
+            global sz
+            if sz == 0:
+                for child in tree2.iter():
+                    if child.getchildren():
+                        pass
+                    else:
+                        sz +=1
+                listeof2 = listeof[:sz]
+                fill_xml(tree2,listeof2)
+            else:
+                fill_xml(tree2,listeof[sz:])
+                sz +=1
+            mytab_of_tree.append((xml[0],tree2))
+
+        for t in mytab_of_tree:
+            checkandremove(t[1],listeof)
+        for t in mytab_of_tree:
+            json_to_render += etree.tostring(t[1])#, pretty_print=True)
+    else:
+        json_to_render = json_contents
+    global sz
+    sz = 0
+    return json_to_render
+
+def generate_xml(content):
+    """ Create the xml associated to a string
+
+    :param request:
+        - string
+    :return:
+    """
+    tree = etree.fromstring(content)
+    return tree
+
+def getTexts(L):
+    """Return the tags and the texts for an xml object
+
+    :param request:
+        - OrderedDict
+    :return:
+    """
     listofcontents = []
     listoftexts = []
     listoftag_texts = []
@@ -796,8 +753,13 @@ def recuperaationtextes(L):
                 listoftag_texts.append((child.tag,child.text))
     return  listoftag_texts
 
-
 def aggregate_query(L):
+    """
+        Re build the xml from parts of xml coming from a same document
+    :param request:
+        - string
+    :return:
+    """
     queries = [query.split('.') for query in L]
     # Check that the first elements of each query are all identical and we initialize the root
     if not queries or [_[0] for _ in queries].count(queries[0][0]) == len(queries):
@@ -818,8 +780,11 @@ def aggregate_query(L):
 
 
 def tree_to_xml_string(tree):
-    from itertools import tee, izip
-    """Conversion of an Node-Tree to an XML String
+    """
+        Conversion of an Node-Tree to an XML String
+    :param request:
+        - XML node
+    :return:
     """
     def iter_2_by_2(iterable):
         "s -> (s0,s1), (s1,s2), (s2, s3), ..."
@@ -845,128 +810,84 @@ def tree_to_xml_string(tree):
     filtered_list = ["<{}>".format(x) for i, x in enumerate(xml_str_split) if (i not in remove_idx_set)]
     return '<?xml version="1.0"?>{}'.format(''.join(filtered_list))
 
-def generate_xml(content):
-    tree = etree.fromstring(content)
-    return tree
 
+def json2xml(json_obj, line_padding=""):
+    """
+        Conversion of a JSON object, a Dict or an Oredereddict into an XML String
+    :param request:
+        - json object or Dict or Oredereddict
+    :return:
+    """
+    result_list = list()
+    json_obj_type = type(json_obj)
 
-def download_corrolated_xml_others_files(L,listeof):
-    global my_list_of_tag_text_initialdoccurrent
-    my_list_of_tag_text_initialdoccurrent = listeof
-    xml_files = []
-    doc_ids = []
-    json_contents = ''
-    json_to_render=''
-    docid_and_trees = []
-    for ordereddict in L:
-        xml_data = (ordereddict[0]).items()[1][1]
-        xml_dta = json.dumps(xml_data)
-        xml_d = json.loads(xml_dta)
+    if json_obj_type is list:
+        for sub_elem in json_obj:
+            result_list.append(json2xml(sub_elem, line_padding))
+        return "\n".join(result_list)
 
-        json_content = json2xml(xml_d)
-        my_xml_string = str(json_content)
-        my_tree = get_tree(my_xml_string)
+    if json_obj_type is dict or isinstance(json_obj, OrderedDict):
+        for tag_name in json_obj:
+            sub_obj = json_obj[tag_name]
+            result_list.append("%s<%s>" % (line_padding, tag_name))
+            result_list.append(json2xml(sub_obj, "\t" + line_padding))
+            result_list.append("%s</%s>" % (line_padding, tag_name))
+        return "\n".join(result_list)
 
-        doc_ids.append((ordereddict[0]).items()[0][1])
-        xml_files.append(json_content)
-        docid_and_trees.append(((ordereddict[0]).items()[0][1],my_tree))
+    return "%s%s" % (line_padding, json_obj)
 
+def get_node_name(node_id):
+    """
+        Get the name of the node
+    :param request:
+        - node id
+    :return:
+    """
+    navigation_name0 = Navigation.get_name(node_id)
+    indexx = (navigation_name0).rfind("#")
+    return navigation_name0[indexx+1:]
 
-        json_contents = json_contents + '\n' + json_content
+def remove_empty_nodes(xml):
+    """
+        Remove the node without any value for an xml tree
+    :param request:
+        - xml object
+    :return:
+    """
+    for child in xml.getiterator():
+        if child.getchildren():
+            pass
+        else:
+            if (str(child.text))[0:9]==mystring:
+                pass#print (child.tag,child.text)
+            else:
+                try:
+                    xmlpere = child.findall("..")
+                    xmlpere[0].remove(child)
+                except:
+                    pass
 
-    if len(docid_and_trees)>1:
-
-        for li in docid_and_trees:
-            i = docid_and_trees.index(li)
-            for lii in docid_and_trees[i+1:]:
-                ii = docid_and_trees.index(lii)
-                var_p = 0
-                for child1, child2 in izip(li,lii):
-                    if child1 == child2:
-                        var_p +=1
-                if var_p == len(li) & len(li) == len(lii):
-                        del docid_and_trees[ii]
-        table_id=[]
-        my_ordered_xml_list = []
-        lesdocsvus =[]
-        for t1 in docid_and_trees:
-
-            y=[]
-            i = docid_and_trees.index(t1)
-            deja_parcouru = False
-            for tab in table_id:
-                if tab == t1[0]:
-                    deja_parcouru = True
-            if deja_parcouru == False:
-                table_id.append(t1[0])
-                for t2 in docid_and_trees[i+1:]:
-                    if t1[0] == t2[0]:
-                        lesdocsvus.append(t1[0])
-                        if y!=[]:
-                            x = union_tree(t1[1],t2[1],verbose=False)
-                            y = union_tree(y,x,verbose=False)
-                        else:#Write for the first time
-                            y = union_tree(t1[1],t2[1],verbose=False)
-
-            if y:
-                my_ordered_xml_list.append((t1[0],y))
-
-        for t in docid_and_trees:
-            if t [0] in lesdocsvus:
+def check_empty_nodes(xml):
+    """
+        Check if there are some node that have no value for an xml tree
+    :param request:
+        - xml object
+    :return:
+    """
+    myvar = False
+    for child in xml.getiterator():
+        if child.getchildren():
+            pass
+        else:
+        #if child.text!='':
+            if (str(child.text))[0:9]==mystring:
                 pass
             else:
-                my_ordered_xml_list.append((t[0],t[1]))
-
-        string_xml=''
-        jsson = ''
-
-        if my_ordered_xml_list==[]:
-            json_to_render = json_contents
-        montab=[]
-        for xml in my_ordered_xml_list:
-            s = LTree_to_xml_string(xml[1])
-            string_xml += s
-
-            uni = unicode(s, 'utf-8')
-            tree2 = etree.fromstring(s)
-
-            i=1
-
-            global sz
-
-            if sz == 0:
-                for child in tree2.iter():
-                    if child.getchildren():
-                        pass
-                    else:
-                        sz +=1
-
-                listeof2 = listeof[:sz]
-                fill_xml(tree2,listeof2)#[sz:])
-                #checkandremove(xmlb,listeof2)
-            else:
-                fill_xml(tree2,listeof[sz:])
-
-                sz +=1
-            montab.append((xml[0],tree2))
-        #    print etree.tostring(tree2,pretty_print=True)
-
-        for t in montab:
-            checkandremove(t[1],listeof)
-
-        for t in montab:
-            json_to_render += etree.tostring(t[1])#, pretty_print=True)
-
-    else:
-        json_to_render = json_contents
-
-    global sz
-    sz = 0
-
-    return json_to_render
+                return True
+    return False
 
 def checkandremove(xml,listeof):
-    maliste = listeof
+    lst = listeof
     for child in xml.iter():
         if child.getchildren():
             pass#print('')
@@ -975,14 +896,14 @@ def checkandremove(xml,listeof):
                 if str(child.tag) == str(s[0]):
                     try :
                         if (str(child.text))[0:9] == mystring:
-                            maliste.remove(s)
+                            lst.remove(s)
                     except:
-                        maliste.remove(s)
+                        lst.remove(s)
     for child in xml.iter():
         if child.getchildren():
             pass#print('')
         else:
-            for s in maliste:
+            for s in lst:
                 if str(child.tag) == str(s[0]):
                     try :
                         if (child.text)[0:9] == mystring:
@@ -1000,9 +921,15 @@ def checkandremove(xml,listeof):
                 child.text = ancien
 
 def fill_xml(xml,listeof):
+    """
+        Add the value of the nodes for an xml tree
+    :param request:
+        - xml object
+        - list of the value for each xml node
+    :return:
+    """
     i=0
     global sz
-
     empty_nodes = 0
     first_time = True
     for child in xml.iter():
@@ -1042,27 +969,38 @@ def fill_xml(xml,listeof):
             else:
                 if child.text =='':
                     child.text = l[1]
-                    print "child.text"
-                    print child.text
-
     return xml
 
 def get_tree(xml_string):
+    """
+        Get the xml tree associated to an xml string
+    :param request:
+        - string
+    :return:
+    """
     parser = XMLParser(target=MyParser())
     parser.feed(xml_string)
     tree = parser.close()
     return tree
 
-
-
 def pairwise(iterable):
-    """"s -> (s0,s1), (s2,s3), (s4, s5), ..."
+    """
+        Create an inclusion list that represents the xml
+    :param request:
+        - list of the xml brackets eg: ["a","b","c","/c","/b","/a"]
+        iterable s -> (s0,s1), (s2,s3), (s4, s5), ...
+    :return:
     """
     it = iter(iterable)
     return izip(it, it)
 
 def union_tree(tree1, tree2, verbose = False):
-
+    """
+        Get the union of parts of xml trees
+    :param request:
+        - xml trees
+    :return:
+    """
     if verbose:
         def verboseprint(*args):
             for arg in args:
@@ -1118,7 +1056,6 @@ def union_tree(tree1, tree2, verbose = False):
             stack_tree.extend(list(pairwise(current_node_childs_t))[::-1])
             stack_tree1.extend(list(pairwise(current_node_childs_t1))[::-1])
             stack_tree2.extend(list(pairwise(current_node_childs_t2))[::-1])
-
         # Gather nodes not common to both trees
         #if current_node_tag_t1 == current_node_tag_t2:
         current_node_childs_t.extend(uncommon_childs)
@@ -1128,13 +1065,26 @@ def union_tree(tree1, tree2, verbose = False):
     return tree
 
 def iter_2_by_2(iterable):
+    """
+        Create an inclusion list that represents the xml
+    :param request:
+        - list of the xml brackets eg: ["a","b","c","/c","/b","/a"]
+    :return:
+    """
     #"s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    print "ITERABLE"
+    print iterable
     a, b = tee(iterable)
     next(b, None)
+
+    print izip(a, b)
     return izip(a, b)
 
 def LTree_to_xml_string(tree):
-    """Conversion of an L-Tree to an XML String
+    """Conversion of a Tree to an XML String
+    :param request:
+        - xml tree
+    :return:
     """
     def rec_xml_to_string(tree):
         current_node_tag, current_node_childs = tree
@@ -1154,25 +1104,3 @@ def LTree_to_xml_string(tree):
     remove_idx_set = set(remove_idx) | set([x+1 for x in remove_idx])
     filtered_list = ["<{}>".format(x) for i, x in enumerate(xml_str_split) if (i not in remove_idx_set)]
     return ''.join(filtered_list)
-
-def download_file(request):
-    xmlID = request.GET["doc_id"]
-    xml = retrieve_xml(xmlID)
-    return  etree.fromstring(xml)
-
-def download_xml(request):
-    xmlID = request.GET["doc_id"]
-    xmltree = retrieve_xml(xmlID)
-    xml = etree.fromstring(xmltree)
-    json_content = etree.tostring(xml,pretty_print=True)
-
-    return HttpResponse(json_content, HTTP_200_OK)
-
-def retrieve_xml(xmlID):
-    xml_data = XMLdata.getXMLdata(xmlID)
-    xml_dta = json.dumps(xml_data.items()[3][1],sort_keys=False)
-    xml_d = json.loads(xml_dta, object_pairs_hook=OrderedDict) # Convert the ordered dict in dict
-    xsdDocData = XMLdata.unparse(xml_d)
-    xsdEncoded = xsdDocData.encode('utf-8')
-
-    return xsdEncoded

@@ -100,16 +100,6 @@
                           <td class="{{ rowcolorsTemplate }}">
                             {{XMLdata.schema|get_templ_object_from_Id}}
                           </td>
-                          <!-- Get the User's name
-                          <td >++
-                              {% if XMLdata.schema = "59a72cb1c9b7090b8055b581" %}
-                                {{Template.user}}
-                              {%else%}
-                                <script>
-                                    document.write('{{ Template.filename }}'.replace(/\.[^/.]+$/, ""));
-                                </script>
-                              {% endif %}
-                          </td>-->
                           <!-- Get the schema ID -->
                           <td>
                               {% if XMLdata.content.Resource.identity.schema %} # A revoir
@@ -124,7 +114,7 @@
 
                     <!-- Get the last modified date -->
                     <td>
-                      {% if XMLdata.content.Resource.identity.lastmodificationdate %} # A revoir
+                      {% if XMLdata.content.Resource.identity.lastmodificationdate %} # NeedTo be check
                           {{ XMLdata.content.Resource.identity.lastmodificationdate }}
                       {%else%}
                           <script>

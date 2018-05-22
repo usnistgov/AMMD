@@ -127,16 +127,18 @@ class Template(dme_Document):
 
     #@staticmethod
     @register.filter
-    def get_templ_object_from_Id(p1): #type = Type.objects(pk=object_id).get()
-        # create a connection
-        # connect to the db 'mgi'
+    def get_templ_object_from_Id(p1):
+        """
+            Returns the title of the template used to enter the file associated to the given id
+        """
+        # create a connection to MongoDB
         client = MongoClient(MONGODB_URI)
+        # connect to the db 'mgi'
         db = client[MGI_DB]
         # get the xmldata collection
         template = db['template']
         # find the associated object
         template = Template.objects(pk=p1).get()
-        #return cursor
         return template.title
 
     @register.filter
@@ -657,7 +659,7 @@ class XMLdata(object):
         xmldata = db['xmldata']
         # find all the objects
         xmldata = XMLdata.objects
-        print type(xmldata)
+
         return xmldata
 
     @staticmethod
