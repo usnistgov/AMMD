@@ -50,7 +50,7 @@ leaf_cache   = caches['leaf']
 branch_cache = caches['branch']
 link_cache   = caches['link']
 
-my_result_to_d = []
+my_result_to_dwld = []
 
 list_of_ordered_dict = ''
 list_of_ordered_dict_cross_docs = ''
@@ -66,7 +66,7 @@ resultat = []
 
 my_list_of_cross_results_f = []
 my_list_of_tag_text_initialdoccurrent = []
-mystring= "MMMMMMMMM"
+mystring= "MYSTRINGG"
 sz = 0
 
 @cache_page(600 * 15)
@@ -267,7 +267,7 @@ def load_leaf_view(request, docid):
                     res_co = ''
 
             result_data["data"] = processview(request.POST["nav_id"], docid, projection_view["data"])
-            my_result_to_d.append(result_data["data"])
+            my_result_to_dwld.append(result_data["data"])
 
         view_data["views"].append(result_data)
     my_node = str(get_node_name(navigation_name2))+"_"+str(request.POST["doc_id"])
@@ -447,7 +447,7 @@ def __load_link_view(request):
                             res_co = ''
                     result_data["data"] = processview(request.POST["nav_id"], request.POST["doc_id"],
                                                       projection_view["data"])
-                    my_result_to_d.append(result_data["data"])
+                    my_result_to_dwld.append(result_data["data"])
 
                 view_data["views"].append(result_data)
 
@@ -1072,12 +1072,8 @@ def iter_2_by_2(iterable):
     :return:
     """
     #"s -> (s0,s1), (s1,s2), (s2, s3), ..."
-    print "ITERABLE"
-    print iterable
     a, b = tee(iterable)
     next(b, None)
-
-    print izip(a, b)
     return izip(a, b)
 
 def LTree_to_xml_string(tree):
